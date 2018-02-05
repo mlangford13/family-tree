@@ -113,7 +113,7 @@ dateType = '' # used to determine the what a date line refers to
 
 # takes parsed lines and creates/modifies classes in dicts
 for line in lines:
-    print(line)
+    # print(line) # debug line to show data in parsed format
     tag = line['tag']
     args = line['args']
     if (tag == 'INDI' and tag not in indis):
