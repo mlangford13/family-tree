@@ -6,6 +6,18 @@
 import sys
 from prettytable import PrettyTable
 import datetime
+from mongoengine import *
+
+# connect to MongoDB with pymongo
+connect('test', host='localhost', port=27017)
+
+GENDERS = ['male','female','other']
+
+class Post(Document):
+    pid = StringField(required=True, unique=True)
+    name = StringField()
+    gender = StringField(choices=GENDERS)
+
 
 today = datetime.date.today() # get todays date
 
@@ -17,13 +29,14 @@ tagsLevel = {"INDI":0, "NAME":1, "SEX":1, "BIRT":1, "DEAT":1, "FAMC":1, "FAMS":1
             "FAM":0, "MARR":1,"HUSB":1, "WIFE":1, "CHIL":1, "DIV":1, "DATE":2,\
             "HEAD":0, "TRLR":0, "NOTE":0}
 
-# dicts and classes will eventually be moved to mongodb)
+# dicts and classes will eventually be moved to mongodb
 
 # dicts used to store finished data
 indis = {} # dict of indis, format{pid:Indi}
 fams = {} # dict of families, format{fid:Fam}
 
 # class for storing and individual
+'''
 class Indi:
     def __init__(self, pid):
         self.pid = pid # person id
@@ -36,6 +49,18 @@ class Indi:
         self.child = 'NA'
         self.spouse = 'NA'
         indis[pid] = self
+'''
+class Indi(Document):
+    pid = StringField(required=True,unique=True)
+    name = StringField()
+    gender = StringField(choices=GENDERS)
+    birth = StringField()
+    age = StringField()
+    alive = StringField()
+    death = StringField()
+    child = ListField(StringField())
+    spouse = ListField(StringField())
+    #indis[pid] = self
 
 # class for storing families
 class Fam:
@@ -117,7 +142,8 @@ for line in lines:
     tag = line['tag']
     args = line['args']
     if (tag == 'INDI' and tag not in indis):
-        person = Indi(args)
+        person = Indi(pid=args)
+        indis[args]=person
         lastIndi = person
     if (tag == 'FAM'):
         fam = Fam(args)
