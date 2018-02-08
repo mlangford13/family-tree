@@ -11,13 +11,7 @@ from mongoengine import *
 # connect to MongoDB with pymongo
 connect('test', host='localhost', port=27017)
 
-GENDERS = ['male','female','other']
-
-class Post(Document):
-    pid = StringField(required=True, unique=True)
-    name = StringField()
-    gender = StringField(choices=GENDERS)
-
+GENDERS = ['M','F','O'] # male female other
 
 today = datetime.date.today() # get todays date
 
@@ -35,7 +29,6 @@ tagsLevel = {"INDI":0, "NAME":1, "SEX":1, "BIRT":1, "DEAT":1, "FAMC":1, "FAMS":1
 indis = {} # dict of indis, format{pid:Indi}
 fams = {} # dict of families, format{fid:Fam}
 
-# class for storing and individual
 '''
 class Indi:
     def __init__(self, pid):
@@ -49,20 +42,34 @@ class Indi:
         self.child = 'NA'
         self.spouse = 'NA'
         indis[pid] = self
+class Fam:
+    def __init__(self, fid):
+        self.fid = fid      # family id
+        self.married = ''
+        self.divorced = ''
+        self.hid = ''       # husband id
+        self.hName = ''     # husband name
+        self.wid = ''       # wife id
+        self.wName = ''     # wife name
+        self.children = []
+        fams[fid] = self
 '''
-class Indi(Document):
-    pid = StringField(required=True,unique=True)
-    name = StringField()
-    gender = StringField(choices=GENDERS)
-    birth = StringField()
-    age = StringField()
-    alive = StringField()
-    death = StringField()
-    child = ListField(StringField())
-    spouse = ListField(StringField())
-    #indis[pid] = self
 
-# class for storing families
+# TODO change dates to DateTimeField s instead of strings
+class Indi(Document):
+    pid = StringField(required=True,primary_key=True) # identifier
+    name = StringField()
+    gender = StringField(choices=GENDERS) # male, female, or other
+    birth = StringField() # birthday
+    age = IntField()
+    alive = BooleanField() # are they currently alive
+    death = StringField() # when did they die? not required
+    children = ListField(StringField()) # list of children ids
+    marriages = DictField() # pid of spouse: date of marriage
+    divorces = DictField() # pid of ex : date of divorce
+    families = ListField(StringField()) # list of family ids
+
+
 class Fam:
     def __init__(self, fid):
         self.fid = fid      # family id
@@ -145,6 +152,7 @@ for line in lines:
         person = Indi(pid=args)
         indis[args]=person
         lastIndi = person
+        lastIndi.save()
     if (tag == 'FAM'):
         fam = Fam(args)
         lastFam = fam
@@ -185,20 +193,17 @@ for line in lines:
                 age = int(age/365)
                 lastIndi.age = age
         if (tag == "FAMC"):
-            if(lastIndi.child == 'NA'):
-                lastIndi.child = []
-            lastIndi.child.append(args)
+            lastIndi.children.append(args)
         if (tag == "FAMS"):
-            if(lastIndi.spouse == 'NA'):
-                lastIndi.spouse = []
-            lastIndi.spouse.append(args)
+            lastIndi.marriages[args] = ''
+        lastIndi.save()
 
 # populating famList with data from indiList
 for i in fams:
     i = fams[i]
     i.hName = indis[i.hid].name
     i.wName = indis[i.wid].name
-
+'''
 # printing the tables from the lists
 t1 = PrettyTable()
 t1.field_names = ["ID","Name","Gender","Birthday","Age","Alive","Death","Child","Spouse"]
@@ -215,3 +220,6 @@ for i in fams:
     t2.add_row([i.fid,i.married,i.divorced,i.hid,i.hName,i.wid,i.wName,i.children])
 print("Families")
 print(t2)
+'''
+for i in Indi.objects():
+    print(i.pid)
