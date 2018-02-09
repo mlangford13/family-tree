@@ -10,7 +10,7 @@ from mongoengine import *
 from dbDef import *
 
 # connect to MongoDB with pymongo
-connect(DATABASE, host='localhost', port=27017)
+connectToMongoDB()
 
 today = datetime.date.today() # get todays date
 
@@ -22,7 +22,6 @@ tagsLevel = {"INDI":0, "NAME":1, "SEX":1, "BIRT":1, "DEAT":1, "FAMC":1, "FAMS":1
             "FAM":0, "MARR":1,"HUSB":1, "WIFE":1, "CHIL":1, "DIV":1, "DATE":2,\
             "HEAD":0, "TRLR":0, "NOTE":0}
 
-# dicts and classes will eventually be moved to mongodb
 
 # dicts used to store finished data
 indis = {} # dict of indis, format{pid:Indi}
@@ -53,17 +52,6 @@ class Fam:
         self.children = []
         fams[fid] = self
 '''
-class Fam:
-    def __init__(self, fid):
-        self.fid = fid      # family id
-        self.married = ''
-        self.divorced = ''
-        self.hid = ''       # husband id
-        self.hName = ''     # husband name
-        self.wid = ''       # wife id
-        self.wName = ''     # wife name
-        self.children = []
-        fams[fid] = self
 
 # returns a 'Y' or 'N' to add to the standard formatting in the initial gedcom processing
 def isValidLevel(level, tag):
@@ -137,8 +125,10 @@ for line in lines:
         lastIndi = person
         lastIndi.save()
     if (tag == 'FAM'):
-        fam = Fam(args)
+        fam = Fam(fid=args)
+        fams[args]=fam
         lastFam = fam
+        lastFam.save()
     if (lastFam != ''):
         if (tag == 'MARR'):
             dateType = 'marriage'
@@ -155,6 +145,7 @@ for line in lines:
                 lastFam.marriage = args
             if (dateType == 'divorce'):
                 lastFam.divorce = args
+        lastFam.save()
     if (lastIndi != ''):
         if (tag == 'NAME'):lastIndi.name = args
         if (tag == 'SEX'):lastIndi.gender = args
@@ -182,29 +173,33 @@ for line in lines:
         lastIndi.save()
 
 # populating famList with data from indiList
+'''
 for i in fams:
     i = fams[i]
     i.hName = indis[i.hid].name
     i.wName = indis[i.wid].name
 '''
-# printing the tables from the lists
-t1 = PrettyTable()
-t1.field_names = ["ID","Name","Gender","Birthday","Age","Alive","Death","Child","Spouse"]
-for i in indis:
-    i = indis[i]
-    t1.add_row([i.pid,i.name,i.gender,i.birth,i.age,i.alive,i.death,i.child,i.spouse])
-print("Individuals")
-print(t1)
 
-t2 = PrettyTable()
-t2.field_names = ["ID","Married","Divorced","Husband ID","Husband Name","Wife ID", "Wife Name","Children"]
+# add families and marriages to indi records
+# TODO : add divorces
 for i in fams:
     i = fams[i]
-    t2.add_row([i.fid,i.married,i.divorced,i.hid,i.hName,i.wid,i.wName,i.children])
-print("Families")
-print(t2)
-'''
+    husband = Indi.objects.get(pid=i.hid)
+    if i.fid not in husband.families: husband.families.append(i.fid)
+    husband.marriages[i.wid]=i.married
+    husband.save()
 
-# for i in Indi.objects():
-#   print(i.pid)
+    wife = Indi.objects.get(pid=i.wid)
+    if i.fid not in wife.families: wife.families.append(i.fid)
+    wife.marriages[i.hid]=i.married
+    wife.save()
+
+    for cid in i.children:
+        child = Indi.objects(pid=cid)[0]
+        if i.fid not in child.families: child.families.append(i.fid)
+        child.save()
+
+
+#for i in Indi.objects():
+#    print(i.pid)
 print("Data uploaded!")
