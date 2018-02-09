@@ -12,6 +12,12 @@ from dbDef import *
 # connect to MongoDB with pymongo
 connectToMongoDB()
 
+# Delete old data
+for i in Indi.objects:
+    i.delete()
+for i in Fam.objects:
+    i.delete()
+
 today = datetime.date.today() # get todays date
 
 # gedcom tags
@@ -161,7 +167,7 @@ for i in fams:
     wife.save()
 
     for cid in i.children:
-        child = Indi.objects(pid=cid)[0]
+        child = Indi.objects.get(pid=cid)
         if i.fid not in child.families: child.families.append(i.fid)
         child.save()
 
