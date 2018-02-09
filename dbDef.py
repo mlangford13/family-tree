@@ -27,7 +27,7 @@ class Indi(Document):
 class Fam(Document):
     fid = StringField(required=True,primary_key=True)
     married = StringField()
-    divorced =StringField()
-    hid =StringField()
-    wid =StringField()
-    children =ListField()
+    divorced = StringField()
+    hid = StringField()
+    wid = StringField()
+    children = ListField(StringField())

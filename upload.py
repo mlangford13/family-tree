@@ -27,32 +27,6 @@ tagsLevel = {"INDI":0, "NAME":1, "SEX":1, "BIRT":1, "DEAT":1, "FAMC":1, "FAMS":1
 indis = {} # dict of indis, format{pid:Indi}
 fams = {} # dict of families, format{fid:Fam}
 
-'''
-class Indi:
-    def __init__(self, pid):
-        self.pid = pid # person id
-        self.name = ''
-        self.gender = ''
-        self.birth = ''
-        self.age = 0
-        self.alive = True
-        self.death = 'NA'
-        self.child = 'NA'
-        self.spouse = 'NA'
-        indis[pid] = self
-class Fam:
-    def __init__(self, fid):
-        self.fid = fid      # family id
-        self.married = ''
-        self.divorced = ''
-        self.hid = ''       # husband id
-        self.hName = ''     # husband name
-        self.wid = ''       # wife id
-        self.wName = ''     # wife name
-        self.children = []
-        fams[fid] = self
-'''
-
 # returns a 'Y' or 'N' to add to the standard formatting in the initial gedcom processing
 def isValidLevel(level, tag):
     if level == tagsLevel[tag]:
@@ -172,14 +146,6 @@ for line in lines:
             lastIndi.marriages[args] = ''
         lastIndi.save()
 
-# populating famList with data from indiList
-'''
-for i in fams:
-    i = fams[i]
-    i.hName = indis[i.hid].name
-    i.wName = indis[i.wid].name
-'''
-
 # add families and marriages to indi records
 # TODO : add divorces
 for i in fams:
@@ -199,7 +165,4 @@ for i in fams:
         if i.fid not in child.families: child.families.append(i.fid)
         child.save()
 
-
-#for i in Indi.objects():
-#    print(i.pid)
 print("Data uploaded!")
