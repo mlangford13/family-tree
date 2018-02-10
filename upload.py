@@ -87,6 +87,10 @@ def parseDateStr(aString):
     x = aString.split(" ")
     return({"day":int(x[0]),"month":int(months.index(x[1]))+1,"year":int(x[2])})
 
+def parseDateStrToObj(aString):
+    x = parseDateStr(aString)
+    return datetime.date(x['year'],x['month'],x['day'])
+
 lines = parseFile(sys.argv[1]) # parse file specified
 
 # variable declarations
@@ -122,29 +126,27 @@ for line in lines:
             dateType = 'divorce'
         if (tag == "DATE"):
             if (dateType == 'marriage'):
-                lastFam.marriage = args
+                lastFam.marriage = parseDateStrToObj(args)
             if (dateType == 'divorce'):
-                lastFam.divorce = args
+                lastFam.divorce = parseDateStrToObj(args)
         lastFam.save()
     if (lastIndi != ''):
-        if (tag == 'NAME'):lastIndi.name = args
-        if (tag == 'SEX'):lastIndi.gender = args
+        if (tag == 'NAME'): lastIndi.name = args
+        if (tag == 'SEX'): lastIndi.gender = args
         if (tag == 'BIRT'): dateType = 'birth'
         if (tag == 'DEAT'): dateType = 'death'
         if (tag == 'DATE'):
             if (dateType == 'birth'):
-                lastIndi.birth = args
+                lastIndi.birth = parseDateStrToObj(args)
                 x = parseDateStr(args)
                 age = (today - datetime.date(x['year'],x['month'],x['day'])).days
                 age = int(age/365)
                 lastIndi.age = age
             if (dateType == 'death'):
-                lastIndi.death = args
+                lastIndi.death = parseDateStrToObj(args)
                 lastIndi.alive = False
-                x = parseDateStr(args)
-                y = parseDateStr(lastIndi.birth)
-                age = (datetime.date(x['year'],x['month'],x['day'])- datetime.date(y['year'],y['month'],y['day'])).days
-                age = int(age/365)
+                age = lastIndi.death - lastIndi.birth
+                age = int(age.days/365)
                 lastIndi.age = age
         if (tag == "FAMC"):
             lastIndi.children.append(args)
