@@ -1,0 +1,38 @@
+#Andy Shu
+#Module for checking if date came before current date
+import time
+from utils import date_first
+
+def date_past(date):
+#Helper function for comparing date to now
+    today = time.strftime("%d %b %Y")
+
+    return date_first(date, today)
+
+def birth_before_now(indiv):
+#checks if birth occurred in the past
+    if not 'BIRTH' in indiv:
+        return True
+
+    return date_past(indiv['BIRTH'])
+
+def death_before_now(indiv):
+#Checks if death occurred in the past
+    if not 'DEATH' in indiv:
+        return True
+
+    return date_past(indiv['DEATH'])
+
+def marr_before_now(fams):
+#Checks if marriage occurred in the past
+    if not 'MARRIAGE' in fams:
+        return True
+
+    return date_past(fams['MARRIAGE'])
+
+def div_before_now(fams):
+#Checks if divorce occurred in the past
+    if not 'DIVORCE' in fams:
+        return True
+
+    return date_past(fams['DIVORCE'])
