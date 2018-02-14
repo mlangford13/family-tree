@@ -1,0 +1,178 @@
+0 HEAD
+1 SOUR Family Echo
+2 WWW http://www.familyecho.com/
+1 FILE My Family
+1 DATE 14 FEB 2018
+1 DEST ANSTFILE
+1 GEDC
+2 VERS 5.5.1
+2 FORM LINEAGE-LINKED
+1 SUBM @I1@
+2 NAME Michael W Langford
+1 SUBN
+1 CHAR UTF-8
+0 @I1@ INDI
+1 NAME Michael /Langford/
+2 GIVN Michael
+2 SURN Langford
+2 _MARNM Langford
+1 SEX M
+1 BIRT
+2 DATE 4 OCT 1995
+1 FAMC @F1@
+0 @I2@ INDI
+1 NAME Michael /Langford/
+2 GIVN Michael
+2 SURN Langford
+2 _MARNM Langford
+1 SEX M
+1 BIRT
+2 DATE 30 APR 1958
+1 FAMS @F1@
+1 FAMC @F2@
+0 @I3@ INDI
+1 NAME Donna /Kosakovich/
+2 GIVN Donna
+2 SURN Kosakovich
+2 _MARNM Langford
+1 SEX F
+1 BIRT
+2 DATE 12 FEB 1968
+1 FAMS @F1@
+1 FAMS @F3@
+0 @I4@ INDI
+1 NAME Cliff /Bowen/
+2 GIVN Cliff
+2 SURN Bowen
+2 _MARNM Bowen
+1 SEX M
+1 BIRT
+2 DATE 5 JAN 1968
+1 DEAT Y
+2 DATE 20 SEP 1992
+1 FAMS @F3@
+0 @I5@ INDI
+1 NAME Nicole /Bowen/
+2 GIVN Nicole
+2 SURN Bowen
+2 _MARNM Langford
+1 SEX F
+1 BIRT
+2 DATE 12 NOV 1981
+1 FAMS @F4@
+1 FAMC @F3@
+0 @I6@ INDI
+1 NAME Kristin /Langford/
+2 GIVN Kristin
+2 SURN Langford
+2 _MARNM Langford
+1 SEX F
+1 BIRT
+2 DATE 13 FEB 1988
+1 FAMC @F1@
+0 @I7@ INDI
+1 NAME William /Langford/
+2 GIVN William
+2 SURN Langford
+2 _MARNM Langford
+1 SEX M
+1 BIRT
+2 DATE 10 FEB 1925
+1 DEAT Y
+2 DATE 7 AUG 2003
+1 FAMS @F2@
+0 @I8@ INDI
+1 NAME Dolores /Abernathy/
+2 GIVN Dolores
+2 SURN Abernathy
+2 _MARNM Langford
+1 SEX F
+1 BIRT
+2 DATE 15 APR 1928
+1 FAMS @F2@
+0 @I9@ INDI
+1 NAME Robert /Langford/
+2 GIVN Robert
+2 SURN Langford
+2 _MARNM Langford
+1 SEX M
+1 BIRT
+2 DATE 10 JAN 1952
+1 FAMC @F2@
+0 @I10@ INDI
+1 NAME Allison /Langford/
+2 GIVN Allison
+2 SURN Langford
+2 _MARNM Langford
+1 SEX F
+1 BIRT
+2 DATE 21 MAY 1965
+1 FAMC @F2@
+0 @I11@ INDI
+1 NAME Billy /Langford/
+2 GIVN Billy
+2 SURN Langford
+2 _MARNM Langford
+1 SEX M
+1 BIRT
+2 DATE 5 APR 1951
+1 FAMC @F2@
+0 @I12@ INDI
+1 NAME Michael /Dawson/
+2 GIVN Michael
+2 SURN Dawson
+2 _MARNM Dawson
+1 SEX M
+1 BIRT
+2 DATE 19 JUL 2015
+1 FAMC @F4@
+0 @I13@ INDI
+1 NAME Jason /Dawson/
+2 GIVN Jason
+2 SURN Dawson
+2 _MARNM Dawson
+1 SEX M
+1 BIRT
+2 DATE 28 NOV 1977
+1 FAMS @F4@
+0 @I14@ INDI
+1 NAME Lucy /Dawson/
+2 GIVN Lucy
+2 SURN Dawson
+2 _MARNM Dawson
+1 SEX F
+1 BIRT
+2 DATE 13 SEP 2017
+1 FAMC @F4@
+0 @F1@ FAM
+1 HUSB @I2@
+1 WIFE @I3@
+1 CHIL @I1@
+1 CHIL @I6@
+1 MARR
+2 DATE 7 APR 1987
+1 _CURRENT Y
+0 @F3@ FAM
+1 HUSB @I4@
+1 WIFE @I3@
+1 CHIL @I5@
+1 MARR
+2 DATE 2 FEB 1984
+1 DIV
+2 DATE 5 FEB 1986
+1 _CURRENT N
+0 @F2@ FAM
+1 HUSB @I7@
+1 WIFE @I8@
+1 CHIL @I2@
+1 CHIL @I9@
+1 CHIL @I10@
+1 CHIL @I11@
+1 _CURRENT Y
+0 @F4@ FAM
+1 HUSB @I13@
+1 WIFE @I5@
+1 CHIL @I12@
+1 CHIL @I14@
+1 _CURRENT N
+0 TRLR

@@ -6,19 +6,25 @@ import datetime
 
 connectToMongoDB()
 
-# birth before death es05
+# birth before death us03
 # takes an Indi and returns true if the birth is before the death
 # or if they're still alive
 def birthBeforeDeath(x):
     if(x.death is not None):return(x.birth<=x.death)
     else:return(True)
+#
+def marriageBeforeDeath(individual):
+    for marriage in individual.marriages:
+        if marriage.value > individual.death:
+            return False
+    return True
 
 # removes indis that don't pass test
 for i in Indi.objects:
     if(not birthBeforeDeath(i)):i.delete()
 
 class MyTests(unittest.TestCase):
-    def test_es05(self):
+    def test_us03(self):
         # year month day
         # dates are earliest -> latest
         # d0 is lack of date
@@ -47,5 +53,16 @@ class MyTests(unittest.TestCase):
         self.assertFalse(birthBeforeDeath(i7))
         self.assertFalse(birthBeforeDeath(i8))
         self.assertTrue(birthBeforeDeath(i9))
+
+    # Marriage before death
+    def test_us05(self):
+        print("Hello")
+        death0 = datetime.date(1990,1,1)        #base
+        #death1 = datetime.date(1990,)
+
+        marriage0 = datetime.date(1980,1,1)
+        i0 = Indi(pid='i0', death=death0, marriages={"test0", marriage0})
+        self.assertTrue(marriageBeforeDeath(i0))
+
     if __name__ == '__main__':
         unittest.main()
