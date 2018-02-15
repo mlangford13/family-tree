@@ -3,6 +3,7 @@ from mongoengine import *
 from dbDef import *
 import unittest
 import datetime
+from prettytable import PrettyTable
 
 connectToMongoDB()
 
@@ -12,10 +13,12 @@ connectToMongoDB()
 def birthBeforeDeath(x):
     if(x.death is not None):return(x.birth<=x.death)
     else:return(True)
-#
+
+# Checks if an individuals own death date is not before any
+# of their marrige dates
 def marriageBeforeDeath(individual):
-    for marriage in individual.marriages:
-        if marriage.value > individual.death:
+    for key in individual.marriages:
+        if individual.marriages[key] > individual.death:
             return False
     return True
 
@@ -56,13 +59,32 @@ class MyTests(unittest.TestCase):
 
     # Marriage before death
     def test_us05(self):
-        print("Hello")
-        death0 = datetime.date(1990,1,1)        #base
-        #death1 = datetime.date(1990,)
+        deathDate = datetime.date(1990,1,1)
 
-        marriage0 = datetime.date(1980,1,1)
-        i0 = Indi(pid='i0', death=death0, marriages={"test0", marriage0})
+        marriage0 = {"test0": datetime.date(1980,1,1)}      #Marriage before
+        marriage1 = {"test1": datetime.date(1990,1,1)}      #Marriage same day
+        marriage2 = {"test2": datetime.date(1995,1,1)}      #Marriage after death
+        marriage3 = {"test3": datetime.date(1980,1,1),\
+                     "test4": datetime.date(1985,1,1)}      #Two valid marriages
+        marriage4 = {"test3": datetime.date(1980,1,1),\
+                     "test4": datetime.date(1995,1,1)}      #One invalid marriages
+        marriage5 = {}                                      #No marriages
+
+        i0 = Indi(pid='i0', death=deathDate, marriages=marriage0)
+        i1 = Indi(pid='i1', death=deathDate, marriages=marriage1)
+        i2 = Indi(pid='i2', death=deathDate, marriages=marriage2)
+        i3 = Indi(pid='i3', death=deathDate, marriages=marriage3)
+        i4 = Indi(pid='i4', death=deathDate, marriages=marriage4)
+        i5 = Indi(pid='i5', death=deathDate, marriages=marriage5)
+
+
         self.assertTrue(marriageBeforeDeath(i0))
+        self.assertTrue(marriageBeforeDeath(i1))
+        self.assertTrue(marriageBeforeDeath(i3))
+        self.assertTrue(marriageBeforeDeath(i5))
 
-    if __name__ == '__main__':
-        unittest.main()
+        self.assertFalse(marriageBeforeDeath(i2))
+        self.assertFalse(marriageBeforeDeath(i4))
+
+if __name__ == '__main__':
+    unittest.main()
