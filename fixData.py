@@ -14,11 +14,21 @@ def birthBeforeDeath(x):
     if(x.death is not None):return(x.birth<=x.death)
     else:return(True)
 
+# US05
 # Checks if an individuals own death date is not before any
 # of their marrige dates
 def marriageBeforeDeath(individual):
     for key in individual.marriages:
         if individual.marriages[key] > individual.death:
+            return False
+    return True
+
+#US06
+# Checks if an individuals own death date is not before any
+# of their divorce dates
+def divorceBeforeDeath(individual):
+    for key in individual.divorces:
+        if individual.divorces[key] > individual.death:
             return False
     return True
 
@@ -85,6 +95,35 @@ class MyTests(unittest.TestCase):
 
         self.assertFalse(marriageBeforeDeath(i2))
         self.assertFalse(marriageBeforeDeath(i4))
+
+    # Divorce before death
+    def test_us06(self):
+        deathDate = datetime.date(1990,1,1)
+
+        divorce0 = {"test0": datetime.date(1980,1,1)}      #Divroce before
+        divorce1 = {"test1": datetime.date(1990,1,1)}      #Divorce same day
+        divorce2 = {"test2": datetime.date(1995,1,1)}      #Divorce after death
+        divorce3 = {"test3": datetime.date(1980,1,1),\
+                     "test4": datetime.date(1985,1,1)}     #Two valid divorces
+        divorce4 = {"test3": datetime.date(1980,1,1),\
+                     "test4": datetime.date(1995,1,1)}     #One invalid divorce
+        divorce5 = {}                                      #No divorces
+
+        i0 = Indi(pid='i0', death=deathDate, divorces=divorce0)
+        i1 = Indi(pid='i1', death=deathDate, divorces=divorce1)
+        i2 = Indi(pid='i2', death=deathDate, divorces=divorce2)
+        i3 = Indi(pid='i3', death=deathDate, divorces=divorce3)
+        i4 = Indi(pid='i4', death=deathDate, divorces=divorce4)
+        i5 = Indi(pid='i5', death=deathDate, divorces=divorce5)
+
+
+        self.assertTrue(divorceBeforeDeath(i0))
+        self.assertTrue(divorceBeforeDeath(i1))
+        self.assertTrue(divorceBeforeDeath(i3))
+        self.assertTrue(divorceBeforeDeath(i5))
+
+        self.assertFalse(divorceBeforeDeath(i2))
+        self.assertFalse(divorceBeforeDeath(i4))
 
 if __name__ == '__main__':
     unittest.main()
