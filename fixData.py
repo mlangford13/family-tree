@@ -1,9 +1,9 @@
 # fix data
 from mongoengine import *
 from dbDef import *
+from utility import *
 import unittest
 import datetime
-from prettytable import PrettyTable
 
 connectToMongoDB()
 
@@ -11,8 +11,10 @@ connectToMongoDB()
 # takes an Indi and returns true if the birth is before the death
 # or if they're still alive
 def birthBeforeDeath(x):
-    if(x.death is not None):return(x.birth<=x.death)
-    else:return(True)
+    if(x.death is not None and x.birth is not None):
+        return(x.birth <= x.death)
+    else:
+        return(True)
 
 # US05
 # Checks if an individuals own death date is not before any
@@ -32,7 +34,25 @@ def divorceBeforeDeath(individual):
             return False
     return True
 
-# removes indis that don't pass test
+#US09
+# Checks that each child in a family is born before the
+# death of their parents
+def birthBeforeDeathOfParents(family):
+    dad = getIndi(pid=family.hid)
+    mom = getIndi(pid=family.wid)
+    for childId in family.children:
+        child = getIndi(childId)
+
+        if(dad.death is not None):
+            if(child.birth > addMonths(dad.death, 9)):
+                return False
+
+        if(mom.death is not None):
+            if(child.birth > mom.death):
+                return False
+    return True
+
+#removes indis that don't pass test
 for i in Indi.objects:
     if(not birthBeforeDeath(i)):i.delete()
 
@@ -124,6 +144,25 @@ class MyTests(unittest.TestCase):
 
         self.assertFalse(divorceBeforeDeath(i2))
         self.assertFalse(divorceBeforeDeath(i4))
+
+    #TODO: Add more test cases
+    def test_us09(self):
+        death = datetime.date(1990,1,1)
+        sonBirth = datetime.date(1990,1,1)
+
+        mom = Indi(pid='mom', death=death)
+        dad = Indi(pid='dad', death=death)
+        child = Indi(pid='son', birth=sonBirth)
+        family = Fam(fid='fam', hid='dad', wid='mom', children={child.pid})
+
+        mom.save()
+        dad.save()
+        child.save()
+        family.save()
+
+        self.assertTrue(birthBeforeDeathOfParents(family))
+
+
 
 if __name__ == '__main__':
     unittest.main()
