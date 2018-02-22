@@ -18,7 +18,7 @@ for i in Indi.objects:
     if(not birthBeforeDeath(i)):i.delete()
 
 class MyTests(unittest.TestCase):
-    def test_es05(self):
+    def test_us03(self):
         # year month day
         # dates are earliest -> latest
         # d0 is lack of date
