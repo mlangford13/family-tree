@@ -7,6 +7,12 @@ from prettytable import PrettyTable
 
 connectToMongoDB()
 
+
+# US01
+# takes date and does as it says
+def dateBeforeToday(x):
+    return (x < datetime.datetime.now().date())
+
 # birth before death us03
 # takes an Indi and returns true if the birth is before the death
 # or if they're still alive
@@ -32,18 +38,46 @@ def divorceBeforeDeath(individual):
             return False
     return True
 
-# removes indis that don't pass test
+# takes fam and checks that the difference between the eldest child and parents
+# are 60 and 80 years respectively for the wife and husband
+def parentsNotTooOld(x):
+    if (x.children == []): return True # no children
+    oldestBirth = datetime.datetime.now()
+    for childPid in x.children:
+        cBirth = Indi.objects.get(pid=childPid).birth
+        if (cBirth < oldestBirth): oldestBirth = cBirth
+    wBirth = Indi.objects.get(pid=x.wid).birth
+    hBirth = Indi.objects.get(pid=x.hid).birth
+    wDif = (oldestBirth - wBirth).days / 365
+    hDif = (oldestBirth - hBirth).days / 365
+    return((wDif < 60)and(hDif < 80))
+
+# print if fam has parents that are too old
 for i in Fam.objects:
-    print(parentsNotTooOld(i))
+    if(not parentsNotTooOld(i)):
+        print(i.fid + " has a parent/parents that is/are too old for their children")
+
+# removes indis that don't pass test
+#for i in Indi.objects:
+#    if(not birthBeforeDeath(i)):i.delete()
+
+# print pid of indis that don't pass test
 for i in Indi.objects:
-    if(not birthBeforeDeath(i)):i.delete()
-
-
-# check each family
-# get the parents (wid and hid)
-# get the oldest child from fam.children
+    if(not birthBeforeDeath(i)):print(i.pid + " dies before they are born.")
 
 class FixDataTests(unittest.TestCase):
+    def test_us01(self):
+        d1 = datetime.date(1990,1,1)
+        d2 = datetime.date(1990,1,2)
+        d3 = datetime.date(1990,2,1)
+        d4 = datetime.date(2010,1,1)
+        d5 = datetime.date.max
+        self.assertTrue(dateBeforeToday(d1))
+        self.assertTrue(dateBeforeToday(d2))
+        self.assertTrue(dateBeforeToday(d3))
+        self.assertTrue(dateBeforeToday(d4))
+        self.assertFalse(dateBeforeToday(d5))
+
     def test_us03(self):
         # year month day
         # dates are earliest -> latest
