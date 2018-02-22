@@ -13,20 +13,31 @@ connectToMongoDB()
 def dateBeforeToday(x):
     return (x < datetime.datetime.now().date())
 
-# birth before death us03
+#U S03
 # takes an Indi and returns true if the birth is before the death
 # or if they're still alive
 def birthBeforeDeath(x):
     if(x.death is not None):return(x.birth<=x.death)
     else:return(True)
 
+# US02
+# takes indi
+def birthBeforeMarriage(x):
+    if(x.marriages == {}): return True
+    for key in x.marriages:
+        if x.birth >= x.marriages[key]:
+            return False
+    return True
+
 # US05
 # Checks if an individuals own death date is not before any
 # of their marrige dates
 def marriageBeforeDeath(individual):
+    if(individual.marriages == {}): return True
     for key in individual.marriages:
-        if individual.marriages[key] > individual.death:
-            return False
+        if not individual.alive:
+            if individual.marriages[key] > individual.death:
+                return False
     return True
 
 #US06
@@ -77,7 +88,33 @@ class FixDataTests(unittest.TestCase):
         self.assertTrue(dateBeforeToday(d3))
         self.assertTrue(dateBeforeToday(d4))
         self.assertFalse(dateBeforeToday(d5))
+    def test_us02(self):
+        birthDate = datetime.date(1990,1,1)
 
+        marriage0 = {"test0": datetime.date(1980,1,1)}      #Marriage before
+        marriage1 = {"test1": datetime.date(1990,1,1)}      #Marriage same day
+        marriage2 = {"test2": datetime.date(1995,1,1)}      #Marriage after death
+        marriage3 = {"test3": datetime.date(1980,1,1),\
+                     "test4": datetime.date(1985,1,1)}      #Two valid marriages
+        marriage4 = {"test3": datetime.date(1980,1,1),\
+                     "test4": datetime.date(1995,1,1)}      #One invalid marriages
+        marriage5 = {}                                      #No marriages
+
+        i0 = Indi(pid='i0', birth=birthDate, marriages=marriage0)
+        i1 = Indi(pid='i1', birth=birthDate, marriages=marriage1)
+        i2 = Indi(pid='i2', birth=birthDate, marriages=marriage2)
+        i3 = Indi(pid='i3', birth=birthDate, marriages=marriage3)
+        i4 = Indi(pid='i4', birth=birthDate, marriages=marriage4)
+        i5 = Indi(pid='i5', birth=birthDate, marriages=marriage5)
+
+
+        self.assertFalse(birthBeforeMarriage(i0))
+        self.assertFalse(birthBeforeMarriage(i1))
+        self.assertFalse(birthBeforeMarriage(i3))
+
+        self.assertTrue(birthBeforeMarriage(i5))
+        self.assertTrue(marriageBeforeDeath(i2))
+        self.assertTrue(marriageBeforeDeath(i4))
     def test_us03(self):
         # year month day
         # dates are earliest -> latest
@@ -121,12 +158,12 @@ class FixDataTests(unittest.TestCase):
                      "test4": datetime.date(1995,1,1)}      #One invalid marriages
         marriage5 = {}                                      #No marriages
 
-        i0 = Indi(pid='i0', death=deathDate, marriages=marriage0)
-        i1 = Indi(pid='i1', death=deathDate, marriages=marriage1)
-        i2 = Indi(pid='i2', death=deathDate, marriages=marriage2)
-        i3 = Indi(pid='i3', death=deathDate, marriages=marriage3)
-        i4 = Indi(pid='i4', death=deathDate, marriages=marriage4)
-        i5 = Indi(pid='i5', death=deathDate, marriages=marriage5)
+        i0 = Indi(pid='i0', death=deathDate,alive=False, marriages=marriage0)
+        i1 = Indi(pid='i1', death=deathDate,alive=False, marriages=marriage1)
+        i2 = Indi(pid='i2', death=deathDate,alive=False, marriages=marriage2)
+        i3 = Indi(pid='i3', death=deathDate,alive=False, marriages=marriage3)
+        i4 = Indi(pid='i4', death=deathDate,alive=False, marriages=marriage4)
+        i5 = Indi(pid='i5', death=deathDate,alive=False, marriages=marriage5)
 
 
         self.assertTrue(marriageBeforeDeath(i0))
