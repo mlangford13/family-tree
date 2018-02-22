@@ -63,6 +63,24 @@ def parentsNotTooOld(x):
     hDif = (oldestBirth - hBirth).days / 365
     return((wDif < 60)and(hDif < 80))
 
+# US13
+# takes
+# more than 8 months (270 days) or less than 2 days
+# true if good else false
+def siblingSpacing(x):
+    if(x.children == []): return True
+    childrenPids = x.children
+    output = True
+    for pidX in childrenPids:
+        for pidY in childrenPids:
+            if(pidX != pidY):
+                birthX = Indi.objects.get(pid=pidX).birth
+                birthY = Indi.objects.get(pid=pidY).birth
+                dif = abs((birthX - birthY).days)
+                if(not ((dif > 270)or(dif < 2))): output = False
+    return output
+
+
 # print if fam has parents that are too old
 for i in Fam.objects:
     if(not parentsNotTooOld(i)):
