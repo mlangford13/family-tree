@@ -3,43 +3,34 @@ from mongoengine import *
 from dbDef import *
 import unittest
 import datetime
+from prettytable import PrettyTable
 
 connectToMongoDB()
 
-# birth before death es05
+# birth before death us03
 # takes an Indi and returns true if the birth is before the death
 # or if they're still alive
 def birthBeforeDeath(x):
     if(x.death is not None):return(x.birth<=x.death)
     else:return(True)
 
-# takes a fam
-# mother less than 60 years older than child
-# father less than 80 years older than child
-# if too old return false: else true
-def parentsNotTooOld(x):
-    if(x.children == []): return true
-    # get oldest child age
-    oldestPid = ''
-    oldestBirth = ''
-    for childPid in x.children:
-        birthDate = Indi.objects.get(pid=childPid).birth
-        if(oldestBirth == ''):
-            oldestBirth = birthDate
-            oldestPid = childPid
-        elif(birthDate < oldestBirth):
-            oldestBirth = birthDate
-            oldestPid = childPid
-        wife = Indi.objects.get(pid=x.wid)
-        husband = Indi.objects.get(pid=x.hid)
-        wDif = abs((wife.birth - oldestBirth).days / 365)
-        hDif = abs((husband.birth - oldestBirth).days / 365)
-        if(wDif > 60 or hDif > 80): return False
-        else: return True
+# US05
+# Checks if an individuals own death date is not before any
+# of their marrige dates
+def marriageBeforeDeath(individual):
+    for key in individual.marriages:
+        if individual.marriages[key] > individual.death:
+            return False
+    return True
 
-# input datetime.date
-def dateBeforeNow(x):
-    return x < datetime.datetime.now().date()
+#US06
+# Checks if an individuals own death date is not before any
+# of their divorce dates
+def divorceBeforeDeath(individual):
+    for key in individual.divorces:
+        if individual.divorces[key] > individual.death:
+            return False
+    return True
 
 # removes indis that don't pass test
 for i in Fam.objects:
@@ -82,16 +73,64 @@ class FixDataTests(unittest.TestCase):
         self.assertFalse(birthBeforeDeath(i7))
         self.assertFalse(birthBeforeDeath(i8))
         self.assertTrue(birthBeforeDeath(i9))
-    def test_us01(self):
-        d1 = datetime.date(1990,1,1)
-        d2 = datetime.date(1990,1,2)
-        d3 = datetime.date(1990,2,1)
-        d4 = datetime.date(2010,1,1)
-        d5 = datetime.date.max
-        self.assertTrue(dateBeforeNow(d1))
-        self.assertTrue(dateBeforeNow(d2))
-        self.assertTrue(dateBeforeNow(d3))
-        self.assertTrue(dateBeforeNow(d4))
-        self.assertFalse(dateBeforeNow(d5))
-    if __name__ == '__main__':
-        unittest.main()
+
+    # Marriage before death
+    def test_us05(self):
+        deathDate = datetime.date(1990,1,1)
+
+        marriage0 = {"test0": datetime.date(1980,1,1)}      #Marriage before
+        marriage1 = {"test1": datetime.date(1990,1,1)}      #Marriage same day
+        marriage2 = {"test2": datetime.date(1995,1,1)}      #Marriage after death
+        marriage3 = {"test3": datetime.date(1980,1,1),\
+                     "test4": datetime.date(1985,1,1)}      #Two valid marriages
+        marriage4 = {"test3": datetime.date(1980,1,1),\
+                     "test4": datetime.date(1995,1,1)}      #One invalid marriages
+        marriage5 = {}                                      #No marriages
+
+        i0 = Indi(pid='i0', death=deathDate, marriages=marriage0)
+        i1 = Indi(pid='i1', death=deathDate, marriages=marriage1)
+        i2 = Indi(pid='i2', death=deathDate, marriages=marriage2)
+        i3 = Indi(pid='i3', death=deathDate, marriages=marriage3)
+        i4 = Indi(pid='i4', death=deathDate, marriages=marriage4)
+        i5 = Indi(pid='i5', death=deathDate, marriages=marriage5)
+
+
+        self.assertTrue(marriageBeforeDeath(i0))
+        self.assertTrue(marriageBeforeDeath(i1))
+        self.assertTrue(marriageBeforeDeath(i3))
+        self.assertTrue(marriageBeforeDeath(i5))
+
+        self.assertFalse(marriageBeforeDeath(i2))
+        self.assertFalse(marriageBeforeDeath(i4))
+
+    # Divorce before death
+    def test_us06(self):
+        deathDate = datetime.date(1990,1,1)
+
+        divorce0 = {"test0": datetime.date(1980,1,1)}      #Divroce before
+        divorce1 = {"test1": datetime.date(1990,1,1)}      #Divorce same day
+        divorce2 = {"test2": datetime.date(1995,1,1)}      #Divorce after death
+        divorce3 = {"test3": datetime.date(1980,1,1),\
+                     "test4": datetime.date(1985,1,1)}     #Two valid divorces
+        divorce4 = {"test3": datetime.date(1980,1,1),\
+                     "test4": datetime.date(1995,1,1)}     #One invalid divorce
+        divorce5 = {}                                      #No divorces
+
+        i0 = Indi(pid='i0', death=deathDate, divorces=divorce0)
+        i1 = Indi(pid='i1', death=deathDate, divorces=divorce1)
+        i2 = Indi(pid='i2', death=deathDate, divorces=divorce2)
+        i3 = Indi(pid='i3', death=deathDate, divorces=divorce3)
+        i4 = Indi(pid='i4', death=deathDate, divorces=divorce4)
+        i5 = Indi(pid='i5', death=deathDate, divorces=divorce5)
+
+
+        self.assertTrue(divorceBeforeDeath(i0))
+        self.assertTrue(divorceBeforeDeath(i1))
+        self.assertTrue(divorceBeforeDeath(i3))
+        self.assertTrue(divorceBeforeDeath(i5))
+
+        self.assertFalse(divorceBeforeDeath(i2))
+        self.assertFalse(divorceBeforeDeath(i4))
+
+if __name__ == '__main__':
+    unittest.main()
