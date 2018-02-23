@@ -2,6 +2,7 @@
 from mongoengine import *
 from dbDef import *
 from utility import *
+#from userStories import *
 import unittest
 import datetime
 
@@ -13,7 +14,7 @@ connectToMongoDB()
 def dateBeforeToday(x):
     return (x < datetime.datetime.now().date())
 
-#U S03
+# US03
 # takes an Indi and returns true if the birth is before the death
 # or if they're still alive
 def birthBeforeDeath(x):
@@ -50,6 +51,14 @@ def divorceBeforeDeath(individual):
             return False
     return True
 
+# US07
+# Checks to make sure that a user is less than 150 years old.
+def isLessThan150(indiv):
+    now = datetime.datetime.now().date()
+    age_in_days = (now - indiv.birth).days
+    age_in_years = age_in_days / 365
+    return age_in_years < 150
+
 #US09
 # Checks that each child in a family is born before the
 # death of their parents
@@ -68,7 +77,49 @@ def birthBeforeDeathOfParents(family):
                 return False
     return True
 
-#removes indis that don't pass test
+# US12
+# takes fam and checks that the difference between the eldest child and parents
+# are 60 and 80 years respectively for the wife and husband
+# def parentsNotTooOld(x):
+#     if (x.children == []): return True # no children
+#     oldestBirth = datetime.datetime.now()
+#     for childPid in x.children:
+#         cBirth = Indi.objects.get(pid=childPid).birth
+#         if (cBirth < oldestBirth): oldestBirth = cBirth
+#     wBirth = Indi.objects.get(pid=x.wid).birth
+#     hBirth = Indi.objects.get(pid=x.hid).birth
+#     wDif = (oldestBirth - wBirth).days / 365
+#     hDif = (oldestBirth - hBirth).days / 365
+#     return((wDif < 60)and(hDif < 80))
+
+# US13
+# takes
+# more than 8 months (270 days) or less than 2 days
+# true if good else false
+def siblingSpacing(x):
+    if(x.children == []): return True
+    childrenPids = x.children
+    output = True
+    for pidX in childrenPids:
+        for pidY in childrenPids:
+            if(pidX != pidY):
+                birthX = Indi.objects.get(pid=pidX).birth
+                birthY = Indi.objects.get(pid=pidY).birth
+                dif = abs((birthX - birthY).days)
+                if(not ((dif > 270)or(dif < 2))): output = False
+    return output
+
+
+# print if fam has parents that are too old
+# for i in Fam.objects:
+#     if(not parentsNotTooOld(i)):
+#         print(i.fid + " has a parent/parents that is/are too old for their children")
+
+# removes indis that don't pass test
+#for i in Indi.objects:
+#    if(not birthBeforeDeath(i)):i.delete()
+
+# print pid of indis that don't pass test
 for i in Indi.objects:
     if(not birthBeforeDeath(i)):print(i.pid + " dies before they are born.")
 
@@ -112,7 +163,7 @@ class FixDataTests(unittest.TestCase):
         self.assertTrue(birthBeforeMarriage(i5))
         self.assertTrue(marriageBeforeDeath(i2))
         self.assertTrue(marriageBeforeDeath(i4))
-        
+
     def test_us03(self):
         # year month day
         # dates are earliest -> latest
@@ -200,6 +251,28 @@ class FixDataTests(unittest.TestCase):
 
         self.assertFalse(divorceBeforeDeath(i2))
         self.assertFalse(divorceBeforeDeath(i4))
+
+    def test_us07(self):
+        d1 = datetime.date(2050, 1, 1)
+        d2 = datetime.date(2000, 1, 1)
+        d3 = datetime.date(1950, 1, 1)
+        d4 = datetime.date(1900, 1, 1)
+        d5 = datetime.date(1850, 1, 1)
+        d6 = datetime.date(1800, 1, 1)
+
+        i1 = Indi(pid = "indi1", birth = d1)
+        i2 = Indi(pid = "indi2", birth = d2)
+        i3 = Indi(pid = "indi3", birth = d3)
+        i4 = Indi(pid = "indi4", birth = d4)
+        i5 = Indi(pid = "indi5", birth = d5)
+        i6 = Indi(pid = "indi6", birth = d6)
+
+        self.assertTrue(isLessThan150(i1))
+        self.assertTrue(isLessThan150(i2))
+        self.assertTrue(isLessThan150(i3))
+        self.assertTrue(isLessThan150(i4))
+        self.assertFalse(isLessThan150(i5))
+        self.assertFalse(isLessThan150(i6))
 
     #TODO: Add more test cases
     def test_us09(self):
