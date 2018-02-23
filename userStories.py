@@ -9,15 +9,6 @@ import datetime
 def dateBeforeToday(x):
     return (x < datetime.datetime.now().date())
 
-# US03
-# takes an Indi and returns true if the birth is before the death
-# or if they're still alive
-def birthBeforeDeath(x):
-    if(x.death is not None and x.birth is not None):
-        return(x.birth <= x.death)
-    else:
-        return(True)
-
 # US02
 # takes indi
 def birthBeforeMarriage(x):
@@ -26,6 +17,15 @@ def birthBeforeMarriage(x):
         if x.birth >= x.marriages[key]:
             return False
     return True
+
+# US03
+# takes an Indi and returns true if the birth is before the death
+# or if they're still alive
+def birthBeforeDeath(x):
+    if(x.death is not None and x.birth is not None):
+        return(x.birth <= x.death)
+    else:
+        return(True)
 
 # US05
 # Checks if an individuals own death date is not before any
