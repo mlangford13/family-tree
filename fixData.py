@@ -1,9 +1,9 @@
 # fix data
 from mongoengine import *
 from dbDef import *
+from utility import *
 import unittest
 import datetime
-from prettytable import PrettyTable
 
 connectToMongoDB()
 
@@ -17,8 +17,10 @@ def dateBeforeToday(x):
 # takes an Indi and returns true if the birth is before the death
 # or if they're still alive
 def birthBeforeDeath(x):
-    if(x.death is not None):return(x.birth<=x.death)
-    else:return(True)
+    if(x.death is not None and x.birth is not None):
+        return(x.birth <= x.death)
+    else:
+        return(True)
 
 # US02
 # takes indi
@@ -49,30 +51,25 @@ def divorceBeforeDeath(individual):
             return False
     return True
 
-# takes fam and checks that the difference between the eldest child and parents
-# are 60 and 80 years respectively for the wife and husband
-def parentsNotTooOld(x):
-    if (x.children == []): return True # no children
-    oldestBirth = datetime.datetime.now()
-    for childPid in x.children:
-        cBirth = Indi.objects.get(pid=childPid).birth
-        if (cBirth < oldestBirth): oldestBirth = cBirth
-    wBirth = Indi.objects.get(pid=x.wid).birth
-    hBirth = Indi.objects.get(pid=x.hid).birth
-    wDif = (oldestBirth - wBirth).days / 365
-    hDif = (oldestBirth - hBirth).days / 365
-    return((wDif < 60)and(hDif < 80))
+#US09
+# Checks that each child in a family is born before the
+# death of their parents
+def birthBeforeDeathOfParents(family):
+    dad = getIndi(pid=family.hid)
+    mom = getIndi(pid=family.wid)
+    for childId in family.children:
+        child = getIndi(childId)
 
-# print if fam has parents that are too old
-for i in Fam.objects:
-    if(not parentsNotTooOld(i)):
-        print(i.fid + " has a parent/parents that is/are too old for their children")
+        if(dad.death is not None):
+            if(child.birth > addMonths(dad.death, 9)):
+                return False
 
-# removes indis that don't pass test
-#for i in Indi.objects:
-#    if(not birthBeforeDeath(i)):i.delete()
+        if(mom.death is not None):
+            if(child.birth > mom.death):
+                return False
+    return True
 
-# print pid of indis that don't pass test
+#removes indis that don't pass test
 for i in Indi.objects:
     if(not birthBeforeDeath(i)):print(i.pid + " dies before they are born.")
 
@@ -202,6 +199,25 @@ class FixDataTests(unittest.TestCase):
 
         self.assertFalse(divorceBeforeDeath(i2))
         self.assertFalse(divorceBeforeDeath(i4))
+
+    #TODO: Add more test cases
+    def test_us09(self):
+        death = datetime.date(1990,1,1)
+        sonBirth = datetime.date(1990,1,1)
+
+        mom = Indi(pid='mom', death=death)
+        dad = Indi(pid='dad', death=death)
+        child = Indi(pid='son', birth=sonBirth)
+        family = Fam(fid='fam', hid='dad', wid='mom', children={child.pid})
+
+        mom.save()
+        dad.save()
+        child.save()
+        family.save()
+
+        self.assertTrue(birthBeforeDeathOfParents(family))
+
+
 
 if __name__ == '__main__':
     unittest.main()
