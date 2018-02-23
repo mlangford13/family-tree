@@ -35,7 +35,6 @@ def birthBeforeMarriage(x):
 # Checks if an individuals own death date is not before any
 # of their marrige dates
 def marriageBeforeDeath(individual):
-    if(individual.marriages == {}): return True
     for key in individual.marriages:
         if not individual.alive:
             if individual.marriages[key] > individual.death:
@@ -85,6 +84,7 @@ class FixDataTests(unittest.TestCase):
         self.assertTrue(dateBeforeToday(d3))
         self.assertTrue(dateBeforeToday(d4))
         self.assertFalse(dateBeforeToday(d5))
+
     def test_us02(self):
         birthDate = datetime.date(1990,1,1)
 
@@ -112,6 +112,7 @@ class FixDataTests(unittest.TestCase):
         self.assertTrue(birthBeforeMarriage(i5))
         self.assertTrue(marriageBeforeDeath(i2))
         self.assertTrue(marriageBeforeDeath(i4))
+        
     def test_us03(self):
         # year month day
         # dates are earliest -> latest
