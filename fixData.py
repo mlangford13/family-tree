@@ -13,7 +13,7 @@ connectToMongoDB()
 def dateBeforeToday(x):
     return (x < datetime.datetime.now().date())
 
-#U S03
+# US03
 # takes an Indi and returns true if the birth is before the death
 # or if they're still alive
 def birthBeforeDeath(x):
@@ -49,6 +49,7 @@ def divorceBeforeDeath(individual):
             return False
     return True
 
+# US12
 # takes fam and checks that the difference between the eldest child and parents
 # are 60 and 80 years respectively for the wife and husband
 def parentsNotTooOld(x):
