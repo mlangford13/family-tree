@@ -127,7 +127,6 @@ class FixDataTests(unittest.TestCase):
         i4 = Indi(pid='i4', death=deathDate, divorces=divorce4)
         i5 = Indi(pid='i5', death=deathDate, divorces=divorce5)
 
-
         self.assertTrue(divorceBeforeDeath(i0))
         self.assertTrue(divorceBeforeDeath(i1))
         self.assertTrue(divorceBeforeDeath(i3))
@@ -175,7 +174,32 @@ class FixDataTests(unittest.TestCase):
 
         self.assertTrue(birthBeforeDeathOfParents(family))
 
+    def test_us25(self):
+        i1 = Indi(pid="john1", name="John")
+        i2 = Indi(pid="john2", name="John")
+        i3 = Indi(pid="amy", name="Amy")
+        i4 = Indi(pid="sue", name="Sue")
+        i5 = Indi(pid="greg1", name="Greg")
+        i6 = Indi(pid="greg2", name="Greg")
 
+        fam1 = Fam(fid="fam1", children={i1.pid, i3.pid, i4.pid}) #John, Amy, Sue
+        fam2 = Fam(fid="fam2", children={i2.pid, i4.pid, i6.pid})#John, Sue, Greg
+        fam3 = Fam(fid="fam3", children={i1.pid, i2.pid, i6.pid})#John,John, Greg
+        fam4 = Fam(fid="fam4", children={i3.pid, i5.pid, i6.pid})#Amy, Greg, Greg
+        fam5 = Fam(fid="fam5", children={i5.pid, i6.pid}) #Greg, Greg
+        fam6 = Fam(fid="fam6")
+        fam7 = Fam(fid="fam7", children={i1.pid}) #John
+
+        for obj in [i1, i2, i3, i4, i5, i6, fam1, fam2, fam3, fam4, fam5, fam6, fam7]:
+            obj.save()
+
+        self.assertTrue(uniqueFirstNames(fam1.fid))
+        self.assertTrue(uniqueFirstNames(fam2.fid))
+        self.assertFalse(uniqueFirstNames(fam3.fid))
+        self.assertFalse(uniqueFirstNames(fam4.fid))
+        self.assertFalse(uniqueFirstNames(fam5.fid))
+        self.assertTrue(uniqueFirstNames(fam6.fid))
+        self.assertTrue(uniqueFirstNames(fam7.fid))
 
 if __name__ == '__main__':
     unittest.main()
