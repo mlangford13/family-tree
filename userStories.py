@@ -91,6 +91,22 @@ def birthBeforeDeathOfParents(family):
 # takes
 # more than 8 months (270 days) or less than 2 days
 # true if good else false
+
+
+# US25
+# Unique first names in families
+def uniqueFirstNames(fid):
+    family = getFam(fid)
+    children = family.children
+    names = []
+    for cid in children:
+        child = getIndi(cid)
+        name = child.name.split(" ")
+        if name in names:
+            return False
+        names.append(name)
+    return True
+
 def siblingSpacing(x):
     if(x.children == []): return True
     childrenPids = x.children
