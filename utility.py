@@ -5,6 +5,9 @@ import calendar
 
 def getIndi(pid):
     return Indi.objects.get(pid=pid)
+    
+def getFam(fid):
+    return Fam.objects.get(fid=fid)
 
 def addMonths(sourcedate,months):
     month = sourcedate.month - 1 + months
