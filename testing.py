@@ -158,6 +158,48 @@ class FixDataTests(unittest.TestCase):
         self.assertFalse(isLessThan150(i5))
         self.assertFalse(isLessThan150(i6))
 
+    def test_us08(self):
+        c1Birth = datetime.date(1990,1,1)
+        c2Birth = datetime.date(1995,1,1)
+        c3Birth = datetime.date(2000,1,1)
+        c4Birth = datetime.date(2005,1,1)
+        c5Birth = datetime.date(2010,8,1)
+        c6Birth = datetime.date(2010,11,1)
+        c1 = Indi(pid='c1', name='c1',birth = c1Birth)
+        c2 = Indi(pid='c2', name='c2',birth = c2Birth)
+        c3 = Indi(pid='c3', name='c3',birth = c3Birth)
+        c4 = Indi(pid='c4', name='c4',birth = c4Birth)
+        c5 = Indi(pid='c5', name='c5',birth = c5Birth)
+        c6 = Indi(pid='c6', name='c6',birth = c6Birth)
+
+        #children = {c1.pid, c2.pid, c3.pid, c4.pid}
+
+        marriage1 = datetime.date(1995,1,1)
+        fam1 = Fam(fid='fam1', married=marriage1, children={c1.pid})
+        fam2 = Fam(fid='fam2', married=marriage1, children={c2.pid})
+        fam3 = Fam(fid='fam3', married=marriage1, children={c3.pid})
+        fam4 = Fam(fid='fam4', married=marriage1, children={c4.pid})
+        fam5 = Fam(fid='fam5', married=marriage1)
+
+        divorce = datetime.date(2010,1,1)
+        fam6 = Fam(fid='fam6', married=marriage1, divorced=divorce, children={c5.pid})
+        fam7 = Fam(fid='fam7', married=marriage1, divorced=divorce, children={c6.pid})
+
+        for obj in [c1, c2, c3, c4, c5, c6, fam1, fam2, fam3, fam4, fam5, fam6, fam7]:
+            obj.save()
+            
+        self.assertFalse(birthAfterMarriageOfParents(fam1))
+        self.assertFalse(birthAfterMarriageOfParents(fam2))
+        self.assertTrue(birthAfterMarriageOfParents(fam3))
+        self.assertTrue(birthAfterMarriageOfParents(fam4))
+        self.assertTrue(birthAfterMarriageOfParents(fam5))
+
+        self.assertTrue(birthAfterMarriageOfParents(fam6))
+        self.assertFalse(birthAfterMarriageOfParents(fam7))
+
+
+
+
     #TODO: Add more test cases
     def test_us09(self):
         death = datetime.date(1990,1,1)
