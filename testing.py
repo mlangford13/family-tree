@@ -193,13 +193,13 @@ class FixDataTests(unittest.TestCase):
         for obj in [i1, i2, i3, i4, i5, i6, fam1, fam2, fam3, fam4, fam5, fam6, fam7]:
             obj.save()
 
-        self.assertTrue(uniqueFirstNames(fam1.fid))
-        self.assertTrue(uniqueFirstNames(fam2.fid))
-        self.assertFalse(uniqueFirstNames(fam3.fid))
-        self.assertFalse(uniqueFirstNames(fam4.fid))
-        self.assertFalse(uniqueFirstNames(fam5.fid))
-        self.assertTrue(uniqueFirstNames(fam6.fid))
-        self.assertTrue(uniqueFirstNames(fam7.fid))
+        self.assertTrue(uniqueFirstNames(fam1))
+        self.assertTrue(uniqueFirstNames(fam2))
+        self.assertFalse(uniqueFirstNames(fam3))
+        self.assertFalse(uniqueFirstNames(fam4))
+        self.assertFalse(uniqueFirstNames(fam5))
+        self.assertTrue(uniqueFirstNames(fam6))
+        self.assertTrue(uniqueFirstNames(fam7))
 
 if __name__ == '__main__':
     unittest.main()

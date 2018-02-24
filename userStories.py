@@ -95,8 +95,7 @@ def birthBeforeDeathOfParents(family):
 
 # US25
 # Unique first names in families
-def uniqueFirstNames(fid):
-    family = getFam(fid)
+def uniqueFirstNames(family):
     children = family.children
     names = []
     for cid in children:
