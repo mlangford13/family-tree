@@ -26,6 +26,18 @@ def birthBeforeDeath(x):
         return(x.birth <= x.death)
     else:
         return(True)
+# US04
+# marriage before birth
+# takes a indi
+def marriageBeforeDivorce(x):
+    output = True
+    for key in x.marriages:                 # every marriage
+        dateM = x.marriages[key]
+        if key in x.divorces:               # check for divorce
+            dateD = x.divorces[key]
+            if dateM != '' and dateD != '': # check for dates
+                output = dateM < dateD     # check dates
+    return output
 
 # US05
 # Checks if an individuals own death date is not before any

@@ -77,6 +77,65 @@ class FixDataTests(unittest.TestCase):
         self.assertFalse(birthBeforeDeath(i7))
         self.assertFalse(birthBeforeDeath(i8))
         self.assertTrue(birthBeforeDeath(i9))
+    # Marriage before divorce
+    def test_us04(self):
+        m0 = {"test0": datetime.date(1980,1,1)}      # Marriage before
+        d0 = {"test0": datetime.date(1981,2,2)}
+
+        m1 = {"test0": datetime.date(1980,1,1)}      # Divorce Before
+        d1 = {"test0": datetime.date(1929,2,2)}
+
+        m2 = {"test0": datetime.date(1980,1,1)}      # Same day
+        d2 = {"test0": datetime.date(1980,1,1)}
+
+        m3 = {}                                      # No marriages
+        d3 = {"test0": datetime.date(1981,2,2)}
+
+        m4 = {"test0": datetime.date(1980,1,1)}      # No divorces
+        d4 = {}
+
+        m5 = {}                                      # No marriages or divorces
+        d5 = {}
+
+        m6 = {"test0": datetime.date(1980,1,1),\
+                "test1": datetime.date(1985,1,1),\
+                "test2": datetime.date(1990,1,1)}    # Multiple valid
+        d6 = {"test0": datetime.date(1984,2,2),\
+                "test1": datetime.date(1987,2,2)}
+
+        m7 = {"test0": datetime.date(1980,1,1),\
+                "test1": datetime.date(1985,1,1),\
+                "test2": datetime.date(1990,1,1)}    # One invalid
+        d7 = {"test0": datetime.date(1984,2,2),\
+                "test1": datetime.date(1987,2,2),\
+                "test2": datetime.date(1983,2,2)}
+
+        m8 = {"test0": datetime.date(1980,1,1),\
+                "test1": datetime.date(1985,1,1),\
+                "test2": datetime.date(1990,1,1)}    # All invalid
+        d8 = {"test0": datetime.date(1950,2,2),\
+                "test1": datetime.date(1967,2,2),\
+                "test2": datetime.date(1981,2,2)}
+
+        i0 = Indi(pid='i0', marriages=m0,divorces=d0)
+        i1 = Indi(pid='i1', marriages=m1,divorces=d1)
+        i2 = Indi(pid='i2', marriages=m2,divorces=d2)
+        i3 = Indi(pid='i3', marriages=m3,divorces=d3)
+        i4 = Indi(pid='i4', marriages=m4,divorces=d4)
+        i5 = Indi(pid='i5', marriages=m5,divorces=d5)
+        i6 = Indi(pid='i6', marriages=m6,divorces=d6)
+        i7 = Indi(pid='i7', marriages=m7,divorces=d7)
+        i8 = Indi(pid='i8', marriages=m8,divorces=d8)
+
+        self.assertTrue(marriageBeforeDivorce(i0))
+        self.assertFalse(marriageBeforeDivorce(i1))
+        self.assertFalse(marriageBeforeDivorce(i2))
+        self.assertTrue(marriageBeforeDivorce(i3))
+        self.assertTrue(marriageBeforeDivorce(i4))
+        self.assertTrue(marriageBeforeDivorce(i5))
+        self.assertTrue(marriageBeforeDivorce(i6))
+        self.assertFalse(marriageBeforeDivorce(i7))
+        self.assertFalse(marriageBeforeDivorce(i8))
 
     # Marriage before death
     def test_us05(self):
