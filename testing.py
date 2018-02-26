@@ -4,8 +4,9 @@ from utility import *
 from userStories import *
 import unittest
 import datetime
+import subprocess
 
-connectToMongoDB()
+connectToTest()
 
 class FixDataTests(unittest.TestCase):
     def test_us01(self):
