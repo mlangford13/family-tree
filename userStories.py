@@ -87,17 +87,17 @@ def birthBeforeDeathOfParents(family):
 # US12
 # takes fam and checks that the difference between the eldest child and parents
 # are 60 and 80 years respectively for the wife and husband
-# def parentsNotTooOld(x):
-#     if (x.children == []): return True # no children
-#     oldestBirth = datetime.datetime.now()
-#     for childPid in x.children:
-#         cBirth = Indi.objects.get(pid=childPid).birth
-#         if (cBirth < oldestBirth): oldestBirth = cBirth
-#     wBirth = Indi.objects.get(pid=x.wid).birth
-#     hBirth = Indi.objects.get(pid=x.hid).birth
-#     wDif = (oldestBirth - wBirth).days / 365
-#     hDif = (oldestBirth - hBirth).days / 365
-#     return((wDif < 60)and(hDif < 80))
+def parentsNotTooOld(x):
+    if (x.children == []): return True # no children
+    oldestBirth = datetime.datetime.max
+    for childPid in x.children:
+        cBirth = Indi.objects.get(pid=childPid).birth
+        if (cBirth < oldestBirth): oldestBirth = cBirth
+    wBirth = Indi.objects.get(pid=x.wid).birth
+    hBirth = Indi.objects.get(pid=x.hid).birth
+    wDif = (oldestBirth - wBirth).days / 365
+    hDif = (oldestBirth - hBirth).days / 365
+    return((wDif < 60)and(hDif < 80))
 
 # US13
 # takes

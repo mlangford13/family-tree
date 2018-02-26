@@ -235,6 +235,61 @@ class FixDataTests(unittest.TestCase):
 
         self.assertTrue(birthBeforeDeathOfParents(family))
 
+    # parents not too old
+    def test_us12(self):
+        y = 365
+        d0 = datetime.date(2000,1,1) # child date (older)
+        d1 = d0 + datetime.timedelta(days = 200) # child date (younger)
+        d2 = d0 - datetime.timedelta(days = 79*y) # young enough father
+        d3 = d0 - datetime.timedelta(days = 80*y) # too old father
+        d4 = d0 - datetime.timedelta(days = 81*y) # too old father
+        d5 = d0 - datetime.timedelta(days = 59*y) # young enough mother
+        d6 = d0 - datetime.timedelta(days = 60*y) # too old mother
+        d7 = d0 - datetime.timedelta(days = 61*y) # too old mother
+
+        c0 = Indi(pid='c0',birth=d0)
+        c1 = Indi(pid='c1',birth=d1)
+
+        cl0 = []
+        cl1 = ['c0']
+        cl2 = ['c0','c1']
+
+        h0 = Indi(pid='h0',birth=d2)
+        h1 = Indi(pid='h1',birth=d3)
+        h2 = Indi(pid='h2',birth=d4)
+
+        w0 = Indi(pid='w0',birth=d5)
+        w1 = Indi(pid='w1',birth=d6)
+        w2 = Indi(pid='w2',birth=d7)
+
+        f0 = Fam(fid='f0',hid='h0',wid='w0',children=cl0) # no children
+        f1 = Fam(fid='f1',hid='h0',wid='w0',children=cl1) # one child
+        f2 = Fam(fid='f2',hid='h0',wid='w0',children=cl2) # less mother
+        f3 = Fam(fid='f3',hid='h0',wid='w1',children=cl2) # equal mother
+        f4 = Fam(fid='f4',hid='h0',wid='w2',children=cl2) # more mother
+        f5 = Fam(fid='f5',hid='h0',wid='w0',children=cl2) # less father
+        f6 = Fam(fid='f6',hid='h1',wid='w0',children=cl2) # equal father
+        f7 = Fam(fid='f7',hid='h2',wid='w0',children=cl2) # more father
+        f8 = Fam(fid='f8',hid='h2',wid='w2',children=cl2) # both more
+
+        saveList = [c0,c1,h0,h1,h2,w0,w1,w2,f0,f1,f2,f3,f4,f5,f6,f7,f8]
+
+        clearDB()
+        for i in saveList:
+            i.save()
+
+        self.assertTrue(parentsNotTooOld(f0))
+        self.assertTrue(parentsNotTooOld(f1))
+        self.assertTrue(parentsNotTooOld(f2))
+        self.assertFalse(parentsNotTooOld(f3))
+        self.assertFalse(parentsNotTooOld(f4))
+        self.assertTrue(parentsNotTooOld(f5))
+        self.assertFalse(parentsNotTooOld(f6))
+        self.assertFalse(parentsNotTooOld(f7))
+        self.assertFalse(parentsNotTooOld(f8))
+        clearDB()
+
+    # sibling spacing
     def test_us13(self):
         d0 = datetime.date(2000,1,1)
         d1 = d0 + datetime.timedelta(days = 271)
