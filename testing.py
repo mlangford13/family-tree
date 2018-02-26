@@ -235,6 +235,41 @@ class FixDataTests(unittest.TestCase):
 
         self.assertTrue(birthBeforeDeathOfParents(family))
 
+    def test_us13(self):
+        d0 = datetime.date(2000,1,1)
+        d1 = d0 + datetime.timedelta(days = 271)
+        d2 = d0 + datetime.timedelta(days = 270)
+        d3 = d0 + datetime.timedelta(days = 2)
+        d4 = d0 + datetime.timedelta(days = 1)
+        d5 = d0 + datetime.timedelta(days = 0)
+
+        i0 = Indi(pid='i0', birth=d0)
+        i1 = Indi(pid='i1', birth=d1)
+        i2 = Indi(pid='i2', birth=d2)
+        i3 = Indi(pid='i3', birth=d3)
+        i4 = Indi(pid='i4', birth=d4)
+        i5 = Indi(pid='i5', birth=d5)
+        iList = [i0,i1,i2,i3,i4,i5]
+
+        f1 = Fam(fid='f1',children=['i0','i1']) # > 270 days
+        f2 = Fam(fid='f2',children=['i0','i2']) # = 270 days
+        f3 = Fam(fid='f3',children=['i0','i3']) # = 2 days
+        f4 = Fam(fid='f4',children=['i0','i4']) # < 2 days
+        f5 = Fam(fid='f5',children=['i0','i5']) # same day
+        fList = [f1,f2,f3,f4,f5]
+
+        clearDB()
+        for i in iList:
+            i.save()
+        for f in fList:
+            f.save()
+        self.assertTrue(siblingSpacing(f1))
+        self.assertFalse(siblingSpacing(f2))
+        self.assertFalse(siblingSpacing(f3))
+        self.assertTrue(siblingSpacing(f4))
+        self.assertTrue(siblingSpacing(f5))
+        clearDB()
+
 
 
 if __name__ == '__main__':
