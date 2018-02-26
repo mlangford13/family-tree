@@ -122,3 +122,15 @@ def siblingSpacing(x):
 # returns true if there are more than 14 siblings
 def tooManySiblings(x):
     return len(x.children) >= 15
+
+# US18
+# siblings should not marry
+# takes a fam and returns true if any siblings are married to each other
+# returns true if married to sibling
+def marriedToSibling(x):
+    output = False
+    for cid in x.children:
+        child = getIndi(cid)
+        for key in child.marriages:
+            if key in x.children: output = True
+    return output
