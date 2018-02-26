@@ -100,7 +100,7 @@ def parentsNotTooOld(x):
     return((wDif < 60)and(hDif < 80))
 
 # US13
-# takes
+# takes fam
 # more than 8 months (270 days) or less than 2 days
 # true if good else false
 def siblingSpacing(x):
@@ -115,3 +115,10 @@ def siblingSpacing(x):
                 dif = abs((birthX - birthY).days)
                 if(not ((dif > 270)or(dif < 2))): output = False
     return output
+
+# US15
+# fewer than 15 siblings in a family
+# takes a fam
+# returns true if there are more than 14 siblings
+def tooManySiblings(x):
+    return len(x.children) >= 15

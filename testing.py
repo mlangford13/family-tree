@@ -325,7 +325,21 @@ class FixDataTests(unittest.TestCase):
         self.assertTrue(siblingSpacing(f5))
         clearDB()
 
+    def test_us15(self):
+        c0 = []
+        c1 = ['testId']*14
+        c2 = ['testId']*15
+        c3 = ['testId']*16
 
+        f0 = Fam(fid='f0',children=c0)
+        f1 = Fam(fid='f1',children=c1)
+        f2 = Fam(fid='f2',children=c2)
+        f3 = Fam(fid='f3',children=c3)
+
+        self.assertFalse(tooManySiblings(f0))
+        self.assertFalse(tooManySiblings(f1))
+        self.assertTrue(tooManySiblings(f2))
+        self.assertTrue(tooManySiblings(f3))
 
 if __name__ == '__main__':
     unittest.main()
