@@ -14,8 +14,9 @@ def dateBeforeToday(x):
 def birthBeforeMarriage(x):
     if(x.marriages == {}): return True
     for key in x.marriages:
-        if x.birth >= x.marriages[key]:
-            return False
+        if x.marriages[key] != '':
+            if x.birth >= x.marriages[key]:
+                return False
     return True
 
 # US03
@@ -27,7 +28,7 @@ def birthBeforeDeath(x):
     else:
         return(True)
 # US04
-# marriage before birth
+# marriage before divorce
 # takes a indi
 def marriageBeforeDivorce(x):
     output = True
@@ -35,7 +36,7 @@ def marriageBeforeDivorce(x):
         dateM = x.marriages[key]
         if key in x.divorces:               # check for divorce
             dateD = x.divorces[key]
-            if dateM != '' and dateD != '': # check for dates
+            if (dateM != '') and (dateD != ''): # check for dates
                 output = dateM < dateD     # check dates
     return output
 
@@ -45,8 +46,9 @@ def marriageBeforeDivorce(x):
 def marriageBeforeDeath(individual):
     for key in individual.marriages:
         if not individual.alive:
-            if individual.marriages[key] > individual.death:
-                return False
+            if individual.marriages[key] != '':
+                if individual.marriages[key] > individual.death:
+                    return False
     return True
 
 #US06
