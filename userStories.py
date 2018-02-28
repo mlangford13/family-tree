@@ -68,6 +68,7 @@ def isLessThan150(indiv):
     age_in_years = age_in_days / 365
     return age_in_years < 150
 
+
 #US08
 # Check that child is born after the marriage of parents
 def birthAfterMarriageOfParents(family):
@@ -80,7 +81,8 @@ def birthAfterMarriageOfParents(family):
                 return False
     return True
 
-#US09
+
+# US09
 # Checks that each child in a family is born before the
 # death of their parents
 def birthBeforeDeathOfParents(family):
@@ -96,6 +98,18 @@ def birthBeforeDeathOfParents(family):
         if(mom.death is not None):
             if(child.birth > mom.death):
                 return False
+    return True
+
+# US10
+# Marriage after 14
+def marriageAfter14(individual):
+    for key in individual.marriages:
+        dom = individual.marriages[key]
+        print(key)
+        print(dom)
+        days = (dom - individual.birth).days
+        if days/365 <= 14:
+            return False
     return True
 
 # US12
@@ -130,12 +144,28 @@ def siblingSpacing(x):
                 if(not ((dif > 270)or(dif < 2))): output = False
     return output
 
+
 # US15
 # fewer than 15 siblings in a family
 # takes a fam
 # returns true if there are more than 14 siblings
 def tooManySiblings(x):
     return len(x.children) >= 15
+
+
+# US16
+# Male last names in family
+def same_male_last_names(family):
+    child_pids = family.children
+    father_pid = family.hid
+    father_name = getIndi(father_pid).name
+    lastname = father_name.split(" ")[1]
+    for pid in child_pids:
+        child = getIndi(pid)
+        child_last_name = child.name.split(" ")[1]
+        if child.gender == "M" and child_last_name != lastname:
+            return False
+    return True
 
 # US18
 # siblings should not marry
@@ -148,3 +178,17 @@ def marriedToSibling(x):
         for key in child.marriages:
             if key in x.children: output = True
     return output
+
+
+# US25
+# Unique first names in families
+def uniqueFirstNames(family):
+    children = family.children
+    names = []
+    for cid in children:
+        child = getIndi(cid)
+        name = child.name.split(" ")
+        if name in names:
+            return False
+        names.append(name)
+    return True
