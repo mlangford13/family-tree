@@ -54,7 +54,7 @@ def isLessThan150(indiv):
     age_in_years = age_in_days / 365
     return age_in_years < 150
 
-#US09
+# US09
 # Checks that each child in a family is born before the
 # death of their parents
 def birthBeforeDeathOfParents(family):
@@ -70,6 +70,18 @@ def birthBeforeDeathOfParents(family):
         if(mom.death is not None):
             if(child.birth > mom.death):
                 return False
+    return True
+
+# US10
+# Marriage after 14
+def marriageAfter14(individual):
+    for key in individual.marriages:
+        dom = individual.marriages[key]
+        print(key)
+        print(dom)
+        days = (dom - individual.birth).days
+        if days/365 <= 14:
+            return False
     return True
 
 # US12
