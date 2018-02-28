@@ -68,6 +68,18 @@ def isLessThan150(indiv):
     age_in_years = age_in_days / 365
     return age_in_years < 150
 
+#US08
+# Check that child is born after the marriage of parents
+def birthAfterMarriageOfParents(family):
+    for cid in family.children:
+        child = getIndi(pid=cid)
+        if child.birth.date() <= family.married:
+            return False
+        if family.divorced is not None:
+            if child.birth > addMonths(family.divorced, 9):
+                return False
+    return True
+
 #US09
 # Checks that each child in a family is born before the
 # death of their parents
