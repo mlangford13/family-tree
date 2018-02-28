@@ -174,6 +174,28 @@ class FixDataTests(unittest.TestCase):
 
         self.assertTrue(birthBeforeDeathOfParents(family))
 
+    def test_us16(self):
+        i1 = Indi(pid = "i1", gender = "M", name = "Harry Potter")
+        i2 = Indi(pid = "i2", gender = "M", name = "James Potter")
+        i3 = Indi(pid = "i3", gender = "F", name = "Lilly Evans")
+        i4 = Indi(pid = "14", gender = "M", name = "Albus Dumbledore")
+
+        fam1 = Fam(fid = "fam1", hid = i2.pid, children={i1.pid}) #True
+        fam2 = Fam(fid = "fam2", hid = i2.pid, children={i1.pid, i3.pid}) #True
+        fam3 = Fam(fid = "fam3", hid = i4.pid, children={i1.pid, i2.pid}) #False
+        fam4 = Fam(fid = "fam4", hid = i1.pid) #True
+        fam5 = Fam(fid = "fam5", wid = i3.pid, hid = i2.pid, children = {i1.pid})
+
+        for obj in [i1, i2, i3, i4, fam1, fam2, fam3, fam4, fam5]:
+            obj.save()
+
+        self.assertTrue(same_male_last_names(fam1))
+        self.assertTrue(same_male_last_names(fam2))
+        self.assertFalse(same_male_last_names(fam3))
+        self.assertTrue(same_male_last_names(fam4))
+        self.assertTrue(same_male_last_names(fam5))
+
+
     def test_us25(self):
         i1 = Indi(pid="john1", name="John")
         i2 = Indi(pid="john2", name="John")
