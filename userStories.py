@@ -92,6 +92,20 @@ def birthBeforeDeathOfParents(family):
 # more than 8 months (270 days) or less than 2 days
 # true if good else false
 
+# US16
+# Male last names in family
+def same_male_last_names(family):
+    child_pids = family.children
+    father_pid = family.hid
+    father_name = getIndi(father_pid).name
+    lastname = father_name.split(" ")[1]
+    for pid in child_pids:
+        child = getIndi(pid)
+        child_last_name = child.name.split(" ")[1]
+        if child.gender == "M" and child_last_name != lastname:
+            return False
+    return True
+
 
 # US25
 # Unique first names in families
