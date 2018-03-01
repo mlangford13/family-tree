@@ -77,8 +77,6 @@ def birthBeforeDeathOfParents(family):
 def marriageAfter14(individual):
     for key in individual.marriages:
         dom = individual.marriages[key]
-        print(key)
-        print(dom)
         days = (dom - individual.birth).days
         if days/365 <= 14:
             return False
@@ -126,7 +124,7 @@ def uniqueFirstNames(family):
     names = []
     for cid in children:
         child = getIndi(cid)
-        name = child.name.split(" ")
+        name = child.name.split(" ")[0]
         if name in names:
             return False
         names.append(name)

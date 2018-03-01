@@ -8,6 +8,7 @@ import datetime
 connectToMongoDB()
 
 class FixDataTests(unittest.TestCase):
+    
     def test_us01(self):
         d1 = datetime.date(1990,1,1)
         d2 = datetime.date(1990,1,2)
