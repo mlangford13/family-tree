@@ -32,6 +32,8 @@ class FixDataTests(unittest.TestCase):
         marriage4 = {"test3": datetime.date(1980,1,1),\
                      "test4": datetime.date(1995,1,1)}      #One invalid marriages
         marriage5 = {}                                      #No marriages
+        marriage6 = {"test3": datetime.date(1980,1,1),\
+                     "test4": ''}                             #Two valid marriages
 
         i0 = Indi(pid='i0', birth=birthDate, marriages=marriage0)
         i1 = Indi(pid='i1', birth=birthDate, marriages=marriage1)
@@ -39,6 +41,7 @@ class FixDataTests(unittest.TestCase):
         i3 = Indi(pid='i3', birth=birthDate, marriages=marriage3)
         i4 = Indi(pid='i4', birth=birthDate, marriages=marriage4)
         i5 = Indi(pid='i5', birth=birthDate, marriages=marriage5)
+        i6 = Indi(pid='i6', birth=birthDate, marriages=marriage6)
 
 
         self.assertFalse(birthBeforeMarriage(i0))
@@ -48,6 +51,7 @@ class FixDataTests(unittest.TestCase):
         self.assertTrue(birthBeforeMarriage(i5))
         self.assertTrue(marriageBeforeDeath(i2))
         self.assertTrue(marriageBeforeDeath(i4))
+        self.assertTrue(marriageBeforeDeath(i6))
 
     def test_us03(self):
         # year month day
@@ -150,6 +154,8 @@ class FixDataTests(unittest.TestCase):
         marriage4 = {"test3": datetime.date(1980,1,1),\
                      "test4": datetime.date(1995,1,1)}      #One invalid marriages
         marriage5 = {}                                      #No marriages
+        marriage6 = {"test3": datetime.date(1980,1,1),\
+                     "test4": ''}                           #Two valid marriages
 
         i0 = Indi(pid='i0', death=deathDate,alive=False, marriages=marriage0)
         i1 = Indi(pid='i1', death=deathDate,alive=False, marriages=marriage1)
@@ -157,12 +163,14 @@ class FixDataTests(unittest.TestCase):
         i3 = Indi(pid='i3', death=deathDate,alive=False, marriages=marriage3)
         i4 = Indi(pid='i4', death=deathDate,alive=False, marriages=marriage4)
         i5 = Indi(pid='i5', death=deathDate,alive=False, marriages=marriage5)
+        i6 = Indi(pid='i6', death=deathDate,alive=False, marriages=marriage6)
 
 
         self.assertTrue(marriageBeforeDeath(i0))
         self.assertTrue(marriageBeforeDeath(i1))
         self.assertTrue(marriageBeforeDeath(i3))
         self.assertTrue(marriageBeforeDeath(i5))
+        self.assertTrue(marriageBeforeDeath(i6))
 
         self.assertFalse(marriageBeforeDeath(i2))
         self.assertFalse(marriageBeforeDeath(i4))
