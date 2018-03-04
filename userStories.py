@@ -5,10 +5,24 @@ import datetime
 
 
 # US01
-# takes date and does as it says
+# takes individual
+# checks if birth, marriage, divorce, and death are not in the future
+# if in the future, returns true
 def dateBeforeToday(x):
-    return (x < datetime.datetime.now().date())
-
+    today = datetime.date.today()
+    if x.birth != None:
+        if x.birth > today: return True
+    if x.death != None:
+        if x.death > today: return True
+    for key in x.marriages:
+        value = x.marriages[key]
+        if value != '':
+            if value > today: return True
+    for key in x.divorces:
+        value = x.divorces[key]
+        if value != '':
+            if value > today: return True
+    return False
 # US02
 # takes indi
 def birthBeforeMarriage(x):

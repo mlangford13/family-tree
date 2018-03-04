@@ -10,16 +10,38 @@ connectToTest()
 
 class FixDataTests(unittest.TestCase):
     def test_us01(self):
-        d1 = datetime.date(1990,1,1)
-        d2 = datetime.date(1990,1,2)
-        d3 = datetime.date(1990,2,1)
-        d4 = datetime.date(2010,1,1)
-        d5 = datetime.date.max
-        self.assertTrue(dateBeforeToday(d1))
-        self.assertTrue(dateBeforeToday(d2))
-        self.assertTrue(dateBeforeToday(d3))
-        self.assertTrue(dateBeforeToday(d4))
-        self.assertFalse(dateBeforeToday(d5))
+        today = datetime.date.today()
+        past = datetime.datetime.min.date()
+        future = datetime.datetime.max.date()
+        l0 = {"a":today, "b":past, "c":''}       # good
+        l1 = {"a":today, "b": past, "c": future} # bad
+        l2 = {}                                  # good
+
+        i0 = Indi(pid='i0', birth=today)    # born today
+        i1 = Indi(pid='i1', birth=past)     # born past
+        i2 = Indi(pid='i2', birth=future)   # born future
+        i3 = Indi(pid='i3', death=today)    # death today
+        i4 = Indi(pid='i4', death=past)     # death past
+        i5 = Indi(pid='i5', death=future)   # death future
+        i6 = Indi(pid='i6', marriages=l0)   # good
+        i7 = Indi(pid='i7', marriages=l1)   # bad
+        i8 = Indi(pid='i8', marriages=l2)   # good
+        i9 = Indi(pid='i9', divorces=l0)    # good
+        i10 = Indi(pid='i10', divorces=l1)  # bad
+        i11 = Indi(pid='i11', divorces=l2)  # good
+
+        self.assertFalse(dateBeforeToday(i0))
+        self.assertFalse(dateBeforeToday(i1))
+        self.assertTrue(dateBeforeToday(i2))
+        self.assertFalse(dateBeforeToday(i3))
+        self.assertFalse(dateBeforeToday(i4))
+        self.assertTrue(dateBeforeToday(i5))
+        self.assertFalse(dateBeforeToday(i6))
+        self.assertTrue(dateBeforeToday(i7))
+        self.assertFalse(dateBeforeToday(i8))
+        self.assertFalse(dateBeforeToday(i9))
+        self.assertTrue(dateBeforeToday(i10))
+        self.assertFalse(dateBeforeToday(i11))
 
     def test_us02(self):
         birthDate = datetime.date(1990,1,1)
