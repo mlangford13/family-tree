@@ -143,7 +143,7 @@ def tooManySiblings(x):
 # siblings should not marry
 # takes a fam and returns true if any siblings are married to each other
 # returns true if married to sibling
-def marriedToSibling(x):
+def siblingMarriages(x):
     output = False
     for cid in x.children:
         child = getIndi(cid)

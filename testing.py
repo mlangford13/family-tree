@@ -371,5 +371,26 @@ class FixDataTests(unittest.TestCase):
         self.assertTrue(tooManySiblings(f2))
         self.assertTrue(tooManySiblings(f3))
 
+    def test_us18(self):
+        i0 = Indi(pid='i0', marriages={'i1':''})  # fam
+        i1 = Indi(pid='i1', marriages={'i0':''})  # fam
+        i2 = Indi(pid='i2', marriages ={'i3':''}) # fam
+        i3 = Indi(pid='i3', marriages={'i2':''})  # not fam
+
+        f0 = Fam(fid='f0',children=[])            # good
+        f1 = Fam(fid='f1',children=['i0'])        # good
+        f2 = Fam(fid='f2',children=['i0','i1'])   # bad
+        f3 = Fam(fid='f3',children=['i2'])        # good
+
+        saveList = [i0,i1,i2,i3,f0,f1,f2,f3]
+
+        clearDB()
+        for i in saveList: i.save()
+        self.assertFalse(siblingMarriages(f0))
+        self.assertFalse(siblingMarriages(f1))
+        self.assertTrue(siblingMarriages(f2))
+        self.assertFalse(siblingMarriages(f3))
+        clearDB()
+
 if __name__ == '__main__':
     unittest.main()
