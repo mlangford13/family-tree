@@ -217,7 +217,6 @@ class FixDataTests(unittest.TestCase):
         i4 = Indi(pid='i4', death=deathDate, divorces=divorce4)
         i5 = Indi(pid='i5', death=deathDate, divorces=divorce5)
 
-
         self.assertTrue(divorceBeforeDeath(i0))
         self.assertTrue(divorceBeforeDeath(i1))
         self.assertTrue(divorceBeforeDeath(i3))
@@ -248,6 +247,46 @@ class FixDataTests(unittest.TestCase):
         self.assertFalse(isLessThan150(i5))
         self.assertFalse(isLessThan150(i6))
 
+    def test_us08(self):
+        c1Birth = datetime.date(1990,1,1)
+        c2Birth = datetime.date(1995,1,1)
+        c3Birth = datetime.date(2000,1,1)
+        c4Birth = datetime.date(2005,1,1)
+        c5Birth = datetime.date(2010,8,1)
+        c6Birth = datetime.date(2010,11,1)
+        c1 = Indi(pid='c1', name='c1',birth = c1Birth)
+        c2 = Indi(pid='c2', name='c2',birth = c2Birth)
+        c3 = Indi(pid='c3', name='c3',birth = c3Birth)
+        c4 = Indi(pid='c4', name='c4',birth = c4Birth)
+        c5 = Indi(pid='c5', name='c5',birth = c5Birth)
+        c6 = Indi(pid='c6', name='c6',birth = c6Birth)
+
+        #children = {c1.pid, c2.pid, c3.pid, c4.pid}
+
+        marriage1 = datetime.date(1995,1,1)
+        fam1 = Fam(fid='fam1', married=marriage1, children={c1.pid})
+        fam2 = Fam(fid='fam2', married=marriage1, children={c2.pid})
+        fam3 = Fam(fid='fam3', married=marriage1, children={c3.pid})
+        fam4 = Fam(fid='fam4', married=marriage1, children={c4.pid})
+        fam5 = Fam(fid='fam5', married=marriage1)
+
+        divorce = datetime.date(2010,1,1)
+        fam6 = Fam(fid='fam6', married=marriage1, divorced=divorce, children={c5.pid})
+        fam7 = Fam(fid='fam7', married=marriage1, divorced=divorce, children={c6.pid})
+
+        for obj in [c1, c2, c3, c4, c5, c6, fam1, fam2, fam3, fam4, fam5, fam6, fam7]:
+            obj.save()
+
+        self.assertFalse(birthAfterMarriageOfParents(fam1))
+        self.assertFalse(birthAfterMarriageOfParents(fam2))
+        self.assertTrue(birthAfterMarriageOfParents(fam3))
+        self.assertTrue(birthAfterMarriageOfParents(fam4))
+        self.assertTrue(birthAfterMarriageOfParents(fam5))
+
+        self.assertTrue(birthAfterMarriageOfParents(fam6))
+        self.assertFalse(birthAfterMarriageOfParents(fam7))
+
+
     #TODO: Add more test cases
     def test_us09(self):
         death = datetime.date(1990,1,1)
@@ -264,6 +303,29 @@ class FixDataTests(unittest.TestCase):
         family.save()
 
         self.assertTrue(birthBeforeDeathOfParents(family))
+
+    def test_us10(self):
+        bday = datetime.datetime(1980,1,1)
+
+        m1date = datetime.datetime(1980, 1, 1)
+        m2date = datetime.datetime(1990, 1, 1)
+        m3date = datetime.datetime(1995, 1, 1)
+        m4date = datetime.datetime(2000, 1, 1)
+
+        i1 = Indi(pid = "i1", birth = bday)                              # True
+        i2 = Indi(pid = "i2", birth = bday, marriages = {"i0" : m1date}) # False
+        i3 = Indi(pid = "i3", birth = bday, marriages = {"i0" : m2date}) # False
+        i4 = Indi(pid = "i4", birth = bday, marriages = {"i0" : m3date, "i1": m4date}) # True
+        i5 = Indi(pid = "i5", birth = bday, marriages = {"i0" : m2date, "i1": m4date}) # False
+
+        for obj in [i1, i2, i3, i4, i5]:
+            obj.save()
+
+        self.assertTrue(marriageAfter14(i1))
+        self.assertFalse(marriageAfter14(i2))
+        self.assertFalse(marriageAfter14(i3))
+        self.assertTrue(marriageAfter14(i4))
+        self.assertFalse(marriageAfter14(i5))
 
     # parents not too old
     def test_us12(self):
@@ -371,6 +433,30 @@ class FixDataTests(unittest.TestCase):
         self.assertTrue(tooManySiblings(f2))
         self.assertTrue(tooManySiblings(f3))
 
+
+
+
+    def test_us16(self):
+        i1 = Indi(pid = "i1", gender = "M", name = "Harry Potter")
+        i2 = Indi(pid = "i2", gender = "M", name = "James Potter")
+        i3 = Indi(pid = "i3", gender = "F", name = "Lilly Evans")
+        i4 = Indi(pid = "14", gender = "M", name = "Albus Dumbledore")
+
+        fam1 = Fam(fid = "fam1", hid = i2.pid, children={i1.pid}) #True
+        fam2 = Fam(fid = "fam2", hid = i2.pid, children={i1.pid, i3.pid}) #True
+        fam3 = Fam(fid = "fam3", hid = i4.pid, children={i1.pid, i2.pid}) #False
+        fam4 = Fam(fid = "fam4", hid = i1.pid) #True
+        fam5 = Fam(fid = "fam5", wid = i3.pid, hid = i2.pid, children = {i1.pid})
+
+        for obj in [i1, i2, i3, i4, fam1, fam2, fam3, fam4, fam5]:
+            obj.save()
+
+        self.assertTrue(same_male_last_names(fam1))
+        self.assertTrue(same_male_last_names(fam2))
+        self.assertFalse(same_male_last_names(fam3))
+        self.assertTrue(same_male_last_names(fam4))
+        self.assertTrue(same_male_last_names(fam5))
+
     def test_us18(self):
         i0 = Indi(pid='i0', marriages={'i1':''})  # fam
         i1 = Indi(pid='i1', marriages={'i0':''})  # fam
@@ -391,6 +477,33 @@ class FixDataTests(unittest.TestCase):
         self.assertTrue(siblingMarriages(f2))
         self.assertFalse(siblingMarriages(f3))
         clearDB()
+        
+    def test_us25(self):
+        i1 = Indi(pid="john1", name="John")
+        i2 = Indi(pid="john2", name="John")
+        i3 = Indi(pid="amy", name="Amy")
+        i4 = Indi(pid="sue", name="Sue")
+        i5 = Indi(pid="greg1", name="Greg")
+        i6 = Indi(pid="greg2", name="Greg")
+
+        fam1 = Fam(fid="fam1", children={i1.pid, i3.pid, i4.pid}) #John, Amy, Sue
+        fam2 = Fam(fid="fam2", children={i2.pid, i4.pid, i6.pid})#John, Sue, Greg
+        fam3 = Fam(fid="fam3", children={i1.pid, i2.pid, i6.pid})#John,John, Greg
+        fam4 = Fam(fid="fam4", children={i3.pid, i5.pid, i6.pid})#Amy, Greg, Greg
+        fam5 = Fam(fid="fam5", children={i5.pid, i6.pid}) #Greg, Greg
+        fam6 = Fam(fid="fam6")
+        fam7 = Fam(fid="fam7", children={i1.pid}) #John
+
+        for obj in [i1, i2, i3, i4, i5, i6, fam1, fam2, fam3, fam4, fam5, fam6, fam7]:
+            obj.save()
+
+        self.assertTrue(uniqueFirstNames(fam1))
+        self.assertTrue(uniqueFirstNames(fam2))
+        self.assertFalse(uniqueFirstNames(fam3))
+        self.assertFalse(uniqueFirstNames(fam4))
+        self.assertFalse(uniqueFirstNames(fam5))
+        self.assertTrue(uniqueFirstNames(fam6))
+        self.assertTrue(uniqueFirstNames(fam7))
 
 if __name__ == '__main__':
     unittest.main()
