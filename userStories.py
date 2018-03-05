@@ -11,17 +11,17 @@ import datetime
 def dateBeforeToday(x):
     today = datetime.date.today()
     if x.birth != None:
-        if x.birth > today: return True
+        if x.birth.date() > today: return True
     if x.death != None:
-        if x.death > today: return True
+        if x.death.date() > today: return True
     for key in x.marriages:
         value = x.marriages[key]
         if value != '':
-            if value > today: return True
+            if value.date() > today: return True
     for key in x.divorces:
         value = x.divorces[key]
         if value != '':
-            if value > today: return True
+            if value.date() > today: return True
     return False
 # US02
 # takes indi
@@ -78,7 +78,7 @@ def divorceBeforeDeath(individual):
 # Checks to make sure that a user is less than 150 years old.
 def isLessThan150(indiv):
     now = datetime.datetime.now().date()
-    age_in_days = (now - indiv.birth).days
+    age_in_days = (now - indiv.birth.date()).days
     age_in_years = age_in_days / 365
     return age_in_years < 150
 

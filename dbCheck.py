@@ -8,6 +8,9 @@ import datetime
 connectToMongoDB()
 
 for i in Indi.objects:
+    # US01 date before today
+    if(not dateBeforeToday(i)):
+        print("Error: "+str(i.pid)+" date is in the future.")
     # US02 Birth before marriage
     if(not birthBeforeMarriage(i)):
         print("Error: "+str(i.pid)+" marriage before birth.")
@@ -22,10 +25,9 @@ for i in Indi.objects:
         print("Error: "+str(i.pid)+" death before marriage.")
 
     # US06 Divorce before death
-#    if(not divorceBeforeDeath(i)):
-#        print("Error: "+i.pid+" divorce after death.")
+    if(not divorceBeforeDeath(i)):
+        print("Error: "+i.pid+" divorce after death.")
     # US07 Less than 150 years old
-#    if(not isLessThan150(i)):
-#        print("Error: "+i.fid+" over 150 years old.")
+    if(not isLessThan150(i)):
+        print("Error: "+i.fid+" over 150 years old.")
     # US10 Marriage after 14
-
