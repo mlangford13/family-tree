@@ -3,7 +3,6 @@ from mongoengine import *
 from dbDef import *
 from utility import *
 from userStories import *
-#import unittest
 import datetime
 
 connectToMongoDB()
@@ -18,6 +17,32 @@ connectToMongoDB()
 #for i in Indi.objects:
 #    if(not birthBeforeDeath(i)):i.delete()
 
-# print pid of indis that don't pass test
+
+deletedIds = []
 for i in Indi.objects:
-    if(not birthBeforeDeath(i)):print(i.pid + " dies before they are born.")
+    valid = True
+    # US01 date before today
+    if(not dateBeforeToday(i)):
+        valid = False
+    # US02 Birth before marriage
+    if(not birthBeforeMarriage(i)):
+        valid = False
+    # US03 Birth before death
+    if(not birthBeforeDeath(i)):
+        valid = False
+    # US04 Marriage before divorce
+    if(not marriageBeforeDivorce(i)):
+        valid = False
+    # US05 Marriage before death
+    if(not marriageBeforeDeath(i)):
+        valid = False
+    # US06 Divorce before death
+    if(not divorceBeforeDeath(i)):
+        valid = False
+    # US07 Less than 150 years old
+    if(not isLessThan150(i)):
+        valid = False
+    if not valid:
+        if i.pid not in deletedIds:
+            deletedIds.append(i.pid)
+print(deletedIds)
