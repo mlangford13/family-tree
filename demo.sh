@@ -10,5 +10,7 @@ echo "Checking database"
 python dbCheck.py
 echo "Removing Bad Data"
 python fixData.py
+echo "Checking that all bad data was removed"
+python dbcheck.py
 echo "Final Output"
 python query.py

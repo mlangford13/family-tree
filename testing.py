@@ -10,9 +10,9 @@ connectToTest()
 
 class FixDataTests(unittest.TestCase):
     def test_us01(self):
-        today = datetime.date.today()
-        past = datetime.datetime.min.date()
-        future = datetime.datetime.max.date()
+        today = datetime.datetime.today()
+        past = datetime.datetime.min
+        future = datetime.datetime.max
         l0 = {"a":today, "b":past, "c":''}       # good
         l1 = {"a":today, "b": past, "c": future} # bad
         l2 = {}                                  # good
@@ -226,12 +226,12 @@ class FixDataTests(unittest.TestCase):
         self.assertFalse(divorceBeforeDeath(i4))
 
     def test_us07(self):
-        d1 = datetime.date(2050, 1, 1)
-        d2 = datetime.date(2000, 1, 1)
-        d3 = datetime.date(1950, 1, 1)
-        d4 = datetime.date(1900, 1, 1)
-        d5 = datetime.date(1850, 1, 1)
-        d6 = datetime.date(1800, 1, 1)
+        d1 = datetime.datetime(2050, 1, 1)
+        d2 = datetime.datetime(2000, 1, 1)
+        d3 = datetime.datetime(1950, 1, 1)
+        d4 = datetime.datetime(1900, 1, 1)
+        d5 = datetime.datetime(1850, 1, 1)
+        d6 = datetime.datetime(1800, 1, 1)
 
         i1 = Indi(pid = "indi1", birth = d1)
         i2 = Indi(pid = "indi2", birth = d2)
