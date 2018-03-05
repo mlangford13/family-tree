@@ -13,5 +13,5 @@ print("File Uploaded")
 print("Checking File")
 print(subprocess.check_output(['python','dbCheck.py']))
 print("File Checked")
-
+print(subprocess.check_output(['python','query.py']))
 print("Demo Complete")
