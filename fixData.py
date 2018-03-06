@@ -7,40 +7,37 @@ import datetime
 
 connectToMongoDB()
 
-
-# print if fam has parents that are too old
-# for i in Fam.objects:
-#     if(not parentsNotTooOld(i)):
-#         print(i.fid + " has a parent/parents that is/are too old for their children")
-
-# removes indis that don't pass test
-#for i in Indi.objects:
-#    if(not birthBeforeDeath(i)):i.delete()
-
-def findBad():
+def findBad(debug):
     badIds = []
     for i in Indi.objects:
         valid = True
         # US01 date before today
         if(not dateBeforeToday(i)):
+            if debug: print("Error ("+i.pid + "): a date is in the future.")
             valid = False
         # US02 Birth before marriage
         if(not birthBeforeMarriage(i)):
+            if debug: print("Error ("+i.pid + "): marriage occurs before birth.")
             valid = False
         # US03 Birth before death
         if(not birthBeforeDeath(i)):
+            if debug: print("Error ("+i.pid + "): death occurs before birth.")
             valid = False
         # US04 Marriage before divorce
         if(not marriageBeforeDivorce(i)):
+            if debug: print("Error ("+i.pid + "): divorce occurs before marriage.")
             valid = False
         # US05 Marriage before death
         if(not marriageBeforeDeath(i)):
+            if debug: print("Error ("+i.pid + "): death occurs before marriage.")
             valid = False
         # US06 Divorce before death
         if(not divorceBeforeDeath(i)):
+            if debug: print("Error ("+i.pid + "): divorce occurs after death.")
             valid = False
         # US07 Less than 150 years old
         if(not isLessThan150(i)):
+            if debug: print("Error ("+i.pid + "): age >= 150 years.")
             valid = False
         if not valid:
             if i.pid not in badIds:
@@ -86,9 +83,9 @@ def removeIds(idList):
         for child in badChildren:
             f.children.remove(child)
 
-badIds = findBad()
+badIds = findBad(True)
 print(badIds)
 while badIds != []:
     removeIds(badIds)
-    badIds = findBad()
+    badIds = findBad(True)
     print(badIds)
