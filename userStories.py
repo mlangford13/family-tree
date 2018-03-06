@@ -11,18 +11,18 @@ import datetime
 def dateBeforeToday(x):
     today = datetime.date.today()
     if x.birth != None:
-        if x.birth.date() > today: return True
+        if x.birth.date() > today: return False 
     if x.death != None:
-        if x.death.date() > today: return True
+        if x.death.date() > today: return False
     for key in x.marriages:
         value = x.marriages[key]
         if value != '':
-            if value.date() > today: return True
+            if value.date() > today: return False
     for key in x.divorces:
         value = x.divorces[key]
         if value != '':
-            if value.date() > today: return True
-    return False
+            if value.date() > today: return False
+    return True
 # US02
 # takes indi
 def birthBeforeMarriage(x):

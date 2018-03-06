@@ -30,18 +30,18 @@ class FixDataTests(unittest.TestCase):
         i10 = Indi(pid='i10', divorces=l1)  # bad
         i11 = Indi(pid='i11', divorces=l2)  # good
 
-        self.assertFalse(dateBeforeToday(i0))
-        self.assertFalse(dateBeforeToday(i1))
-        self.assertTrue(dateBeforeToday(i2))
-        self.assertFalse(dateBeforeToday(i3))
-        self.assertFalse(dateBeforeToday(i4))
-        self.assertTrue(dateBeforeToday(i5))
-        self.assertFalse(dateBeforeToday(i6))
-        self.assertTrue(dateBeforeToday(i7))
-        self.assertFalse(dateBeforeToday(i8))
-        self.assertFalse(dateBeforeToday(i9))
-        self.assertTrue(dateBeforeToday(i10))
-        self.assertFalse(dateBeforeToday(i11))
+        self.assertTrue(dateBeforeToday(i0))
+        self.assertTrue(dateBeforeToday(i1))
+        self.assertFalse(dateBeforeToday(i2))
+        self.assertTrue(dateBeforeToday(i3))
+        self.assertTrue(dateBeforeToday(i4))
+        self.assertFalse(dateBeforeToday(i5))
+        self.assertTrue(dateBeforeToday(i6))
+        self.assertFalse(dateBeforeToday(i7))
+        self.assertTrue(dateBeforeToday(i8))
+        self.assertTrue(dateBeforeToday(i9))
+        self.assertFalse(dateBeforeToday(i10))
+        self.assertTrue(dateBeforeToday(i11))
 
     def test_us02(self):
         birthDate = datetime.date(1990,1,1)

@@ -30,7 +30,7 @@ for i in Fam.objects:
     hName = ''
     wName = ''
     if i.hid != '' : hName = getIndi(i.hid).name
-    if i.hid != '' : wName = getIndi(i.wid).name
+    if i.wid != '' : wName = getIndi(i.wid).name
     t2.add_row([i.fid,i.married,i.divorced,i.hid,hName,i.wid,wName,i.children])
 print("Families")
 print(t2)
