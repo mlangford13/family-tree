@@ -61,6 +61,26 @@ def findBad():
                 badIds.append(i.pid)
     return badIds
 
+# return list of fids with not parents or children
+def emptyFams():
+    output = []
+    for f in Fam.objects:
+        if f.wid == '' and f.hid == '' and f.children == []:
+            output.append(f.fid)
+    return output
+# removes fams from records
+# takes a list of fids
+def removeFams(famList):
+    for f in Fam.objects:
+        if f.fid in famList: f.delete()
+    for i in Indi.objects:
+        for key in i.marriages:
+            if key in famList:
+                i.marriages.pop(key)
+        for key in i.divorces:
+            if key in famList:
+                i.divorces.pop(key)
+
 # removes ids from records
 # takes the list of ids
 def removeIds(idList):
@@ -105,4 +125,6 @@ print("Bad Ids: "+str(badIds))
 if delete:
     while badIds != []:
         removeIds(badIds)
+        badFams = emptyFams()
+        removeFams(badFams)
         badIds = findBad()
