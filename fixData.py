@@ -4,8 +4,23 @@ from dbDef import *
 from utility import *
 from userStories import *
 import datetime
+import argparse
 
-connectToMongoDB()
+parser = argparse.ArgumentParser(description='Detect and delete bad records in the database.')
+parser.add_argument('-v',action='store_true',help='Verbose output.')
+parser.add_argument('-t',action='store_true',help='Use the test database.')
+args = parser.parse_args()
+
+debug = args.v
+test = args.t
+if test:
+    connectToTest()
+    if debug:
+        print("Connected to Test Database")
+else:
+    connectToMongoDB()
+    if debug:
+        print("Connected to Main Database")
 
 def findBad(debug):
     badIds = []
