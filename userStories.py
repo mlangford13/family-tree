@@ -119,8 +119,6 @@ def birthBeforeDeathOfParents(family):
 def marriageAfter14(individual):
     for key in individual.marriages:
         dom = individual.marriages[key]
-        print(key)
-        print(dom)
         days = (dom - individual.birth).days
         if days/365 <= 14:
             return False

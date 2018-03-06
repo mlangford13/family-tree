@@ -121,7 +121,9 @@ def removeIds(idList):
             f.children.remove(child)
 
 badIds = findBad()
-print("Bad Ids: "+str(badIds))
+if debug:
+    if badIds == []: print("No bad ids.")
+    else: print("Bad Ids: "+str(badIds))
 if delete:
     while badIds != []:
         removeIds(badIds)

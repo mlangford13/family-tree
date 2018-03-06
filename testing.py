@@ -477,7 +477,7 @@ class FixDataTests(unittest.TestCase):
         self.assertTrue(siblingMarriages(f2))
         self.assertFalse(siblingMarriages(f3))
         clearDB()
-        
+
     def test_us25(self):
         i1 = Indi(pid="john1", name="John")
         i2 = Indi(pid="john2", name="John")
