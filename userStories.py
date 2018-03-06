@@ -88,11 +88,12 @@ def isLessThan150(indiv):
 def birthAfterMarriageOfParents(family):
     for cid in family.children:
         child = getIndi(pid=cid)
-        if child.birth.date() <= family.married:
-            return False
-        if family.divorced is not None:
-            if child.birth > addMonths(family.divorced, 9):
+        if family.married != None and family.married != '':
+            if child.birth.date() <= family.married:
                 return False
+            if family.divorced is not None:
+                if child.birth > addMonths(family.divorced, 9):
+                    return False
     return True
 
 
@@ -100,18 +101,24 @@ def birthAfterMarriageOfParents(family):
 # Checks that each child in a family is born before the
 # death of their parents
 def birthBeforeDeathOfParents(family):
-    dad = getIndi(pid=family.hid)
-    mom = getIndi(pid=family.wid)
+    isDad = False
+    isMom = False
+    if family.hid != '':
+        dad = getIndi(family.hid)
+        isDad = True
+    if family.wid != '':
+        mom = getIndi(family.wid)
+        isMom = True
     for childId in family.children:
         child = getIndi(childId)
-
-        if(dad.death is not None):
-            if(child.birth > addMonths(dad.death, 9)):
-                return False
-
-        if(mom.death is not None):
-            if(child.birth > mom.death):
-                return False
+        if isDad:
+            if(dad.death is not None):
+                if(child.birth > addMonths(dad.death, 9)):
+                    return False
+        if isMom:
+            if(mom.death is not None):
+                if(child.birth > mom.death):
+                    return False
     return True
 
 # US10
@@ -119,9 +126,10 @@ def birthBeforeDeathOfParents(family):
 def marriageAfter14(individual):
     for key in individual.marriages:
         dom = individual.marriages[key]
-        days = (dom - individual.birth).days
-        if days/365 <= 14:
-            return False
+        if dom != '':
+            days = (dom - individual.birth).days
+            if days/365 <= 14:
+                return False
     return True
 
 # US12
@@ -170,6 +178,7 @@ def tooManySiblings(x):
 def same_male_last_names(family):
     child_pids = family.children
     father_pid = family.hid
+    if father_pid == '': return True # no father
     father_name = getIndi(father_pid).name
     lastname = father_name.split(" ")[1]
     for pid in child_pids:
