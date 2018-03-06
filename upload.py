@@ -10,7 +10,7 @@ from mongoengine import *
 from dbDef import *
 import argparse
 
-parser = argparse.ArgumentParser(description='Detect and delete bad records in the database.')
+parser = argparse.ArgumentParser(description='Uploads gedcom file to database.')
 parser.add_argument('-v',action='store_true',help='Verbose output.')
 parser.add_argument('-t',action='store_true',help='Use the test database.')
 parser.add_argument('fileName', metavar='F',type=str,help='Gedcom file to be uploaded.')

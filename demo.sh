@@ -3,14 +3,12 @@ echo "Begin Demo"
 echo "Testing codebase"
 python testing.py
 echo "Upload Gedcom"
-python upload.py testFam.ged
+python upload.py ged/testFam.ged -t
 echo "Show initial database"
-python query.py
-echo "Checking database"
-python dbCheck.py
-echo "Removing Bad Data"
-python fixData.py
-echo "Checking that all bad data was removed"
-python dbcheck.py
+python query.py -t
+echo "Checking database and removing bad data."
+python fixData.py -t -v -d
+echo "Checking the database to show no bad data remains."
+python fixData.py -t -v
 echo "Final Output"
-python query.py
+python query.py -t

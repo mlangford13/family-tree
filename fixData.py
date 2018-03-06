@@ -9,10 +9,12 @@ import argparse
 parser = argparse.ArgumentParser(description='Detect and delete bad records in the database.')
 parser.add_argument('-v',action='store_true',help='Verbose output.')
 parser.add_argument('-t',action='store_true',help='Use the test database.')
+parser.add_argument('-d',action='store_true',help='Delete bad objects and ids.')
 args = parser.parse_args()
 
 debug = args.v
 test = args.t
+delete = args.d
 if test:
     connectToTest()
     if debug:
@@ -22,7 +24,7 @@ else:
     if debug:
         print("Connected to Main Database")
 
-def findBad(debug):
+def findBad():
     badIds = []
     for i in Indi.objects:
         valid = True
@@ -88,7 +90,7 @@ def removeIds(idList):
         if f.hid in idList: f.hid = ''
         # wid
         if f.wid in idList: f.wid = ''
-
+        f.save()
         badChildren = []
         # children
         if f.children != []:
@@ -98,9 +100,9 @@ def removeIds(idList):
         for child in badChildren:
             f.children.remove(child)
 
-badIds = findBad(True)
-print(badIds)
-while badIds != []:
-    removeIds(badIds)
-    badIds = findBad(True)
-    print(badIds)
+badIds = findBad()
+print("Bad Ids: "+str(badIds))
+if delete:
+    while badIds != []:
+        removeIds(badIds)
+        badIds = findBad()
