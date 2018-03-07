@@ -171,6 +171,7 @@ def removeIndis(idList):
                     badChildren.append(pid)
         for child in badChildren:
             f.children.remove(child)
+        f.save()
 
 badIds = findBadIndis()
 if debug:

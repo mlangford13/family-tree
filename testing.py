@@ -79,11 +79,11 @@ class FixDataTests(unittest.TestCase):
         # year month day
         # dates are earliest -> latest
         # d0 is lack of date
-        d1 = datetime.date(1990,1,1)             # base
-        d2 = datetime.date(1990,1,2)             # later day
-        d3 = datetime.date(1990,2,1)             # later month
-        d4 = datetime.date(2010,1,1)             # later year
-        d5 = datetime.date(2011,6,5)             # later all
+        d1 = datetime.datetime(1990,1,1)             # base
+        d2 = datetime.datetime(1990,1,2)             # later day
+        d3 = datetime.datetime(1990,2,1)             # later month
+        d4 = datetime.datetime(2010,1,1)             # later year
+        d5 = datetime.datetime(2011,6,5)             # later all
         i0 = Indi(pid='test1',birth=d1)          # still alive
         i1 = Indi(pid='test2',birth=d1,death=d2) # later day
         i2 = Indi(pid='test3',birth=d1,death=d3) # later month
@@ -248,12 +248,12 @@ class FixDataTests(unittest.TestCase):
         self.assertFalse(isLessThan150(i6))
 
     def test_us08(self):
-        c1Birth = datetime.date(1990,1,1)
-        c2Birth = datetime.date(1995,1,1)
-        c3Birth = datetime.date(2000,1,1)
-        c4Birth = datetime.date(2005,1,1)
-        c5Birth = datetime.date(2010,8,1)
-        c6Birth = datetime.date(2010,11,1)
+        c1Birth = datetime.datetime(1990,1,1)
+        c2Birth = datetime.datetime(1995,1,1)
+        c3Birth = datetime.datetime(2000,1,1)
+        c4Birth = datetime.datetime(2005,1,1)
+        c5Birth = datetime.datetime(2010,8,1)
+        c6Birth = datetime.datetime(2010,11,1)
         c1 = Indi(pid='c1', name='c1',birth = c1Birth)
         c2 = Indi(pid='c2', name='c2',birth = c2Birth)
         c3 = Indi(pid='c3', name='c3',birth = c3Birth)
@@ -263,14 +263,14 @@ class FixDataTests(unittest.TestCase):
 
         #children = {c1.pid, c2.pid, c3.pid, c4.pid}
 
-        marriage1 = datetime.date(1995,1,1)
+        marriage1 = datetime.datetime(1995,1,1)
         fam1 = Fam(fid='fam1', married=marriage1, children={c1.pid})
         fam2 = Fam(fid='fam2', married=marriage1, children={c2.pid})
         fam3 = Fam(fid='fam3', married=marriage1, children={c3.pid})
         fam4 = Fam(fid='fam4', married=marriage1, children={c4.pid})
         fam5 = Fam(fid='fam5', married=marriage1)
 
-        divorce = datetime.date(2010,1,1)
+        divorce = datetime.datetime(2010,1,1)
         fam6 = Fam(fid='fam6', married=marriage1, divorced=divorce, children={c5.pid})
         fam7 = Fam(fid='fam7', married=marriage1, divorced=divorce, children={c6.pid})
 

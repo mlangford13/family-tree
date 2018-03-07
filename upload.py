@@ -107,6 +107,9 @@ def parseDateStrToObj(aString):
     x = parseDateStr(aString)
     return datetime.date(x['year'],x['month'],x['day'])
 
+def parseDateStrToDatetime(aString):
+    x = parseDateStr(aString)
+    return datetime.datetime(x['year'],x['month'],x['day'])
 lines = parseFile(fileName) # parse file specified
 
 # variable declarations
@@ -142,9 +145,9 @@ for line in lines:
             dateType = 'divorce'
         if (tag == "DATE"):
             if (dateType == 'marriage'):
-                lastFam.marriage = parseDateStrToObj(args)
+                lastFam.married = parseDateStrToDatetime(args)
             if (dateType == 'divorce'):
-                lastFam.divorce = parseDateStrToObj(args)
+                lastFam.divorced = parseDateStrToDatetime(args)
         lastFam.save()
     if (lastIndi != ''):
         if (tag == 'NAME'): lastIndi.name = args

@@ -89,7 +89,7 @@ def birthAfterMarriageOfParents(family):
     for cid in family.children:
         child = getIndi(pid=cid)
         if family.married != None and family.married != '':
-            if child.birth.date() <= family.married:
+            if child.birth.date() <= family.married.date():
                 return False
             if family.divorced is not None:
                 if child.birth > addMonths(family.divorced, 9):
@@ -141,11 +141,16 @@ def parentsNotTooOld(x):
     for childPid in x.children:
         cBirth = Indi.objects.get(pid=childPid).birth
         if (cBirth < oldestBirth): oldestBirth = cBirth
-    wBirth = Indi.objects.get(pid=x.wid).birth
-    hBirth = Indi.objects.get(pid=x.hid).birth
-    wDif = (oldestBirth - wBirth).days / 365
-    hDif = (oldestBirth - hBirth).days / 365
-    return((wDif < 60)and(hDif < 80))
+    if x.wid != '':
+        wBirth = getIndi(x.wid).birth
+        wDif = (oldestBirth - wBirth).days / 365
+        if wDif >= 60: return False
+
+    if x.hid != '':
+        hBirth = getIndi(x.hid).birth
+        hDif = (oldestBirth - hBirth).days / 365
+        if hDif >= 80: return False
+    return True
 
 # US13
 # takes fam
