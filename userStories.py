@@ -77,6 +77,7 @@ def divorceBeforeDeath(individual):
 # US07
 # Checks to make sure that a user is less than 150 years old.
 def isLessThan150(indiv):
+    if indiv.birth == None: return True
     now = datetime.datetime.now().date()
     age_in_days = (now - indiv.birth.date()).days
     age_in_years = age_in_days / 365
@@ -185,6 +186,7 @@ def same_male_last_names(family):
     father_pid = family.hid
     if father_pid == '': return True # no father
     father_name = getIndi(father_pid).name
+    if father_name == '': return True # no father name
     lastname = father_name.split(" ")[1]
     for pid in child_pids:
         child = getIndi(pid)
