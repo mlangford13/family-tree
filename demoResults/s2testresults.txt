@@ -1,0 +1,13 @@
+python testing.py   
+......./usr/lib/python3.6/site-packages/mongoengine/document.py:428: DeprecationWarning: save is deprecated. Use insert_one or replace_one instead
+  object_id = collection.save(doc, **write_concern)
+.../usr/lib/python3.6/site-packages/mongoengine/queryset/base.py:473: DeprecationWarning: remove is deprecated. Use delete_one or delete_many instead.
+  result = queryset._collection.remove(queryset._query, **write_concern)
+/home/evan/Stevens/agile/family-tree/utility.py:24: DeprecationWarning: generator 'QuerySet._iter_results' raised StopIteration
+  for i in Indi.objects:
+/home/evan/Stevens/agile/family-tree/utility.py:26: DeprecationWarning: generator 'QuerySet._iter_results' raised StopIteration
+  for i in Fam.objects:
+......
+----------------------------------------------------------------------
+Ran 16 tests in 0.226s
+
