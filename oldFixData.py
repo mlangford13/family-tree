@@ -30,35 +30,35 @@ def findBad():
         valid = True
         # US01 date before today
         if(not dateBeforeToday(i)):
-            if debug: print("Error ("+i.pid + "): a date is in the future.")
+            if debug: print("Error US01("+i.pid + "): a date is in the future.")
             valid = False
         # US02 Birth before marriage
         if(not birthBeforeMarriage(i)):
-            if debug: print("Error ("+i.pid + "): marriage occurs before birth.")
+            if debug: print("Error US02("+i.pid + "): marriage occurs before birth.")
             valid = False
         # US03 Birth before death
         if(not birthBeforeDeath(i)):
-            if debug: print("Error ("+i.pid + "): death occurs before birth.")
+            if debug: print("Error US03("+i.pid + "): death occurs before birth.")
             valid = False
         # US04 Marriage before divorce
         if(not marriageBeforeDivorce(i)):
-            if debug: print("Error ("+i.pid + "): divorce occurs before marriage.")
+            if debug: print("Error US04("+i.pid + "): divorce occurs before marriage.")
             valid = False
         # US05 Marriage before death
         if(not marriageBeforeDeath(i)):
-            if debug: print("Error ("+i.pid + "): death occurs before marriage.")
+            if debug: print("Error US05("+i.pid + "): death occurs before marriage.")
             valid = False
         # US06 Divorce before death
         if(not divorceBeforeDeath(i)):
-            if debug: print("Error ("+i.pid + "): divorce occurs after death.")
+            if debug: print("Error US06("+i.pid + "): divorce occurs after death.")
             valid = False
         # US07 Less than 150 years old
         if(not isLessThan150(i)):
-            if debug: print("Error ("+i.pid + "): age >= 150 years.")
+            if debug: print("Error US07("+i.pid + "): age >= 150 years.")
             valid = False
         # US10 Marriage after 14
         if(not marriageAfter14(i)):
-            if debug: print("Error ("+i.pid + "): marriage before 14.")
+            if debug: print("Error US10("+i.pid + "): marriage before 14.")
             valid = False
         if not valid:
             if i.pid not in badIds:
