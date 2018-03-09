@@ -137,6 +137,7 @@ def marriageAfter14(individual):
 # takes fam and checks that the difference between the eldest child and parents
 # are 60 and 80 years respectively for the wife and husband
 def parentsNotTooOld(x):
+    if (x.hid == '' and x.wid == ''): return True # no  parents
     if (x.children == []): return True # no children
     oldestBirth = datetime.datetime.max
     for childPid in x.children:
@@ -144,13 +145,15 @@ def parentsNotTooOld(x):
         if (cBirth < oldestBirth): oldestBirth = cBirth
     if x.wid != '':
         wBirth = getIndi(x.wid).birth
-        wDif = (oldestBirth - wBirth).days / 365
-        if wDif >= 60: return False
+        if wBirth != None:
+            wDif = (oldestBirth - wBirth).days / 365
+            if wDif >= 60: return False
 
     if x.hid != '':
         hBirth = getIndi(x.hid).birth
-        hDif = (oldestBirth - hBirth).days / 365
-        if hDif >= 80: return False
+        if hBirth != None:
+            hDif = (oldestBirth - hBirth).days / 365
+            if hDif >= 80: return False
     return True
 
 # US13

@@ -174,9 +174,12 @@ def removeIndis(idList):
         f.save()
 
 badIds = findBadIndis()
+badFams = findBadFams()
 if debug:
-    if badIds == []: print("No bad ids.")
-    else: print("Bad Ids: "+str(badIds))
+    if badIds == []: print("No bad indis.")
+    else: print("Bad Indis: "+str(badIds))
+    if badFams == []: print("No bad fams.")
+    else: print("Bad Famss: "+str(badIds))
 if delete:
     while badIds != []:
         removeIndis(badIds)
