@@ -2,6 +2,7 @@
 from dbDef import *
 from utility import *
 import datetime
+import collections
 
 
 # US01
@@ -173,6 +174,23 @@ def siblingSpacing(x):
                 if(not ((dif > 270)or(dif < 2))): output = False
     return output
 
+# US14
+# No more than 5 siblings should be born at the same time
+def tooManyBirthsAtOnce(family):
+    if len(family.children) < 6:
+        return False
+
+    bdays = []
+    for cid in family.children:
+        child = getIndi(cid)
+        if child != None:
+            bdays.append(child.birth.date())
+    counter = collections.Counter(bdays)
+
+    if any(i > 5 for i in counter.values()):
+        return True
+    else:
+        return False
 
 # US15
 # fewer than 15 siblings in a family

@@ -3,7 +3,7 @@ echo "--- Begin Demo ---"
 echo "---Testing codebase ---"
 python testing.py
 echo "--- Uploading gedcom file---"
-python upload.py ged/s2test.ged -t
+python upload.py ged/s3test.ged -t
 echo "--- Showing initial database ---"
 python query.py -t
 echo "--- Checking database and removing bad data ---"

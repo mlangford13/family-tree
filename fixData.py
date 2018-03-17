@@ -95,6 +95,11 @@ def findBadFams():
             if debug: print("Error US13("+f.fid + "): children spacing is too close but not twins.")
             valid = False
 
+        if(tooManyBirthsAtOnce(f)):
+            if debug:
+                print("Error US14("+f.fid + "): more than 5 children born on the same day")
+            valid = False
+
         # US15 too many siblings
         if(tooManySiblings(f)):
             if debug: print("Error US15("+f.fid + "): too many (>= 15) children.")
