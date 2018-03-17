@@ -417,6 +417,34 @@ class FixDataTests(unittest.TestCase):
         self.assertTrue(siblingSpacing(f5))
         clearDB()
 
+    # No more than 5 siblings should be born at the same time
+    def test_us14(self):
+        birth_SAME = datetime.date(2000,1,1)
+        birth_DIF6 = datetime.date(2001,1,1)
+        c0_SAME = Indi(pid='c0', birth=birth_SAME)
+        c1_SAME = Indi(pid='c1', birth=birth_SAME)
+        c2_SAME = Indi(pid='c2', birth=birth_SAME)
+        c3_SAME = Indi(pid='c3', birth=birth_SAME)
+        c4_SAME = Indi(pid='c4', birth=birth_SAME)
+        c5_SAME = Indi(pid='c5', birth=birth_SAME)
+        c6_DIF = Indi(pid='c6', birth=birth_DIF6)
+
+        f0 = Fam(fid='f0', children=['c0','c1','c2','c3','c4','c5','c6'])
+        f1 = Fam(fid='f1', children=['c0','c1','c2','c3','c4','c6'])
+        f2 = Fam(fid='f2')
+        f3 = Fam(fid='f0', children=['c0','c1','c2','c6','c3','c4','c5'])
+
+        saveList = [c0_SAME, c1_SAME, c2_SAME, c3_SAME, c4_SAME, c5_SAME, c6_DIF]
+
+        clearDB()
+        for obj in saveList:
+            obj.save()
+        self.assertTrue(tooManyBirthsAtOnce(f0))
+        self.assertTrue(tooManyBirthsAtOnce(f3))
+        self.assertFalse(tooManySiblings(f1))
+        self.assertFalse(tooManySiblings(f2))
+        clearDB()
+
     def test_us15(self):
         c0 = []
         c1 = ['testId']*14
