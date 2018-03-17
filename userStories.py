@@ -11,7 +11,7 @@ import datetime
 def dateBeforeToday(x):
     today = datetime.date.today()
     if x.birth != None:
-        if x.birth.date() > today: return False 
+        if x.birth.date() > today: return False
     if x.death != None:
         if x.death.date() > today: return False
     for key in x.marriages:
@@ -210,6 +210,17 @@ def siblingMarriages(x):
             if key in x.children: output = True
     return output
 
+# US21
+# Husband in family should be male and wife in family should be female
+def correctGenderForRole(family):
+    husband = getIndi(family.hid)
+    wife = getIndi(family.wid)
+
+    if(husband.gender != 'M'):
+        return False
+    if(wife.gender != 'F'):
+        return False
+    return True
 
 # US25
 # Unique first names in families

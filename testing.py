@@ -478,6 +478,30 @@ class FixDataTests(unittest.TestCase):
         self.assertFalse(siblingMarriages(f3))
         clearDB()
 
+    def test_us21(self):
+        dad_M = Indi(pid='dad_M', gender='M')
+        dad_F = Indi(pid='dad_F', gender='F')
+
+        mom_F = Indi(pid='mom_F', gender='F')
+        mom_M = Indi(pid='mom_M', gender='M')
+
+        f0 = Fam(fid='valid', hid = dad_M.pid , wid = mom_F.pid)
+        f1 = Fam(fid='invalid_dad', hid = dad_F.pid , wid = mom_F.pid)
+        f2 = Fam(fid='invalid_mom', hid = dad_M.pid , wid = mom_M.pid)
+        f3 = Fam(fid='invalid_both', hid = dad_F.pid , wid = mom_M.pid)
+
+        saveList = [dad_M, dad_F, mom_F, mom_M]
+
+        clearDB()
+        for i in saveList:
+            i.save()
+        self.assertTrue(correctGenderForRole(f0))
+        self.assertFalse(correctGenderForRole(f1))
+        self.assertFalse(correctGenderForRole(f2))
+        self.assertFalse(correctGenderForRole(f3))
+        clearDB()
+
+
     def test_us25(self):
         i1 = Indi(pid="john1", name="John")
         i2 = Indi(pid="john2", name="John")
