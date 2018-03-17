@@ -202,7 +202,7 @@ def tooManySiblings(x):
 
 # US16
 # Male last names in family
-def same_male_last_names(family):
+def sameMaleLastNames(family):
     child_pids = family.children
     father_pid = family.hid
     if father_pid == '': return True # no father

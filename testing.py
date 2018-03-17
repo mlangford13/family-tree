@@ -479,11 +479,11 @@ class FixDataTests(unittest.TestCase):
         for obj in [i1, i2, i3, i4, fam1, fam2, fam3, fam4, fam5]:
             obj.save()
 
-        self.assertTrue(same_male_last_names(fam1))
-        self.assertTrue(same_male_last_names(fam2))
-        self.assertFalse(same_male_last_names(fam3))
-        self.assertTrue(same_male_last_names(fam4))
-        self.assertTrue(same_male_last_names(fam5))
+        self.assertTrue(sameMaleLastNames(fam1))
+        self.assertTrue(sameMaleLastNames(fam2))
+        self.assertFalse(sameMaleLastNames(fam3))
+        self.assertTrue(sameMaleLastNames(fam4))
+        self.assertTrue(sameMaleLastNames(fam5))
 
     def test_us18(self):
         i0 = Indi(pid='i0', marriages={'i1':''})  # fam

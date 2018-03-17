@@ -106,7 +106,7 @@ def findBadFams():
             valid = False
 
         # US16 males last names in the family
-        if(not same_male_last_names(f)):
+        if(not sameMaleLastNames(f)):
             if debug: print("Error US16("+f.fid + "): male child does not have the correct last name.")
             valid = False
 
