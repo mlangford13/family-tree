@@ -215,7 +215,8 @@ def siblingMarriages(x):
 def correctGenderForRole(family):
     husband = getIndi(family.hid)
     wife = getIndi(family.wid)
-
+    if(husband == None or wife == None):
+        return False
     if(husband.gender != 'M'):
         return False
     if(wife.gender != 'F'):

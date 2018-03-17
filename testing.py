@@ -481,16 +481,24 @@ class FixDataTests(unittest.TestCase):
     def test_us21(self):
         dad_M = Indi(pid='dad_M', gender='M')
         dad_F = Indi(pid='dad_F', gender='F')
+        dad_NA = Indi(pid='dad_NA')
 
         mom_F = Indi(pid='mom_F', gender='F')
         mom_M = Indi(pid='mom_M', gender='M')
+        mom_NA = Indi(pid='mom_NA')
 
         f0 = Fam(fid='valid', hid = dad_M.pid , wid = mom_F.pid)
         f1 = Fam(fid='invalid_dad', hid = dad_F.pid , wid = mom_F.pid)
         f2 = Fam(fid='invalid_mom', hid = dad_M.pid , wid = mom_M.pid)
         f3 = Fam(fid='invalid_both', hid = dad_F.pid , wid = mom_M.pid)
+        f4 = Fam(fid='invalid_mom_NA', hid = dad_M.pid, wid = mom_NA.pid)
+        f5 = Fam(fid='invalid_dad_NA', hid = dad_NA.pid, wid = mom_F.pid)
+        f6 = Fam(fid='invalid_both_NA', hid = dad_NA.pid, wid = mom_NA.pid)
+        f7 = Fam(fid='invalid_dont_exist_dad', hid='dont_exist', wid = mom_F.pid)
+        f8 = Fam(fid='invalid_dont_exist_mom', hid= dad_M.pid, wid='dont_exist')
+        f9 = Fam(fid='invalid_dont_exist_dad', hid='dont_exist', wid='dont_exist')
 
-        saveList = [dad_M, dad_F, mom_F, mom_M]
+        saveList = [dad_M, dad_F, dad_NA, mom_F, mom_M, mom_NA]
 
         clearDB()
         for i in saveList:
@@ -499,6 +507,12 @@ class FixDataTests(unittest.TestCase):
         self.assertFalse(correctGenderForRole(f1))
         self.assertFalse(correctGenderForRole(f2))
         self.assertFalse(correctGenderForRole(f3))
+        self.assertFalse(correctGenderForRole(f4))
+        self.assertFalse(correctGenderForRole(f5))
+        self.assertFalse(correctGenderForRole(f6))
+        self.assertFalse(correctGenderForRole(f7))
+        self.assertFalse(correctGenderForRole(f8))
+        self.assertFalse(correctGenderForRole(f9))
         clearDB()
 
 

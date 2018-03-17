@@ -110,6 +110,15 @@ def findBadFams():
             if debug: print("Error US18("+f.fid + "): siblings are married.")
             valid = False
 
+        # US21 Correct gender for role
+        if(not correctGenderForRole(f)):
+            if debug:
+                print("Error US21("+f.fid + "): gender is incorrect for a parent")
+                if getIndi(f.hid) != None and getIndi(f.wid) != None:
+                    print("\t\t\tDad ID: "+f.hid+" | Gender: "+getIndi(f.hid).gender)
+                    print("\t\t\tMom ID: "+f.wid+" | Gender: "+getIndi(f.wid).gender)
+            valid = False
+
         # US25 unique first name in families
         if(not uniqueFirstNames(f)):
             if debug: print("Error US25("+f.fid + "): first names are not unique.")
