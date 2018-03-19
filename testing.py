@@ -571,5 +571,27 @@ class FixDataTests(unittest.TestCase):
         self.assertTrue(uniqueFirstNames(fam6))
         self.assertTrue(uniqueFirstNames(fam7))
 
+    def test_us29(self):
+        i0 = Indi(pid="i0",alive=True)
+        i1 = Indi(pid="i1",alive=False)
+        i2 = Indi(pid="i2",alive=False)
+
+        clearDB()
+
+        self.assertTrue(listDead() == [])
+
+        i0.save()
+        self.assertTrue(listDead() == [])
+
+        i1.save()
+        self.assertTrue(listDead() == ["i1"])
+
+        i2.save()
+        self.assertTrue(listDead() == ["i1","i2"])
+
+        clearDB()
+
+
+
 if __name__ == '__main__':
     unittest.main()

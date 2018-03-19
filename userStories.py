@@ -253,3 +253,11 @@ def uniqueFirstNames(family):
             return False
         names.append(name)
     return True
+# US29
+# List Deceased
+# returns a list of dead indis pids
+def listDead():
+    deadList = []
+    for i in Indi.objects():
+        if not i.alive: deadList.append(i.pid)
+    return deadList
