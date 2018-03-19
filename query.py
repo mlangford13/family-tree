@@ -2,6 +2,7 @@ from mongoengine import *
 from dbDef import *
 from prettytable import PrettyTable
 from utility import *
+from userStories import *
 import argparse
 
 parser = argparse.ArgumentParser(description='PrettyTable prints database.')
@@ -34,3 +35,6 @@ for i in Fam.objects:
     t2.add_row([i.fid,i.married,i.divorced,i.hid,hName,i.wid,wName,i.children])
 print("Families")
 print(t2)
+
+# US29 List deceased
+print("Deceased: " + str(listDead()))
