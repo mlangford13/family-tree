@@ -591,6 +591,58 @@ class FixDataTests(unittest.TestCase):
 
         clearDB()
 
+    def test_us30(self):
+        i0 = Indi(pid="i0",alive=True)  # alive h
+        i1 = Indi(pid="i1",alive=True)  # alive w
+        i2 = Indi(pid="i2",alive=True)  # alive h
+        i3 = Indi(pid="i3",alive=True)  # alive w
+        i4 = Indi(pid="i4",alive=False) # dead h
+        i5 = Indi(pid="i5",alive=False) # dead w
+
+        f0 = Fam(fid="f0") # no parents
+        f1 = Fam(fid="f1", wid="i1") # no husband
+        f2 = Fam(fid="f2", hid="i0") # no wife
+        f3 = Fam(fid="f3",hid="i4", wid="i1") # dead husband
+        f4 = Fam(fid="f4",hid="i0", wid="i5") # dead wife
+        f5 = Fam(fid="f5",hid="i0", wid="i1") # valid family 0
+        f6 = Fam(fid="f6",hid="i2", wid="i3") # valid family 1 (to show it can list multiple)
+
+        clearDB()
+        self.assertTrue(listMarriedAlive() == []) # empty db
+
+        i0.save()
+        i1.save()
+        i2.save()
+        i3.save()
+        i4.save()
+        i5.save()
+        self.assertTrue(listMarriedAlive() == []) # no families
+
+        f0.save()
+        f1.save()
+        f2.save()
+        f3.save()
+        f4.save()
+
+        self.assertTrue(listMarriedAlive() == []) # no good families
+
+        f5.save()
+        # one good families
+        x = listMarriedAlive()
+        self.assertTrue("i0" in x)
+        self.assertTrue("i1" in x)
+        self.assertTrue(len(x) == 2)
+
+        f6.save()
+        # two good families
+        x = listMarriedAlive()
+        self.assertTrue("i0" in x)
+        self.assertTrue("i1" in x)
+        self.assertTrue("i2" in x)
+        self.assertTrue("i3" in x)
+        self.assertTrue(len(x) == 4)
+
+        clearDB()
 
 
 if __name__ == '__main__':

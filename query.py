@@ -38,3 +38,6 @@ print(t2)
 
 # US29 List deceased
 print("Deceased: " + str(listDead()))
+
+# US29 List Married and Alive
+print("Married and Alive: " + str(listMarriedAlive()))

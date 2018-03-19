@@ -253,6 +253,7 @@ def uniqueFirstNames(family):
             return False
         names.append(name)
     return True
+
 # US29
 # List Deceased
 # returns a list of dead indis pids
@@ -261,3 +262,17 @@ def listDead():
     for i in Indi.objects():
         if not i.alive: deadList.append(i.pid)
     return deadList
+
+# US30
+# list married and alive
+def listMarriedAlive():
+    marriedAlive = []
+    for f in Fam.objects():
+        if f.wid != None and f.hid != None and f.divorced == None:
+            wife = getIndi(f.wid)
+            husb = getIndi(f.hid)
+            if(wife.alive and husb.alive):
+                marriedAlive.append(f.wid)
+                marriedAlive.append(f.hid)
+    return marriedAlive
+
