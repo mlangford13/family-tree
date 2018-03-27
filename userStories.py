@@ -275,4 +275,3 @@ def listMarriedAlive():
                 marriedAlive.append(f.wid)
                 marriedAlive.append(f.hid)
     return marriedAlive
-
