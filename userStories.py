@@ -116,6 +116,7 @@ def same_male_last_names(family):
             return False
     return True
 
+def list_single()
 
 # US25
 # Unique first names in families
@@ -129,6 +130,19 @@ def uniqueFirstNames(family):
             return False
         names.append(name)
     return True
+
+# US28
+# Order siblings by age
+def order_siblings_by_age(family):
+    child_objects = []
+    child_ids = family.children
+    for pid in child_ids:
+        child_objects.append(getIndi(pid))
+    sorted_array = sorted(child_objects, key=lambda i: i.birth)
+    sorted_pids = []
+    for child in sorted_array:
+        sorted_pids.append(child.pid)
+    return sorted_pids
 
 def siblingSpacing(x):
     if(x.children == []): return True
