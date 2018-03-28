@@ -4,8 +4,14 @@ import datetime
 import calendar
 
 def getIndi(pid):
-    return Indi.objects.get(pid=pid)
-    
+    try:
+        return Indi.objects.get(pid=pid)
+    except:
+        return None
+
+def getFam(fid):
+    return Fam.objects.get(fid=fid)
+
 def getFam(fid):
     return Fam.objects.get(fid=fid)
 

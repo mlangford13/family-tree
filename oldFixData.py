@@ -24,7 +24,7 @@ else:
     if debug:
         print("Connected to Main Database")
 
-def findBadIndis():
+def findBad():
     badIds = []
     for i in Indi.objects:
         valid = True
@@ -65,75 +65,13 @@ def findBadIndis():
                 badIds.append(i.pid)
     return badIds
 
-# return list of fids that are not valid
-def findBadFams():
-    badIds = []
+# return list of fids with not parents or children
+def emptyFams():
+    output = []
     for f in Fam.objects:
-        valid = True
-
-        # no parents and children
         if f.wid == '' and f.hid == '' and f.children == []:
-            if debug: print("Error ("+f.fid + "): family has no parents or children.")
-            valid = False
-
-        # US08 birth after marriage of parents
-        if(not birthAfterMarriageOfParents(f)):
-            if debug: print("Error US08("+f.fid + "): birth occurs before marriage of parents.")
-            valid = False
-        # US09 birth before death of parents
-        if(not birthBeforeDeathOfParents(f)):
-            if debug: print("Error US09("+f.fid + "): birth occurs after death of parents.")
-            valid = False
-
-        # US12 parents not too old
-        if(not parentsNotTooOld(f)):
-            if debug: print("Error US12("+f.fid + "): parents are too old for children.")
-            valid = False
-
-        # US13 sibling spacing
-        if(not siblingSpacing(f)):
-            if debug: print("Error US13("+f.fid + "): children spacing is too close but not twins.")
-            valid = False
-
-        if(tooManyBirthsAtOnce(f)):
-            if debug:
-                print("Error US14("+f.fid + "): more than 5 children born on the same day")
-            valid = False
-
-        # US15 too many siblings
-        if(tooManySiblings(f)):
-            if debug: print("Error US15("+f.fid + "): too many (>= 15) children.")
-            valid = False
-
-        # US16 males last names in the family
-        if(not sameMaleLastNames(f)):
-            if debug: print("Error US16("+f.fid + "): male child does not have the correct last name.")
-            valid = False
-
-        # US18 siblings should not marry
-        if(siblingMarriages(f)):
-            if debug: print("Error US18("+f.fid + "): siblings are married.")
-            valid = False
-
-        # US21 Correct gender for role
-        if(not correctGenderForRole(f)):
-            if debug:
-                print("Error US21("+f.fid + "): gender is incorrect for a parent")
-                if getIndi(f.hid) != None and getIndi(f.wid) != None:
-                    print("\t\t\tDad ID: "+f.hid+" | Gender: "+getIndi(f.hid).gender)
-                    print("\t\t\tMom ID: "+f.wid+" | Gender: "+getIndi(f.wid).gender)
-            valid = False
-
-        # US25 unique first name in families
-        if(not uniqueFirstNames(f)):
-            if debug: print("Error US25("+f.fid + "): first names are not unique.")
-            valid = False
-
-
-        if not valid:
-            if f.fid not in badIds:
-                badIds.append(f.fid)
-    return badIds
+            output.append(f.fid)
+    return output
 # removes fams from records
 # takes a list of fids
 def removeFams(famList):
@@ -149,7 +87,7 @@ def removeFams(famList):
 
 # removes ids from records
 # takes the list of ids
-def removeIndis(idList):
+def removeIds(idList):
     for i in Indi.objects:
         # children
         badChildren = []
@@ -185,18 +123,14 @@ def removeIndis(idList):
                     badChildren.append(pid)
         for child in badChildren:
             f.children.remove(child)
-        f.save()
 
-badIds = findBadIndis()
-badFams = findBadFams()
+badIds = findBad()
 if debug:
-    if badIds == []: print("No bad indis.")
-    else: print("Bad Indis: "+str(badIds))
-    if badFams == []: print("No bad fams.")
-    else: print("Bad Famss: "+str(badIds))
+    if badIds == []: print("No bad ids.")
+    else: print("Bad Ids: "+str(badIds))
 if delete:
     while badIds != []:
-        removeIndis(badIds)
-        badFams = findBadFams()
+        removeIds(badIds)
+        badFams = emptyFams()
         removeFams(badFams)
-        badIds = findBadIndis()
+        badIds = findBad()
