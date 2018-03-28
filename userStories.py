@@ -248,12 +248,38 @@ def uniqueFirstNames(family):
     names = []
     for cid in children:
         child = getIndi(cid)
-        name = child.name.split(" ")
+        name = child.name.split(" ")[0]
         if name in names:
             return False
         names.append(name)
     return True
 
+# US28
+# Order siblings by age
+def order_siblings_by_age(family):
+    child_objects = []
+    child_ids = family.children
+    for pid in child_ids:
+        child_objects.append(getIndi(pid))
+    sorted_array = sorted(child_objects, key=lambda i: i.birth)
+    sorted_pids = []
+    for child in sorted_array:
+        sorted_pids.append(child.pid)
+    return sorted_pids
+
+def siblingSpacing(x):
+    if(x.children == []): return True
+    childrenPids = x.children
+    output = True
+    for pidX in childrenPids:
+        for pidY in childrenPids:
+            if(pidX != pidY):
+                birthX = Indi.objects.get(pid=pidX).birth
+                birthY = Indi.objects.get(pid=pidY).birth
+                dif = abs((birthX - birthY).days)
+                if(not ((dif > 270)or(dif < 2))): output = False
+    return output
+ 
 # US29
 # List Deceased
 # returns a list of dead indis pids

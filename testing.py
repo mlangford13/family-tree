@@ -9,6 +9,7 @@ import subprocess
 connectToTest()
 
 class FixDataTests(unittest.TestCase):
+    
     def test_us01(self):
         today = datetime.datetime.today()
         past = datetime.datetime.min
@@ -543,7 +544,6 @@ class FixDataTests(unittest.TestCase):
         self.assertFalse(correctGenderForRole(f9))
         clearDB()
 
-
     def test_us25(self):
         i1 = Indi(pid="john1", name="John")
         i2 = Indi(pid="john2", name="John")
@@ -570,6 +570,37 @@ class FixDataTests(unittest.TestCase):
         self.assertFalse(uniqueFirstNames(fam5))
         self.assertTrue(uniqueFirstNames(fam6))
         self.assertTrue(uniqueFirstNames(fam7))
+
+    def test_us28(self):
+        bday1 = datetime.date(1990, 1, 1)
+        bday2 = datetime.date(1995, 1, 1)
+        bday3 = datetime.date(2000, 1, 1)
+
+        i1 = Indi(pid = "01", birth = bday1)
+        i2 = Indi(pid = "02", birth = bday2)
+        i3 = Indi(pid = "03", birth = bday3)
+        i4 = Indi(pid = "04", birth = bday1)
+
+        fam1 = Fam(fid="fam1")
+        fam2 = Fam(fid="fam2", children={i1.pid})
+        fam3 = Fam(fid="fam3", children={i1.pid, i4.pid})
+        fam4 = Fam(fid="fam4", children={i1.pid, i2.pid, i3.pid})
+        fam5 = Fam(fid="fam5", children={i1.pid, i4.pid, i2.pid})
+
+        result1 = []
+        result2 = ["01"]
+        result3 = ["04", "01"]
+        result4 = ["01", "02", "03"]
+        result5 = ["04", "01", "02"]
+
+        for obj in [i1, i2, i3, i4, fam1, fam2, fam3, fam4, fam5]:
+            obj.save()
+
+        self.assertEqual(order_siblings_by_age(fam1), result1)
+        self.assertEqual(order_siblings_by_age(fam2), result2)
+        self.assertEqual(order_siblings_by_age(fam3), result3)
+        self.assertEqual(order_siblings_by_age(fam4), result4)
+        self.assertEqual(order_siblings_by_age(fam5), result5)
 
     def test_us29(self):
         i0 = Indi(pid="i0",alive=True)
@@ -643,7 +674,6 @@ class FixDataTests(unittest.TestCase):
         self.assertTrue(len(x) == 4)
 
         clearDB()
-
 
 if __name__ == '__main__':
     unittest.main()
