@@ -116,8 +116,6 @@ def same_male_last_names(family):
             return False
     return True
 
-def list_single()
-
 # US25
 # Unique first names in families
 def uniqueFirstNames(family):
