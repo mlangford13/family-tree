@@ -8,9 +8,25 @@ from prettytable import PrettyTable
 import datetime
 from mongoengine import *
 from dbDef import *
+import argparse
 
-# connect to MongoDB with pymongo
-connectToMongoDB()
+parser = argparse.ArgumentParser(description='Uploads gedcom file to database.')
+parser.add_argument('-v',action='store_true',help='Verbose output.')
+parser.add_argument('-t',action='store_true',help='Use the test database.')
+parser.add_argument('fileName', metavar='F',type=str,help='Gedcom file to be uploaded.')
+args = parser.parse_args()
+
+debug = args.v
+test = args.t
+fileName = args.fileName
+if test:
+    connectToTest()
+    if debug:
+        print("Connected to Test Database")
+else:
+    connectToMongoDB()
+    if debug:
+        print("Connected to Main Database")
 
 # Delete old data
 for i in Indi.objects:
@@ -50,7 +66,7 @@ def parseFile(filename):
         args = ''
         for line in file:
             # input print
-            print('--> {}'.format(line.strip()))
+            if debug: print('--> {}'.format(line.strip()))
             # initial format of line by stripping spaces and seperating arguments
             words = line.strip().split(' ')
             level = words[0]
@@ -75,10 +91,10 @@ def parseFile(filename):
                     valid = isValidLevel(int(level), tag)
                     args = ' '.join(words[2:])
             # output print
-            print('<-- {}|{}|{}|{}'.format(level, tag, valid, args))
+            if debug: print('<-- {}|{}|{}|{}'.format(level, tag, valid, args))
             # if the tag was valid add line values to output
             if (valid == 'Y'):output.append({'level':level,'tag':tag,'args':args})
-    print('---File Parsed---')
+    if debug: print('---File Parsed---')
     return output
 
 # takes the gedcom style date and converts it into the datetime format
@@ -91,7 +107,10 @@ def parseDateStrToObj(aString):
     x = parseDateStr(aString)
     return datetime.date(x['year'],x['month'],x['day'])
 
-lines = parseFile(sys.argv[1]) # parse file specified
+def parseDateStrToDatetime(aString):
+    x = parseDateStr(aString)
+    return datetime.datetime(x['year'],x['month'],x['day'])
+lines = parseFile(fileName) # parse file specified
 
 # variable declarations
 lastFam = ''
@@ -126,9 +145,9 @@ for line in lines:
             dateType = 'divorce'
         if (tag == "DATE"):
             if (dateType == 'marriage'):
-                lastFam.marriage = parseDateStrToObj(args)
+                lastFam.married = parseDateStrToDatetime(args)
             if (dateType == 'divorce'):
-                lastFam.divorce = parseDateStrToObj(args)
+                lastFam.divorced = parseDateStrToDatetime(args)
         lastFam.save()
     if (lastIndi != ''):
         if (tag == 'NAME'): lastIndi.name = args
@@ -173,4 +192,4 @@ for i in fams:
         if i.fid not in child.families: child.families.append(i.fid)
         child.save()
 
-print("Data uploaded!")
+if debug: print("Data uploaded!")

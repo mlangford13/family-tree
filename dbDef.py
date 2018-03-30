@@ -2,12 +2,16 @@
 from mongoengine import *
 
 global DATABASE, GENDERS
-DATABASE = 'test'
+DATABASE_MAIN = 'main'
+DATABASE_TEST= 'test'
 GENDERS = ['M','F','O'] # male female other
 
 
 def connectToMongoDB():
-    connect(DATABASE, host='localhost', port=27017)
+    connect(DATABASE_MAIN, host='localhost', port=27017)
+
+def connectToTest():
+    connect(DATABASE_TEST, host='localhost', port=27017)
 
 class Indi(Document):
     pid = StringField(required=True,primary_key=True) # identifier
