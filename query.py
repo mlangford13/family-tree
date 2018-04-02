@@ -39,5 +39,11 @@ print(t2)
 # US29 List deceased
 print("Deceased: " + str(listDead()))
 
-# US29 List Married and Alive
+# US30 List Married and Alive
 print("Married and Alive: " + str(listMarriedAlive()))
+
+# US39
+print("Upcoming Anniversaries: ")
+anniversaries = getFams(listUpcomingAnniversaries())
+for f in anniversaries:
+    print("\tHusband: " + f.hid + ", Wife: " + f.wid + ", Married: " + str(f.married))

@@ -12,6 +12,12 @@ def getIndi(pid):
 def getFam(fid):
     return Fam.objects.get(fid=fid)
 
+def getFams(fids):
+    fams = []
+    for fid in fids:
+        fams.append(getFam(fid))
+    return fams
+
 def getFam(fid):
     return Fam.objects.get(fid=fid)
 

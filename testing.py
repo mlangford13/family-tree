@@ -9,7 +9,7 @@ import subprocess
 connectToTest()
 
 class FixDataTests(unittest.TestCase):
-    
+
     def test_us01(self):
         today = datetime.datetime.today()
         past = datetime.datetime.min
@@ -674,6 +674,34 @@ class FixDataTests(unittest.TestCase):
         self.assertTrue(len(x) == 4)
 
         clearDB()
+
+    def test_us39(self):
+        today = datetime.date.today()
+        margin0 = datetime.timedelta(days = 15)
+        margin1 = datetime.timedelta(days = 30)
+        margin2 = datetime.timedelta(days = 60)
+
+        f0 = Fam(fid="f0", hid="m0_good", wid="w0_good", married=today)
+        f1 = Fam(fid="f1", hid="m1_good", wid="w1_good", married=today+margin0)
+        f2 = Fam(fid="f2", hid="m2_good", wid="w2_good", married=today+margin1)
+        f3 = Fam(fid="f3", hid="m3_bad", wid="w3_bad", married=today+margin2)
+        f4 = Fam(fid="f4", hid="m4_bad", wid="w3_bad", married=today-margin0)
+
+        clearDB()
+
+        for obj in [f0, f1, f2, f3, f4]:
+            obj.save()
+
+        fams = listUpcomingAnniversaries()
+
+        self.assertTrue("f0" in fams)
+        self.assertTrue("f1" in fams)
+        self.assertTrue("f2" in fams)
+        self.assertTrue(len(fams) == 3)
+
+        clearDB()
+
+
 
 if __name__ == '__main__':
     unittest.main()

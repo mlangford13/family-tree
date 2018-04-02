@@ -279,7 +279,7 @@ def siblingSpacing(x):
                 dif = abs((birthX - birthY).days)
                 if(not ((dif > 270)or(dif < 2))): output = False
     return output
- 
+
 # US29
 # List Deceased
 # returns a list of dead indis pids
@@ -301,3 +301,18 @@ def listMarriedAlive():
                 marriedAlive.append(f.wid)
                 marriedAlive.append(f.hid)
     return marriedAlive
+
+
+def listUpcomingAnniversaries():
+    today = datetime.date.today()
+    margin = datetime.timedelta(days = 30)
+    anniversaries = []
+
+    for f in Fam.objects():
+        if f.divorced == None and f.married != None:
+            marriageDate = f.married.date()
+            marriageDate = marriageDate.replace(year = today.year)
+            if today <= marriageDate <= (today + margin):
+                anniversaries.append(f.fid)
+
+    return anniversaries
