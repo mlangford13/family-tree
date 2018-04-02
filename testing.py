@@ -596,11 +596,11 @@ class FixDataTests(unittest.TestCase):
         for obj in [i1, i2, i3, i4, fam1, fam2, fam3, fam4, fam5]:
             obj.save()
 
-        self.assertEqual(order_siblings_by_age(fam1), result1)
-        self.assertEqual(order_siblings_by_age(fam2), result2)
-        self.assertEqual(order_siblings_by_age(fam3), result3)
-        self.assertEqual(order_siblings_by_age(fam4), result4)
-        self.assertEqual(order_siblings_by_age(fam5), result5)
+        self.assertEqual(orderSibilingsByAge(fam1), result1)
+        self.assertEqual(orderSibilingsByAge(fam2), result2)
+        self.assertEqual(orderSibilingsByAge(fam3), result3)
+        self.assertEqual(orderSibilingsByAge(fam4), result4)
+        self.assertEqual(orderSibilingsByAge(fam5), result5)
 
     def test_us29(self):
         i0 = Indi(pid="i0",alive=True)

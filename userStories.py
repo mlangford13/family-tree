@@ -256,7 +256,7 @@ def uniqueFirstNames(family):
 
 # US28
 # Order siblings by age
-def order_siblings_by_age(family):
+def orderSibilingsByAge(family):
     child_objects = []
     child_ids = family.children
     for pid in child_ids:
@@ -302,7 +302,10 @@ def listMarriedAlive():
                 marriedAlive.append(f.hid)
     return marriedAlive
 
-
+# US39
+# List upcoming anniversaries
+#  List all living couples in a GEDCOM file whose
+#  marriage anniversaries occur in the next 30 days
 def listUpcomingAnniversaries():
     today = datetime.date.today()
     margin = datetime.timedelta(days = 30)
