@@ -295,25 +295,22 @@ def listMarriedAlive():
 # List recent survivors
 #  List all living spouses and descendants of people in a GEDCOM
 #  file who died in the last 30 days
-def listRecentSurvivors():
+def listRecentSurvivors(i):
     today = datetime.date.today()
     margin = datetime.timedelta(days = 30)
     aliveSpouses = []
     aliveDescendants = []
+    spouses = []
 
-    for i in Indi.objects():
-        if i.death != None and (today-margin) <= i.death.date() <= today:
-            spouses = getSpousesOfIndi(i)
-            tempSpouces = []
+    if i.death != None and (today-margin) <= i.death.date() <= today:
+        spouses = getSpousesOfIndi(i)
+        for spouse in spouses:
+            if spouse.alive:
+                aliveSpouses.append(spouse.pid)
 
-            for spouse in spouses:
-                if spouse.alive:
-                    tempSpouces.append(spouse.pid)
-            aliveSpouses.append(tempSpouces)
-
-            descendants = getSurvivingDescendants(i)
-            if descendants:
-                aliveDescendants.append(descendants)
+        descendants = getSurvivingDescendants(i)
+        if descendants:
+            aliveDescendants.extend(descendants)
 
     return aliveSpouses, aliveDescendants
 

@@ -43,9 +43,11 @@ print("Deceased: " + str(listDead()))
 print("Married and Alive: " + str(listMarriedAlive()))
 
 # US37 List recent survivors
-spouses, descendants = listRecentSurvivors()
-print("Spouses: " + str(spouses))
-print("Descendants: " + str(descendants))
+for i in Indi.objects():
+    spouses, descendants = listRecentSurvivors(i)
+    if spouses or descendants: print("Individual "+ i.pid +" survived by:")
+    if spouses: print("\tSpouses: " + str(spouses))
+    if descendants: print("\tDescendants: " + str(descendants))
 
 # US39
 print("Upcoming Anniversaries: ")

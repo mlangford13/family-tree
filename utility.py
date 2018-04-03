@@ -52,14 +52,21 @@ def getSpousesOfIndi(i):
 
     return spouses
 
+def getChildrenOfIndi(i):
+    families = getFams(i.marriages.keys())
+    children = []
+    for fam in families:
+        children.extend(getIndis(fam.children))
+    return children
+
+# Recursive Helper function for US37
 def getSurvivingDescendants(indi):
     descendants = []
-    cids = indi.children
-    children = getIndis(cids)
+    children = getChildrenOfIndi(indi)
+
     for child in children:
         if child.alive:
-            print("Child: " + child.pid)
-            descendants.extend(child.pid) #Put child on
+            descendants.append(child.pid) #Put child on
         temp = getSurvivingDescendants(child)
         if temp:
             descendants.extend(temp)

@@ -675,6 +675,51 @@ class FixDataTests(unittest.TestCase):
 
         clearDB()
 
+    def test_us37(self):
+        today = datetime.datetime.today()
+        margin0 = datetime.timedelta(days = 15)
+        margin1 = datetime.timedelta(days = 30)
+        margin2 = datetime.timedelta(days = 60)
+        margin3 = datetime.timedelta(days = 90)
+
+        marriage0 = {"f0":today-margin1}
+        marriageBoth = {"f0":(today-margin1), "f1":(today-margin2)}
+        marriage1 = {"f1":today-margin2}
+        marriage2 = {"f2":today-margin3}
+
+        i0 = Indi(pid="i0", gender="M", death=today-margin0, alive=False, marriages=marriageBoth)
+        i1 = Indi(pid="i1", gender="F", marriages=marriage0)
+        i2 = Indi(pid="i2", gender="F", alive=False, marriages=marriage1)
+
+        i3 = Indi(pid="i3", alive=True)
+        i4 = Indi(pid="i4", alive=True)
+        i5 = Indi(pid="i5", alive=False, marriages=marriage2)
+
+        i6 = Indi(pid="i6", alive=True)
+
+        f0 = Fam(fid="f0", hid=i0.pid, wid=i1.pid, children=[i3.pid, i4.pid, i5.pid])
+        f1 = Fam(fid="f1", hid=i0.pid, wid=i2.pid)
+        f2 = Fam(fid="f2", children=[i6.pid])
+
+        saveList = [i0,i1,i2,i3,i4,i5,i6,f0,f1,f2]
+
+        clearDB()
+        for obj in saveList:
+            obj.save()
+
+
+        spouses, descendants = listRecentSurvivors(i0)
+        self.assertTrue("i1" in spouses)
+        self.assertTrue(len(spouses) == 1)
+
+        self.assertTrue("i3" in descendants)
+        self.assertTrue("i4" in descendants)
+        self.assertTrue("i6" in descendants)
+        self.assertTrue(len(descendants) == 3)
+        clearDB()
+
+
+
     def test_us39(self):
         today = datetime.date.today()
         margin0 = datetime.timedelta(days = 15)
