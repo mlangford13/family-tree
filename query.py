@@ -42,6 +42,11 @@ print("Deceased: " + str(listDead()))
 # US30 List Married and Alive
 print("Married and Alive: " + str(listMarriedAlive()))
 
+# US37 List recent survivors
+spouses, descendants = listRecentSurvivors()
+print("Spouses: " + str(spouses))
+print("Descendants: " + str(descendants))
+
 # US39
 print("Upcoming Anniversaries: ")
 anniversaries = getFams(listUpcomingAnniversaries())

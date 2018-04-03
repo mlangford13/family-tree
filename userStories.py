@@ -267,18 +267,7 @@ def orderSibilingsByAge(family):
         sorted_pids.append(child.pid)
     return sorted_pids
 
-def siblingSpacing(x):
-    if(x.children == []): return True
-    childrenPids = x.children
-    output = True
-    for pidX in childrenPids:
-        for pidY in childrenPids:
-            if(pidX != pidY):
-                birthX = Indi.objects.get(pid=pidX).birth
-                birthY = Indi.objects.get(pid=pidY).birth
-                dif = abs((birthX - birthY).days)
-                if(not ((dif > 270)or(dif < 2))): output = False
-    return output
+
 
 # US29
 # List Deceased
@@ -301,6 +290,32 @@ def listMarriedAlive():
                 marriedAlive.append(f.wid)
                 marriedAlive.append(f.hid)
     return marriedAlive
+
+# US37
+# List recent survivors
+#  List all living spouses and descendants of people in a GEDCOM
+#  file who died in the last 30 days
+def listRecentSurvivors():
+    today = datetime.date.today()
+    margin = datetime.timedelta(days = 30)
+    aliveSpouses = []
+    aliveDescendants = []
+
+    for i in Indi.objects():
+        if i.death != None and (today-margin) <= i.death.date() <= today:
+            spouses = getSpousesOfIndi(i)
+            tempSpouces = []
+
+            for spouse in spouses:
+                if spouse.alive:
+                    tempSpouces.append(spouse.pid)
+            aliveSpouses.append(tempSpouces)
+
+            descendants = getSurvivingDescendants(i)
+            if descendants:
+                aliveDescendants.append(descendants)
+
+    return aliveSpouses, aliveDescendants
 
 # US39
 # List upcoming anniversaries

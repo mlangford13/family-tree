@@ -11,7 +11,7 @@ echo ""
 echo "------------------------------"
 echo "--- Uploading gedcom file---"
 echo "------------------------------"
-python upload.py ged/s3test.ged -t
+python upload.py ged/s4test.ged -t
 echo ""
 echo "-----------------------------------"
 echo "--- Showing initial database ---"

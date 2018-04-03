@@ -9,6 +9,15 @@ def getIndi(pid):
     except:
         return None
 
+def getIndis(pids):
+    indis = []
+    for pid in pids:
+        indi = getIndi(pid)
+        if indi != None:
+            indis.append(indi)
+
+    return indis
+
 def getFam(fid):
     return Fam.objects.get(fid=fid)
 
@@ -27,6 +36,35 @@ def addMonths(sourcedate,months):
     month = month % 12 + 1
     day = min(sourcedate.day,calendar.monthrange(year,month)[1])
     return datetime.datetime(year,month,day)
+
+def getSpousesOfIndi(i):
+    families = getFams(i.marriages.keys())
+    spouses = []
+    for fam in families:
+        spouse = None
+        if i.gender == 'M':
+            spouse = getIndi(fam.wid)
+        else:
+            spouse = getIndi(fam.hid)
+
+        if spouse != None:
+            spouses.append(spouse)
+
+    return spouses
+
+def getSurvivingDescendants(indi):
+    descendants = []
+    cids = indi.children
+    children = getIndis(cids)
+    for child in children:
+        if child.alive:
+            print("Child: " + child.pid)
+            descendants.extend(child.pid) #Put child on
+        temp = getSurvivingDescendants(child)
+        if temp:
+            descendants.extend(temp)
+
+    return descendants
 
 def clearDB():
     # Delete old data
