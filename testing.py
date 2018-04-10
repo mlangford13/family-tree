@@ -674,7 +674,82 @@ class FixDataTests(unittest.TestCase):
         self.assertTrue(len(x) == 4)
 
         clearDB()
+    def test_us31(self):
+        i0 = Indi(pid="i0", marriages={"f0":0}) # married to each other
+        i1 = Indi(pid="i1", marriages={"f0":0})
 
+        i2 = Indi(pid="i2", marriages={"f1":0}, divorces={"f1":0}) # married to each other then divorced
+        i3 = Indi(pid="i3", marriages={"f1":0}, divorces={"f1":0})
+
+        i4 = Indi(pid="i4") # no marriages
+        i5 = Indi(pid="i5")
+
+        i6 = Indi(pid="i6", marriages={"f1":0}, divorces={"f1":0}) # marriage divorce, then remarried
+        i7 = Indi(pid="i7", marriages={"f1":0,"f2":0}, divorces={"f1":0})
+        i8 = Indi(pid="i8", marriages={"f2":0})
+
+        i9 = Indi(pid="i9", marriages={"f1":0}, divorces={"f1":0}) # marriage divorce, then remarried
+        i10 = Indi(pid="i10", marriages={"f1":0,"f2":0}, divorces={"f1":0,"f2":0}) # then divorced again
+        i11 = Indi(pid="i11", marriages={"f2":0}, divorces={"f2":0})
+
+        i12 = Indi(pid="i12") # just a single person
+
+        clearDB()
+        self.assertTrue(listLivingSingle() == [])
+        i0.save()
+        i1.save()
+        x = listLivingSingle()
+        self.assertTrue(x == [])
+        i2.save()
+        i3.save()
+        x = listLivingSingle()
+        self.assertTrue("i2" in x)
+        self.assertTrue("i3" in x)
+        self.assertTrue(len(x)==2)
+        i4.save()
+        i5.save()
+        x = listLivingSingle()
+        self.assertTrue("i2" in x)
+        self.assertTrue("i3" in x)
+        self.assertTrue("i4" in x)
+        self.assertTrue("i5" in x)
+        self.assertTrue(len(x)==4)
+        i6.save()
+        i7.save()
+        i8.save()
+        x = listLivingSingle()
+        self.assertTrue("i2" in x)
+        self.assertTrue("i3" in x)
+        self.assertTrue("i4" in x)
+        self.assertTrue("i5" in x)
+        self.assertTrue("i6" in x)
+        self.assertTrue(len(x)==5)
+        i9.save()
+        i10.save()
+        i11.save()
+        x = listLivingSingle()
+        self.assertTrue("i2" in x)
+        self.assertTrue("i3" in x)
+        self.assertTrue("i4" in x)
+        self.assertTrue("i5" in x)
+        self.assertTrue("i6" in x)
+        self.assertTrue("i9" in x)
+        self.assertTrue("i10" in x)
+        self.assertTrue("i11" in x)
+        self.assertTrue(len(x)==8)
+        i12.save()
+        x = listLivingSingle()
+        self.assertTrue("i2" in x)
+        self.assertTrue("i3" in x)
+        self.assertTrue("i4" in x)
+        self.assertTrue("i5" in x)
+        self.assertTrue("i6" in x)
+        self.assertTrue("i9" in x)
+        self.assertTrue("i10" in x)
+        self.assertTrue("i11" in x)
+        self.assertTrue("i12" in x)
+        self.assertTrue(len(x)==9)
+        clearDB()
     def test_us37(self):
         today = datetime.datetime.today()
         margin0 = datetime.timedelta(days = 15)

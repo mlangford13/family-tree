@@ -291,6 +291,21 @@ def listMarriedAlive():
                 marriedAlive.append(f.hid)
     return marriedAlive
 
+# US31
+# list living single
+def listLivingSingle():
+    # go through individuals
+    # check if there is a marriage that isnt in a divorce
+    livingSingle = []
+    for i in Indi.objects():
+        single = True
+        for m in i.marriages:
+            if m not in i.divorces:
+                single = False
+        if single:
+            livingSingle.append(i.pid)
+    return livingSingle
+
 # US37
 # List recent survivors
 #  List all living spouses and descendants of people in a GEDCOM
