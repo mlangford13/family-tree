@@ -329,6 +329,22 @@ def listRecentSurvivors(i):
 
     return aliveSpouses, aliveDescendants
 
+
+# US38
+# list upcoming birthdays
+# 30 days from current
+def listUpcomingBirthdays():
+    currentDate = datetime.datetime.now()
+    birthdayList = []
+    for i in Indi.objects():
+        if(i.birth != None):
+            b = i.birth
+            x = datetime.date(currentDate.year,b.month,b.day)
+            diff = x-currentDate.date()
+            diff = diff.days
+            if (diff >= 0 and diff <= 30):
+                birthdayList.append(i.pid)
+    return birthdayList
 # US39
 # List upcoming anniversaries
 #  List all living couples in a GEDCOM file whose
