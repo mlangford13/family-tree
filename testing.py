@@ -571,15 +571,33 @@ class FixDataTests(unittest.TestCase):
         self.assertTrue(uniqueFirstNames(fam6))
         self.assertTrue(uniqueFirstNames(fam7))
 
+    def test_us27(self):
+        i1 = Indi(pid="i1", name="John", age=20)
+        i2 = Indi(pid="i2", name="Michael", age=30)
+        i3 = Indi(pid="i3", name="James", age=10)
+        i4 = Indi(pid="i4", name="Sarah", age=100)
+        i5 = Indi(pid="i5", name="Jane", age=2)
+
+        for i in [i1, i2, i3, i4, i5]:
+            i.save()
+
+        self.assertEqual(display_with_age(i1), "John 20")
+        self.assertEqual(display_with_age(i2), "Michael 30")
+        self.assertEqual(display_with_age(i3), "James 10")
+        self.assertEqual(display_with_age(i4), "Sarah 100")
+        self.assertEqual(display_with_age(i5), "Jane 2")
+
+
     def test_us28(self):
         bday1 = datetime.date(1990, 1, 1)
         bday2 = datetime.date(1995, 1, 1)
         bday3 = datetime.date(2000, 1, 1)
+        bday4 = datetime.date(2000, 6, 1)
 
         i1 = Indi(pid = "01", birth = bday1)
         i2 = Indi(pid = "02", birth = bday2)
         i3 = Indi(pid = "03", birth = bday3)
-        i4 = Indi(pid = "04", birth = bday1)
+        i4 = Indi(pid = "04", birth = bday4)
 
         fam1 = Fam(fid="fam1")
         fam2 = Fam(fid="fam2", children={i1.pid})
@@ -591,7 +609,7 @@ class FixDataTests(unittest.TestCase):
         result2 = ["01"]
         result3 = ["01", "04"]
         result4 = ["01", "02", "03"]
-        result5 = ["01", "04", "02"]
+        result5 = ["01", "02", "04"]
 
         for obj in [i1, i2, i3, i4, fam1, fam2, fam3, fam4, fam5]:
             obj.save()
@@ -674,6 +692,30 @@ class FixDataTests(unittest.TestCase):
         self.assertTrue(len(x) == 4)
 
         clearDB()
+
+    '''
+    def testing_us42(self):
+
+        # Because we are using datetime to create our date objects and datetime automatically handles illegitimate dates, we know that our system works. However, I have written a working function in userStories.py just to be safe.
+        
+        date1 = datetime.date(2000, 2, 29)  # True
+        date2 = datetime.date(2001, 2, 29)  # False
+        date3 = datetime.date(2000, 4, 31)  # False
+        date4 = datetime.date(2000, 5, 31)  # True
+        date5 = datetime.date(2000, 4, 30)  # True
+        for d in [date1, date2, date3, date4, date5]:
+            d.save()
+        
+        self.assertTrue(isDateLegitimate(date1))
+        self.assertFalse(isDateLegitimate(date2))
+        self.assertFalse(isDateLegitimate(date3))
+        self.assertTrue(isDateLegitimate(date4))
+        self.assertTrue(isDateLegitimate(date5))
+    '''
+
+        
+
+
 
 if __name__ == '__main__':
     unittest.main()

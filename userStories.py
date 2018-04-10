@@ -216,8 +216,7 @@ def sameMaleLastNames(family):
             return False
     return True
 
-<<<<<<< HEAD
-=======
+
 # US18
 # siblings should not marry
 # takes a fam and returns true if any siblings are married to each other
@@ -243,7 +242,6 @@ def correctGenderForRole(family):
         return False
     return True
 
->>>>>>> bb5e51ccc461ef0495f1605ef5ae35ad867ed9e9
 # US25
 # Unique first names in families
 def uniqueFirstNames(family):
@@ -256,6 +254,13 @@ def uniqueFirstNames(family):
             return False
         names.append(name)
     return True
+
+# US27
+# Include individual ages
+def display_with_age(individual):
+    age = individual.age
+    name = individual.name
+    return name + " " + str(age)
 
 # US28
 # Order siblings by age
@@ -302,5 +307,23 @@ def listMarriedAlive():
             husb = getIndi(f.hid)
             if(wife.alive and husb.alive):
                 marriedAlive.append(f.wid)
-                marriedAlive.append(f.hid)
+                marriedAlive.append(f.hid) 
     return marriedAlive
+
+# US42
+# reject illegitimate dates
+def isDateLegitimate(date):
+    day = date.day
+    month = date.month
+    year = date.year
+    isLeapYear = year % 4 == 0
+    if day <= 0:
+        return False
+    if month == 2:
+        if isLeapYear:
+            return day <= 29
+        return day <= 28
+    if month == 4 or month == 6 or month == 9 or month == 11:
+        return day <= 30
+    return day <= 31
+    
