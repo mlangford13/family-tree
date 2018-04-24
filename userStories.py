@@ -70,9 +70,10 @@ def marriageBeforeDeath(individual):
 # Checks if an individuals own death date is not before any
 # of their divorce dates
 def divorceBeforeDeath(individual):
-    for key in individual.divorces:
-        if individual.divorces[key] > individual.death:
-            return False
+    if individual.death != None:
+        for key in individual.divorces:
+            if individual.divorces[key] > individual.death:
+                return False
     return True
 
 # US07
@@ -140,10 +141,11 @@ def marriageAfter14(individual):
 def parentsNotTooOld(x):
     if (x.hid == '' and x.wid == ''): return True # no  parents
     if (x.children == []): return True # no children
-    oldestBirth = datetime.datetime.max
-    for childPid in x.children:
-        cBirth = Indi.objects.get(pid=childPid).birth
-        if (cBirth < oldestBirth): oldestBirth = cBirth
+
+    siblingsByAge = orderSibilingsByAge(x)
+    oldestChildPid = siblingsByAge[0]
+    oldestBirth = getIndi(oldestChildPid).birth
+
     if x.wid != '':
         wBirth = getIndi(x.wid).birth
         if wBirth != None:
@@ -265,6 +267,8 @@ def orderSibilingsByAge(family):
     sorted_pids = []
     for child in sorted_array:
         sorted_pids.append(child.pid)
+
+    sorted_pids = [x.encode('UTF8') for x in sorted_pids]
     return sorted_pids
 
 

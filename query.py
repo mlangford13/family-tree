@@ -19,9 +19,9 @@ else:
 
 # printing the tables from the lists
 t1 = PrettyTable()
-t1.field_names = ["ID","Name","Gender","Birthday","Age","Alive","Death","Child","Spouse"]
+t1.field_names = ["ID","Name","Gender","Birthday","Age","Alive","Death","Child","Spouse", "Divorces"]
 for i in Indi.objects:
-    t1.add_row([i.pid,i.name,i.gender,i.birth,i.age,i.alive,i.death,i.children,i.marriages])
+    t1.add_row([i.pid,i.name,i.gender,i.birth,i.age,i.alive,i.death,i.children,i.marriages, i.divorces])
 print("Individuals")
 print(t1)
 
