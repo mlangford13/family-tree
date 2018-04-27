@@ -232,13 +232,14 @@ def noMarriagesToDescendants(i):
 # siblings should not marry
 # takes a fam and returns true if any siblings are married to each other
 # returns true if married to sibling
-def siblingMarriages(x):
+def siblingMarriages(f):
     output = False
-    for cid in x.children:
+    for cid in f.children:
         child = getIndi(cid)
-        for key in child.marriages:
-            if key in x.children: output = True
-    return output
+        for key in getSpousePids(child):
+            if key in f.children:
+                return True
+    return False
 
 # US21
 # Husband in family should be male and wife in family should be female
