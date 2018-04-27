@@ -158,7 +158,7 @@ def parentsNotTooOld(x):
     if childrenList == []: return True # no valid children
     oldestChild = childrenList[0]
     for i in childrenList:
-        if i.birth < oldestChild.birth:
+        if i.birth > oldestChild.birth:
             oldestChild = i
 
     oldestBirth = oldestChild.birth
