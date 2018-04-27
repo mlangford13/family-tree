@@ -218,6 +218,16 @@ def sameMaleLastNames(family):
             return False
     return True
 
+# US17
+# Parents should not marry any of their descendants
+def noMarriagesToDescendants(i):
+    descendants = getDescendants(i)
+    spouses = getSpousePids(i)
+    if any(d in spouses for d in descendants):
+        return False
+    return True
+
+
 # US18
 # siblings should not marry
 # takes a fam and returns true if any siblings are married to each other

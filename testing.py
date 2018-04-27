@@ -486,6 +486,22 @@ class FixDataTests(unittest.TestCase):
         self.assertTrue(sameMaleLastNames(fam4))
         self.assertTrue(sameMaleLastNames(fam5))
 
+    def test_us17(self):
+        i1 = Indi(pid="dad", marriages={'f1':''}, gender='M')
+        i2 = Indi(pid="son", marriages={'f2':''}, gender='M')
+        i3 = Indi(pid="g-son")
+
+        f1 = Fam(fid="f1", hid='dad', wid='mom', children=["son"])
+        f2 = Fam(fid='f2', hid="son", wid="g-son", children=["g-son"])
+
+        clearDB()
+        for obj in [i1, i2, i3, f1, f2]:
+            obj.save()
+
+        self.assertTrue(noMarriagesToDescendants(i1))
+        self.assertFalse(noMarriagesToDescendants(i2))
+        self.assertTrue(noMarriagesToDescendants(i3))
+
     def test_us18(self):
         i0 = Indi(pid='i0', marriages={'i1':''})  # fam
         i1 = Indi(pid='i1', marriages={'i0':''})  # fam
