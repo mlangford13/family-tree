@@ -143,7 +143,21 @@ def parentsNotTooOld(x):
     if (x.children == []): return True # no children
 
     siblingsByAge = orderSibilingsByAge(x)
+
+    # remove any siblings without a birth
+    newList = siblingsByAge
+    for s in siblingsByAge:
+        indi = getIndi(s)
+        if indi is None:
+            newList.remove(s)
+        else:
+            if indi.birth is None: newList.remove(s)
+    siblingsByAge = newList
+    if siblingsByAge == []:
+        return True
+
     oldestChildPid = siblingsByAge[0]
+    if getIndi(oldestChildPid) is None: return True
     oldestBirth = getIndi(oldestChildPid).birth
 
     if x.wid != '':
