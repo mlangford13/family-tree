@@ -141,10 +141,27 @@ def marriageAfter14(individual):
 def parentsNotTooOld(x):
     if (x.hid == '' and x.wid == ''): return True # no  parents
     if (x.children == []): return True # no children
+    # remove children not actually in the database or without an age
 
-    siblingsByAge = orderSibilingsByAge(x)
-    oldestChildPid = siblingsByAge[0]
-    oldestBirth = getIndi(oldestChildPid).birth
+    # remove any siblings without a birth
+    newList = x.children
+    for s in x.children:
+        indi = getIndi(s)
+        if indi is None:
+            newList.remove(s)
+        elif indi.birth is None:
+            newList.remove(s)
+    # convert list of child pids to indis
+    childrenList = []
+    for i in newList:
+        childrenList.append(getIndi(i))
+    if childrenList == []: return True # no valid children
+    oldestChild = childrenList[0]
+    for i in childrenList:
+        if i.birth > oldestChild.birth:
+            oldestChild = i
+
+    oldestBirth = oldestChild.birth
 
     if x.wid != '':
         wBirth = getIndi(x.wid).birth
