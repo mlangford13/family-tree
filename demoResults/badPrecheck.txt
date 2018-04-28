@@ -1,0 +1,7 @@
+Indi Id @I5@ is duplicated
+Indi Id @I12@ is duplicated
+Date ['34', 'MAY', '1988'] is invalid
+Month HUL does not exist
+Familt Id @F1@ is duplicated
+Familt Id @F1@ is duplicated
+Precheck failed. The file will cause errors on upload
