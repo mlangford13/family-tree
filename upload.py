@@ -174,7 +174,6 @@ for line in lines:
         lastIndi.save()
 
 # add families and marriages to indi records
-# TODO : add divorces
 for i in fams:
     i = fams[i]
     husband = Indi.objects.get(pid=i.hid)
