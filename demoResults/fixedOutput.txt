@@ -114,26 +114,40 @@ Error US10(@I1@): marriage before 14.
 Error US11(@I1@): cannot be married again while being married.
 Error US04(@I2@): divorce occurs before marriage.
 Error US11(@I2@): cannot be married again while being married.
+Error US11(@I3@): cannot be married again while being married.
+Error US11(@I4@): cannot be married again while being married.
+Error US11(@I5@): cannot be married again while being married.
 Error US05(@I7@): death occurs before marriage.
+Error US11(@I7@): cannot be married again while being married.
 Error US07(@I8@): age >= 150 years.
+Error US11(@I9@): cannot be married again while being married.
 Error US02(@I10@): marriage occurs before birth.
 Error US10(@I10@): marriage before 14.
+Error US11(@I10@): cannot be married again while being married.
+Error US11(@I11@): cannot be married again while being married.
 Error US02(@I15@): marriage occurs before birth.
 Error US06(@I15@): divorce occurs after death.
 Error US10(@I15@): marriage before 14.
+Error US11(@I15@): cannot be married again while being married.
 Error US02(@I16@): marriage occurs before birth.
 Error US10(@I16@): marriage before 14.
+Error US11(@I16@): cannot be married again while being married.
 Error US02(@I18@): marriage occurs before birth.
 Error US10(@I18@): marriage before 14.
+Error US11(@I18@): cannot be married again while being married.
 Error US03(@I19@): death occurs before birth.
 Error US05(@I19@): death occurs before marriage.
 Error US10(@I19@): marriage before 14.
+Error US11(@I19@): cannot be married again while being married.
+Error US11(@I20@): cannot be married again while being married.
 Error US01(@I21@): a date is in the future.
 Error US02(@I21@): marriage occurs before birth.
 Error US10(@I21@): marriage before 14.
+Error US11(@I21@): cannot be married again while being married.
 Error US01(@I23@): a date is in the future.
 Error US03(@I23@): death occurs before birth.
 Error US17(@I24@): marriage to a descendant.
+Error US11(@I24@): cannot be married again while being married.
 Error US01(@I51@): a date is in the future.
 Error US08(@F1@): birth occurs before marriage of parents.
 Error US16(@F1@): male child does not have the correct last name.
@@ -194,11 +208,25 @@ Error US21(@F14@): gender is incorrect for a parent
 Error US21(@F16@): gender is incorrect for a parent
 			Dad ID: @I31@ | Gender: F
 			Mom ID: @I32@ | Gender: F
+Error US11(@I3@): cannot be married again while being married.
+Error US11(@I4@): cannot be married again while being married.
+Error US11(@I5@): cannot be married again while being married.
+Error US11(@I9@): cannot be married again while being married.
+Error US11(@I11@): cannot be married again while being married.
+Error US11(@I20@): cannot be married again while being married.
+Error US11(@I24@): cannot be married again while being married.
 
 -------------------------------------------------------------
 --- Checking the database to show no bad data remains ---
 -------------------------------------------------------------
 Connected to Test Database
+Error US11(@I3@): cannot be married again while being married.
+Error US11(@I4@): cannot be married again while being married.
+Error US11(@I5@): cannot be married again while being married.
+Error US11(@I9@): cannot be married again while being married.
+Error US11(@I11@): cannot be married again while being married.
+Error US11(@I20@): cannot be married again while being married.
+Error US11(@I24@): cannot be married again while being married.
 No bad indis.
 No bad fams.
 
