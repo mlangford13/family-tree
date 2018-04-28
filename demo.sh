@@ -11,7 +11,7 @@ echo ""
 echo "------------------------------"
 echo "--- Uploading gedcom file---"
 echo "------------------------------"
-python upload.py ged/US04_06.ged -t
+python upload.py ged/US04_08.ged -t
 echo ""
 echo "-----------------------------------"
 echo "--- Showing initial database ---"
