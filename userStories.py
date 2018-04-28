@@ -142,13 +142,14 @@ def bigamyCheck(x):
     if len(x.marriages)==0: return False
     married = False
     for marr in x.marriages:
-        if married:
-            return True
-        if marr in x.divorces: # if was divorced
-            if x.divorces[marr] < x.marriages[marr]: #compare dates
+        if x.marriages[marr] != '':
+            if married:
                 return True
-        if marr not in x.divorces:
-            married = True
+            if marr in x.divorces: # if was divorced
+                if x.divorces[marr] < x.marriages[marr]: #compare dates
+                    return True
+                if marr not in x.divorces:
+                    married = True
     return False
 
 # US12

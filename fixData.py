@@ -65,6 +65,10 @@ def findBadIndis():
         if not valid:
             if i.pid not in badIds:
                 badIds.append(i.pid)
+        # US11 is there bigamy
+        if(bigamyCheck(i)):
+            if debug: print("Error US11("+i.pid + "): cannot be married again while being married.")
+            valid = False
     return badIds
 
 # return list of fids that are not valid
