@@ -264,12 +264,21 @@ def display_with_age(individual):
 
 # US28
 # Order siblings by age
-def order_siblings_by_age(family):
+def orderSibilingsByAge(family):
     child_objects = []
     child_ids = family.children
     for pid in child_ids:
         child_objects.append(getIndi(pid))
     sorted_array = sorted(child_objects, key=lambda i: i.birth)
+    print(type(sorted_array))
+    for i in range(len(sorted_array)-1):
+        if sorted_array[i].birth == sorted_array[i+1].birth:
+            first_int = ord(str(sorted_array[i].name)[0])
+            second_int = ord(str(sorted_array[i+1].name)[0])
+            if first_int < second_int:
+                temp = sorted_array[i]
+                sorted_array[i] = sorted_array[i+1]
+                sorted_array[i+1] = temp
     sorted_pids = []
     for child in sorted_array:
         sorted_pids.append(child.pid)
