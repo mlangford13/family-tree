@@ -289,7 +289,7 @@ def uniqueFirstNames(family):
 def orderSibilingsByAge(family):
     child_objects = []
     child_ids = family.children
-    for pid in child_ids:dan
+    for pid in child_ids:
         child_objects.append(getIndi(pid))
     sorted_array = sorted(child_objects, key=lambda i: i.birth)
     sorted_pids = []
