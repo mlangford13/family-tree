@@ -1,4 +1,5 @@
 clear
+
 echo "------------------------------"
 echo "--- Begin Demo ---"
 echo "------------------------------"
@@ -7,6 +8,10 @@ echo "------------------------------"
 echo "---Testing codebase ---"
 echo "------------------------------"
 python testing.py
+echo "------------------------------"
+echo "---Running Precheck---"
+echo "------------------------------"
+python precheck.py ged/US04_08.ged
 echo ""
 echo "------------------------------"
 echo "--- Uploading gedcom file---"
