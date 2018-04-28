@@ -46,12 +46,19 @@ print("Married and Alive: " + str(listMarriedAlive()))
 print("Single and Alive: " + str(listLivingSingle()))
 
 
+# US35 List Recent Births
+print("Recent Births: " + str(listRecentBirths()))
+
+# US36 List Recent Deaths
+print("Recent Deaths: " + str(listRecentDeaths()))
+
 # US37 List recent survivors
 for i in Indi.objects():
     spouses, descendants = listRecentSurvivors(i)
     if spouses or descendants: print("Individual "+ i.pid +" survived by:")
     if spouses: print("\tSpouses: " + str(spouses))
     if descendants: print("\tDescendants: " + str(descendants))
+
 
 # US38 List Upcoming Birthdays
 print("Upcoming Birthdays: " + str(listUpcomingBirthdays()))

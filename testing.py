@@ -766,6 +766,81 @@ class FixDataTests(unittest.TestCase):
         self.assertTrue("i12" in x)
         self.assertTrue(len(x)==9)
         clearDB()
+
+    def test_us35(self):
+        today = datetime.datetime.today()
+        margin0 = datetime.timedelta(days = 15)
+        margin1 = datetime.timedelta(days = 30)
+        margin2 = datetime.timedelta(days = 31)
+        margin3 = datetime.timedelta(days = 90)
+
+        date0 = today
+        date1 = today + margin0 # +15 bad
+        date2 = today - margin0 # -15 good
+        date3 = today + margin1 # +30 bad
+        date4 = today - margin1 # -30 good
+        date5 = today + margin2 # +31 bad
+        date6 = today - margin2 # -31 bad
+        date7 = today + margin3 # +90 bad
+        date8 = today - margin3 # -90 bad
+
+        i0 = Indi(pid='i0', birth=date0)
+        i1 = Indi(pid='i1', birth=date1)
+        i2 = Indi(pid='i2', birth=date2)
+        i3 = Indi(pid='i3', birth=date3)
+        i4 = Indi(pid='i4', birth=date4)
+        i5 = Indi(pid='i5', birth=date5)
+        i6 = Indi(pid='i6', birth=date6)
+        i7 = Indi(pid='i7', birth=date7)
+        i8 = Indi(pid='i8', birth=date8)
+
+        iList = [i0,i1,i2,i3,i4,i5,i6,i7,i8]
+
+        clearDB()
+        for i in iList:
+            i.save()
+        x = listRecentBirths()
+        self.assertTrue('i0' in x)
+        self.assertTrue('i2' in x)
+        self.assertTrue('i4' in x)
+        self.assertTrue(len(x)==3)
+    def test_us36(self):
+        today = datetime.datetime.today()
+        margin0 = datetime.timedelta(days = 15)
+        margin1 = datetime.timedelta(days = 30)
+        margin2 = datetime.timedelta(days = 31)
+        margin3 = datetime.timedelta(days = 90)
+
+        date0 = today
+        date1 = today + margin0 # +15 bad
+        date2 = today - margin0 # -15 good
+        date3 = today + margin1 # +30 bad
+        date4 = today - margin1 # -30 good
+        date5 = today + margin2 # +31 bad
+        date6 = today - margin2 # -31 bad
+        date7 = today + margin3 # +90 bad
+        date8 = today - margin3 # -90 bad
+
+        i0 = Indi(pid='i0', death=date0)
+        i1 = Indi(pid='i1', death=date1)
+        i2 = Indi(pid='i2', death=date2)
+        i3 = Indi(pid='i3', death=date3)
+        i4 = Indi(pid='i4', death=date4)
+        i5 = Indi(pid='i5', death=date5)
+        i6 = Indi(pid='i6', death=date6)
+        i7 = Indi(pid='i7', death=date7)
+        i8 = Indi(pid='i8', death=date8)
+
+        iList = [i0,i1,i2,i3,i4,i5,i6,i7,i8]
+
+        clearDB()
+        for i in iList:
+            i.save()
+        x = listRecentDeaths()
+        self.assertTrue('i0' in x)
+        self.assertTrue('i2' in x)
+        self.assertTrue('i4' in x)
+        self.assertTrue(len(x)==3)
     def test_us37(self):
         today = datetime.datetime.today()
         margin0 = datetime.timedelta(days = 15)

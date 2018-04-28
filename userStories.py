@@ -362,6 +362,34 @@ def listRecentSurvivors(i):
     return aliveSpouses, aliveDescendants
 
 
+# US35
+# list recent births
+# 30 days from current
+def listRecentBirths():
+    currentDate = datetime.datetime.now()
+    birthList = []
+    for i in Indi.objects():
+        if(i.birth != None):
+            diff = i.birth.date()-currentDate.date()
+            diff = diff.days
+            if (diff >= -30 and diff <= 0):
+                birthList.append(i.pid)
+    return birthList
+
+# US36
+# list recent deaths
+# 30 days from current
+def listRecentDeaths():
+    currentDate = datetime.datetime.now()
+    deathList = []
+    for i in Indi.objects():
+        if(i.death != None):
+            diff = i.death.date()-currentDate.date()
+            diff = diff.days
+            if (diff >= -30 and diff <= 0):
+                deathList.append(i.pid)
+    return deathList
+
 # US38
 # list upcoming birthdays
 # 30 days from current
