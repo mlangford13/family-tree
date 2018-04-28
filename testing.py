@@ -327,7 +327,64 @@ class FixDataTests(unittest.TestCase):
         self.assertFalse(marriageAfter14(i3))
         self.assertTrue(marriageAfter14(i4))
         self.assertFalse(marriageAfter14(i5))
+    # US11 bigamy check
+    def test_us11(self):
+        d0 = datetime.datetime(2000,1,1)
+        d1 = datetime.datetime(2001,1,1)
+        d2 = datetime.datetime(2002,1,1)
 
+        # plain marriage
+        i0 = Indi(pid = "i0", marriages = {"i1" : d0})
+        i1 = Indi(pid = "i1", marriages = {"i0" : d0})
+
+        #plain bigamy
+        i2 = Indi(pid = "i2", marriages = {"i2" : d0, "i3":d1})
+        i3 = Indi(pid = "i3", marriages = {"i2" : d0})
+        i4 = Indi(pid = "i4", marriages = {"i3" : d1})
+
+        # working divorce
+        i5 = Indi(pid = "i5", marriages = {"i6" : d0, "i7":d2}, divorces = {"i6":d1})
+        i6 = Indi(pid = "i6", marriages = {"i5" : d0})
+        i7 = Indi(pid = "i7", marriages = {"i5" : d2})
+
+        # divorce not timed right
+        i8 = Indi(pid = "i8", marriages = {"i9" : d0, "i10":d1}, divorces = {"i2":d2})
+        i9 = Indi(pid = "i9", marriages = {"i8" : d0})
+        i10 = Indi(pid = "i10", marriages = {"i8" : d1})
+
+        clearDB()
+
+        i0.save()
+        i1.save()
+
+        self.assertTrue(not bigamyCheck(i0))
+        self.assertTrue(not bigamyCheck(i1))
+
+        i2.save()
+        i3.save()
+        i4.save()
+
+        self.assertTrue(bigamyCheck(i2))
+        self.assertTrue(not bigamyCheck(i3))
+        self.assertTrue(not bigamyCheck(i4))
+
+        i5.save()
+        i6.save()
+        i7.save()
+
+        self.assertTrue(not bigamyCheck(i5))
+        self.assertTrue(not bigamyCheck(i6))
+        self.assertTrue(not bigamyCheck(i7))
+
+        i8.save()
+        i9.save()
+        i10.save()
+
+        self.assertTrue(bigamyCheck(i8))
+        self.assertTrue(not bigamyCheck(i9))
+        self.assertTrue(not bigamyCheck(i10))
+
+        clearDB()
     # parents not too old
     def test_us12(self):
         y = 365

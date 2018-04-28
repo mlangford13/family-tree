@@ -134,6 +134,22 @@ def marriageAfter14(individual):
             if days/365 <= 14:
                 return False
     return True
+# US11
+# no bigamy
+# no marriages at the same time
+# takes an individual
+def bigamyCheck(x):
+    if len(x.marriages)==0: return False
+    married = False
+    for marr in x.marriages:
+        if married:
+            return True
+        if marr in x.divorces: # if was divorced
+            if x.divorces[marr] < x.marriages[marr]: #compare dates
+                return True
+        if marr not in x.divorces:
+            married = True
+    return False
 
 # US12
 # takes fam and checks that the difference between the eldest child and parents
