@@ -319,15 +319,13 @@ def orderSibilingsByAge(family):
         if sorted_array[i].birth == sorted_array[i+1].birth:
             first_int = ord(str(sorted_array[i].name)[0])
             second_int = ord(str(sorted_array[i+1].name)[0])
-            if first_int < second_int:
+            if first_int > second_int:
                 temp = sorted_array[i]
                 sorted_array[i] = sorted_array[i+1]
                 sorted_array[i+1] = temp
     sorted_pids = []
     for child in sorted_array:
         sorted_pids.append(child.pid)
-
-    sorted_pids = [x.encode('UTF8') for x in sorted_pids]
     return sorted_pids
 
 

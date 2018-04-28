@@ -682,7 +682,7 @@ class FixDataTests(unittest.TestCase):
         result2 = ["01"]
         result3 = ["01", "04"]
         result4 = ["01", "02", "03"]
-        result5 = ["01", "04", "02"]
+        result5 = ["01", "02", "04"]
 
         for obj in [i1, i2, i3, i4, fam1, fam2, fam3, fam4, fam5]:
             obj.save()
