@@ -178,23 +178,25 @@ Error US14(@F14@): more than 5 children born on the same day
 Error US21(@F16@): gender is incorrect for a parent
 			Dad ID: @I31@ | Gender: F
 			Mom ID: @I32@ | Gender: F
-Bad Indis: ['@I1@', '@I2@', '@I7@', '@I8@', '@I10@', '@I15@', '@I16@', '@I18@', '@I19@', '@I21@', '@I23@', '@I51@']
-Bad Famss: ['@I1@', '@I2@', '@I7@', '@I8@', '@I10@', '@I15@', '@I16@', '@I18@', '@I19@', '@I21@', '@I23@', '@I51@']
+Bad Indis: ['@I1@', '@I2@', '@I3@', '@I4@', '@I5@', '@I7@', '@I8@', '@I9@', '@I10@', '@I11@', '@I15@', '@I16@', '@I18@', '@I19@', '@I20@', '@I21@', '@I23@', '@I24@', '@I51@']
+Bad Famss: ['@I1@', '@I2@', '@I3@', '@I4@', '@I5@', '@I7@', '@I8@', '@I9@', '@I10@', '@I11@', '@I15@', '@I16@', '@I18@', '@I19@', '@I20@', '@I21@', '@I23@', '@I24@', '@I51@']
 Error US08(@F1@): birth occurs before marriage of parents.
 Error US21(@F1@): gender is incorrect for a parent
-Error US08(@F2@): birth occurs before marriage of parents.
-Error US18(@F2@): siblings are married.
-Error US08(@F3@): birth occurs before marriage of parents.
-Error US16(@F3@): male child does not have the correct last name.
+Error (@F2@): family has no parents or children.
+Error US21(@F2@): gender is incorrect for a parent
+Error (@F3@): family has no parents or children.
 Error US21(@F3@): gender is incorrect for a parent
 Error (@F8@): family has no parents or children.
 Error US21(@F8@): gender is incorrect for a parent
 Error US08(@F4@): birth occurs before marriage of parents.
 Error US21(@F4@): gender is incorrect for a parent
+Error US21(@F5@): gender is incorrect for a parent
 Error US21(@F6@): gender is incorrect for a parent
-			Dad ID: @I6@ | Gender: M
-			Mom ID: @I5@ | Gender: M
+Error (@F7@): family has no parents or children.
+Error US21(@F7@): gender is incorrect for a parent
+Error (@F9@): family has no parents or children.
 Error US21(@F9@): gender is incorrect for a parent
+Error US21(@F10@): gender is incorrect for a parent
 Error (@F11@): family has no parents or children.
 Error US21(@F11@): gender is incorrect for a parent
 Error US08(@F12@): birth occurs before marriage of parents.
@@ -205,28 +207,15 @@ Error US21(@F12@): gender is incorrect for a parent
 Error US25(@F12@): first names are not unique.
 Error US14(@F14@): more than 5 children born on the same day
 Error US21(@F14@): gender is incorrect for a parent
+Error US21(@F15@): gender is incorrect for a parent
 Error US21(@F16@): gender is incorrect for a parent
 			Dad ID: @I31@ | Gender: F
 			Mom ID: @I32@ | Gender: F
-Error US11(@I3@): cannot be married again while being married.
-Error US11(@I4@): cannot be married again while being married.
-Error US11(@I5@): cannot be married again while being married.
-Error US11(@I9@): cannot be married again while being married.
-Error US11(@I11@): cannot be married again while being married.
-Error US11(@I20@): cannot be married again while being married.
-Error US11(@I24@): cannot be married again while being married.
 
 -------------------------------------------------------------
 --- Checking the database to show no bad data remains ---
 -------------------------------------------------------------
 Connected to Test Database
-Error US11(@I3@): cannot be married again while being married.
-Error US11(@I4@): cannot be married again while being married.
-Error US11(@I5@): cannot be married again while being married.
-Error US11(@I9@): cannot be married again while being married.
-Error US11(@I11@): cannot be married again while being married.
-Error US11(@I20@): cannot be married again while being married.
-Error US11(@I24@): cannot be married again while being married.
 No bad indis.
 No bad fams.
 
@@ -235,64 +224,53 @@ No bad fams.
 ------------------------------
 Connected to Test Database
 Individuals
-+-------+-----------------+--------+---------------------+------+-------+---------------------+-----------+---------------------------------------------------------------------------------------------------------------------+----------+
-|   ID  |       Name      | Gender |       Birthday      | Age  | Alive |        Death        |   Child   |                                                        Spouse                                                       | Divorces |
-+-------+-----------------+--------+---------------------+------+-------+---------------------+-----------+---------------------------------------------------------------------------------------------------------------------+----------+
-|  @I3@ |    Leo /Shu/    |   M    | 1948-06-10 00:00:00 |  69  |  True |         None        |  ['@F4@'] | {'@F2@': '', '@F3@': '', '@I4@': datetime.datetime(2010, 7, 10, 0, 0), '@I7@': datetime.datetime(2012, 5, 6, 0, 0)} |    {}    |
-|  @I4@ |    Linda /Qi/   |   F    | 1958-12-17 00:00:00 |  59  |  True |         None        |  ['@F5@'] |                              {'@F2@': '', '@I3@': datetime.datetime(2010, 7, 10, 0, 0)}                             |    {}    |
-|  @I5@ |    Noel /Shu/   |   M    | 1991-11-11 00:00:00 |  26  |  True |         None        |  ['@F2@'] |                       {'@F6@': '', '@F7@': '', '@I20@': datetime.datetime(2010, 7, 10, 0, 0)}                       |    {}    |
-|  @I6@ | Christian /Shu/ |   M    | 2017-06-08 00:00:00 |  0   |  True |         None        |  ['@F1@'] |                                                     {'@F6@': ''}                                                    |    {}    |
-|  @I9@ |   Kevin /Lee/   |   M    | 1988-07-09 00:00:00 |  29  |  True |         None        |  ['@F3@'] |                             {'@F9@': '', '@I10@': datetime.datetime(2006, 7, 19, 0, 0)}                             |    {}    |
-| @I11@ |    Zhang /Qi/   |   M    | 1922-10-18 00:00:00 |  94  | False | 2016-10-11 00:00:00 |     []    |                                              {'@F5@': '', '@F10@': ''}                                              |    {}    |
-| @I12@ |     Mei /Qi/    |   F    | 1928-07-05 00:00:00 |  69  | False | 1997-09-14 00:00:00 |     []    |                                                     {'@F5@': ''}                                                    |    {}    |
-| @I13@ |     Lin /Qi/    |   M    | 1948-06-09 00:00:00 |  69  |  True |         None        |  ['@F5@'] |                                                          {}                                                         |    {}    |
-| @I14@ |     Wu /Qi/     |   M    | 1945-05-20 00:00:00 |  72  |  True |         None        |  ['@F5@'] |                                                          {}                                                         |    {}    |
-| @I17@ |    Sha /Peng/   |   F    | 1928-05-11 00:00:00 |  27  | False | 1955-06-10 00:00:00 |     []    |                                                    {'@F10@': ''}                                                    |    {}    |
-| @I20@ |    Jane /Nan/   |   F    | 1985-04-10 00:00:00 |  33  |  True |         None        |     []    |                              {'@F7@': '', '@I5@': datetime.datetime(2010, 7, 10, 0, 0)}                             |    {}    |
-| @I22@ |    Bubu /Shu/   |   M    | 1989-07-10 00:00:00 |  28  |  True |         None        |  ['@F4@'] |                                                          {}                                                         |    {}    |
-| @I24@ |   Lydia /Shu/   |   F    | 2001-05-09 00:00:00 |  16  |  True |         None        |     []    |                                              {'@F14@': '', '@F15@': ''}                                             |    {}    |
-| @I25@ |    Jojo /Shu/   |   F    | 2018-02-02 00:00:00 |  0   |  True |         None        | ['@F12@'] |                                                          {}                                                         |    {}    |
-| @I26@ |    Momo /Shu/   |   F    | 2018-02-13 00:00:00 |  0   |  True |         None        | ['@F12@'] |                                                          {}                                                         |    {}    |
-| @I27@ |    Aoao /Shu/   |   F    | 2018-02-10 00:00:00 |  0   |  True |         None        | ['@F12@'] |                                                          {}                                                         |    {}    |
-| @I28@ |   Jessy /Shu/   |   F    | 2017-07-06 00:00:00 |  0   |  True |         None        | ['@F12@'] |                                                          {}                                                         |    {}    |
-| @I29@ |    Cece /Shu/   |   F    | 2017-07-08 00:00:00 |  0   |  True |         None        | ['@F12@'] |                                                          {}                                                         |    {}    |
-| @I30@ |    Fufu /Shu/   |   M    | 2017-05-06 00:00:00 |  0   |  True |         None        | ['@F12@'] |                                                          {}                                                         |    {}    |
-| @I31@ |    Lulu /Shu/   |   F    | 2017-05-13 00:00:00 |  0   |  True |         None        | ['@F12@'] |                                                    {'@F16@': ''}                                                    |    {}    |
-| @I32@ |    Qiu /Shu/    |   F    | 2017-11-11 00:00:00 |  0   |  True |         None        | ['@F12@'] |                                                    {'@F16@': ''}                                                    |    {}    |
-| @I33@ |    Pupu /Qi/    |   F    | 2017-07-18 00:00:00 |  0   |  True |         None        | ['@F12@'] |                                                          {}                                                         |    {}    |
-| @I34@ |    Wuwu /Shu/   |   F    | 2017-09-12 00:00:00 |  0   |  True |         None        | ['@F12@'] |                                                          {}                                                         |    {}    |
-| @I35@ |    Jojo /Shu/   |   F    | 2017-12-15 00:00:00 |  0   |  True |         None        | ['@F12@'] |                                                          {}                                                         |    {}    |
-| @I36@ |    Andy /Po/    |   M    | 2010-06-06 00:00:00 |  7   |  True |         None        | ['@F12@'] |                                                          {}                                                         |    {}    |
-| @I37@ |   Tracy /Levi/  |   F    | 2009-02-04 00:00:00 |  9   |  True |         None        | ['@F12@'] |                                                          {}                                                         |    {}    |
-| @I38@ | John /Martinez/ |   M    | 2002-06-10 00:00:00 |  15  |  True |         None        | ['@F12@'] |                                                          {}                                                         |    {}    |
-| @I39@ |                 |   M    |         None        | None |  True |         None        |     []    |                                                    {'@F13@': ''}                                                    |    {}    |
-| @I40@ |                 |   F    |         None        | None |  True |         None        |     []    |                                                    {'@F13@': ''}                                                    |    {}    |
-| @I41@ |    Nono /Lo/    |   F    | 1999-04-13 00:00:00 |  19  |  True |         None        | ['@F12@'] |                                                          {}                                                         |    {}    |
-| @I42@ |    Last /Shu/   |   F    | 1988-01-23 00:00:00 |  30  |  True |         None        | ['@F12@'] |                                                          {}                                                         |    {}    |
-| @I43@ |   Aaron /Shu/   |   M    | 2017-01-01 00:00:00 |  1   |  True |         None        | ['@F14@'] |                                                          {}                                                         |    {}    |
-| @I44@ |    Bob /Shu/    |   M    | 2017-01-01 00:00:00 |  1   |  True |         None        | ['@F14@'] |                                                    {'@F17@': ''}                                                    |    {}    |
-| @I45@ |   Carol /Shu/   |   F    | 2017-01-01 00:00:00 |  1   |  True |         None        |     []    |                                                    {'@F17@': ''}                                                    |    {}    |
-| @I46@ |    Dan /Shu/    |   M    | 2017-01-01 00:00:00 |  1   |  True |         None        | ['@F14@'] |                                                    {'@F15@': ''}                                                    |    {}    |
-| @I47@ |   Ethan /Shu/   |   M    | 2017-01-01 00:00:00 |  1   |  True |         None        | ['@F14@'] |                                                          {}                                                         |    {}    |
-| @I48@ |   Fiona /Shu/   |   F    | 2017-01-01 00:00:00 |  1   |  True |         None        | ['@F14@'] |                                                          {}                                                         |    {}    |
-| @I49@ |    Gory /Shu/   |   M    | 2017-01-01 00:00:00 |  1   |  True |         None        | ['@F14@'] |                                                          {}                                                         |    {}    |
-| @I50@ |   Tommy /Shu/   |   M    | 2017-05-01 00:00:00 |  0   |  True |         None        | ['@F17@'] |                                                          {}                                                         |    {}    |
-+-------+-----------------+--------+---------------------+------+-------+---------------------+-----------+---------------------------------------------------------------------------------------------------------------------+----------+
++-------+-----------------+--------+---------------------+------+-------+---------------------+-----------+---------------+----------+
+|   ID  |       Name      | Gender |       Birthday      | Age  | Alive |        Death        |   Child   |     Spouse    | Divorces |
++-------+-----------------+--------+---------------------+------+-------+---------------------+-----------+---------------+----------+
+|  @I6@ | Christian /Shu/ |   M    | 2017-06-08 00:00:00 |  0   |  True |         None        |  ['@F1@'] |  {'@F6@': ''} |    {}    |
+| @I12@ |     Mei /Qi/    |   F    | 1928-07-05 00:00:00 |  69  | False | 1997-09-14 00:00:00 |     []    |  {'@F5@': ''} |    {}    |
+| @I13@ |     Lin /Qi/    |   M    | 1948-06-09 00:00:00 |  69  |  True |         None        |  ['@F5@'] |       {}      |    {}    |
+| @I14@ |     Wu /Qi/     |   M    | 1945-05-20 00:00:00 |  72  |  True |         None        |  ['@F5@'] |       {}      |    {}    |
+| @I17@ |    Sha /Peng/   |   F    | 1928-05-11 00:00:00 |  27  | False | 1955-06-10 00:00:00 |     []    | {'@F10@': ''} |    {}    |
+| @I22@ |    Bubu /Shu/   |   M    | 1989-07-10 00:00:00 |  28  |  True |         None        |  ['@F4@'] |       {}      |    {}    |
+| @I25@ |    Jojo /Shu/   |   F    | 2018-02-02 00:00:00 |  0   |  True |         None        | ['@F12@'] |       {}      |    {}    |
+| @I26@ |    Momo /Shu/   |   F    | 2018-02-13 00:00:00 |  0   |  True |         None        | ['@F12@'] |       {}      |    {}    |
+| @I27@ |    Aoao /Shu/   |   F    | 2018-02-10 00:00:00 |  0   |  True |         None        | ['@F12@'] |       {}      |    {}    |
+| @I28@ |   Jessy /Shu/   |   F    | 2017-07-06 00:00:00 |  0   |  True |         None        | ['@F12@'] |       {}      |    {}    |
+| @I29@ |    Cece /Shu/   |   F    | 2017-07-08 00:00:00 |  0   |  True |         None        | ['@F12@'] |       {}      |    {}    |
+| @I30@ |    Fufu /Shu/   |   M    | 2017-05-06 00:00:00 |  0   |  True |         None        | ['@F12@'] |       {}      |    {}    |
+| @I31@ |    Lulu /Shu/   |   F    | 2017-05-13 00:00:00 |  0   |  True |         None        | ['@F12@'] | {'@F16@': ''} |    {}    |
+| @I32@ |    Qiu /Shu/    |   F    | 2017-11-11 00:00:00 |  0   |  True |         None        | ['@F12@'] | {'@F16@': ''} |    {}    |
+| @I33@ |    Pupu /Qi/    |   F    | 2017-07-18 00:00:00 |  0   |  True |         None        | ['@F12@'] |       {}      |    {}    |
+| @I34@ |    Wuwu /Shu/   |   F    | 2017-09-12 00:00:00 |  0   |  True |         None        | ['@F12@'] |       {}      |    {}    |
+| @I35@ |    Jojo /Shu/   |   F    | 2017-12-15 00:00:00 |  0   |  True |         None        | ['@F12@'] |       {}      |    {}    |
+| @I36@ |    Andy /Po/    |   M    | 2010-06-06 00:00:00 |  7   |  True |         None        | ['@F12@'] |       {}      |    {}    |
+| @I37@ |   Tracy /Levi/  |   F    | 2009-02-04 00:00:00 |  9   |  True |         None        | ['@F12@'] |       {}      |    {}    |
+| @I38@ | John /Martinez/ |   M    | 2002-06-10 00:00:00 |  15  |  True |         None        | ['@F12@'] |       {}      |    {}    |
+| @I39@ |                 |   M    |         None        | None |  True |         None        |     []    | {'@F13@': ''} |    {}    |
+| @I40@ |                 |   F    |         None        | None |  True |         None        |     []    | {'@F13@': ''} |    {}    |
+| @I41@ |    Nono /Lo/    |   F    | 1999-04-13 00:00:00 |  19  |  True |         None        | ['@F12@'] |       {}      |    {}    |
+| @I42@ |    Last /Shu/   |   F    | 1988-01-23 00:00:00 |  30  |  True |         None        | ['@F12@'] |       {}      |    {}    |
+| @I43@ |   Aaron /Shu/   |   M    | 2017-01-01 00:00:00 |  1   |  True |         None        | ['@F14@'] |       {}      |    {}    |
+| @I44@ |    Bob /Shu/    |   M    | 2017-01-01 00:00:00 |  1   |  True |         None        | ['@F14@'] | {'@F17@': ''} |    {}    |
+| @I45@ |   Carol /Shu/   |   F    | 2017-01-01 00:00:00 |  1   |  True |         None        |     []    | {'@F17@': ''} |    {}    |
+| @I46@ |    Dan /Shu/    |   M    | 2017-01-01 00:00:00 |  1   |  True |         None        | ['@F14@'] | {'@F15@': ''} |    {}    |
+| @I47@ |   Ethan /Shu/   |   M    | 2017-01-01 00:00:00 |  1   |  True |         None        | ['@F14@'] |       {}      |    {}    |
+| @I48@ |   Fiona /Shu/   |   F    | 2017-01-01 00:00:00 |  1   |  True |         None        | ['@F14@'] |       {}      |    {}    |
+| @I49@ |    Gory /Shu/   |   M    | 2017-01-01 00:00:00 |  1   |  True |         None        | ['@F14@'] |       {}      |    {}    |
+| @I50@ |   Tommy /Shu/   |   M    | 2017-05-01 00:00:00 |  0   |  True |         None        | ['@F17@'] |       {}      |    {}    |
++-------+-----------------+--------+---------------------+------+-------+---------------------+-----------+---------------+----------+
 Families
-+-------+---------------------+----------+------------+--------------+---------+-------------+----------------------------+
-|   ID  |       Married       | Divorced | Husband ID | Husband Name | Wife ID |  Wife Name  |          Children          |
-+-------+---------------------+----------+------------+--------------+---------+-------------+----------------------------+
-|  @F5@ |         None        |   None   |   @I11@    |  Zhang /Qi/  |  @I12@  |   Mei /Qi/  | ['@I4@', '@I13@', '@I14@'] |
-|  @F7@ | 2010-07-10 00:00:00 |   None   |    @I5@    |  Noel /Shu/  |  @I20@  |  Jane /Nan/ |             []             |
-| @F10@ |         None        |   None   |   @I11@    |  Zhang /Qi/  |  @I17@  |  Sha /Peng/ |             []             |
-| @F13@ |         None        |   None   |   @I39@    |              |  @I40@  |             |             []             |
-| @F15@ |         None        |   None   |   @I46@    |  Dan /Shu/   |  @I24@  | Lydia /Shu/ |             []             |
-| @F17@ |         None        |   None   |   @I44@    |  Bob /Shu/   |  @I45@  | Carol /Shu/ |         ['@I50@']          |
-+-------+---------------------+----------+------------+--------------+---------+-------------+----------------------------+
-Deceased: ['@I11@', '@I12@', '@I17@']
-Married and Alive: ['@I20@', '@I5@', '@I40@', '@I39@', '@I24@', '@I46@', '@I45@', '@I44@']
++-------+---------+----------+------------+--------------+---------+-------------+-----------+
+|   ID  | Married | Divorced | Husband ID | Husband Name | Wife ID |  Wife Name  |  Children |
++-------+---------+----------+------------+--------------+---------+-------------+-----------+
+| @F13@ |   None  |   None   |   @I39@    |              |  @I40@  |             |     []    |
+| @F17@ |   None  |   None   |   @I44@    |  Bob /Shu/   |  @I45@  | Carol /Shu/ | ['@I50@'] |
++-------+---------+----------+------------+--------------+---------+-------------+-----------+
+Deceased: ['@I12@', '@I17@']
+Married and Alive: ['@I40@', '@I39@', '@I45@', '@I44@']
 Single and Alive: ['@I13@', '@I14@', '@I22@', '@I25@', '@I26@', '@I27@', '@I28@', '@I29@', '@I30@', '@I33@', '@I34@', '@I35@', '@I36@', '@I37@', '@I38@', '@I41@', '@I42@', '@I43@', '@I47@', '@I48@', '@I49@', '@I50@']
 Recent Births: []
 Recent Deaths: []
-Upcoming Birthdays: ['@I14@', '@I17@', '@I24@', '@I30@', '@I31@', '@I50@']
+Upcoming Birthdays: ['@I14@', '@I17@', '@I30@', '@I31@', '@I50@']
 Upcoming Anniversaries: 
