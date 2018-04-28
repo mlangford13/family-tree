@@ -594,10 +594,10 @@ class FixDataTests(unittest.TestCase):
         bday3 = datetime.date(2000, 1, 1)
         bday4 = datetime.date(2000, 6, 1)
 
-        i1 = Indi(pid = "01", birth = bday1)
-        i2 = Indi(pid = "02", birth = bday2)
-        i3 = Indi(pid = "03", birth = bday3)
-        i4 = Indi(pid = "04", birth = bday4)
+        i1 = Indi(pid = "01", name = "Tom", birth = bday1)
+        i2 = Indi(pid = "02", name = "Susan", birth = bday2)
+        i3 = Indi(pid = "03", name = "Amy", birth = bday3)
+        i4 = Indi(pid = "04", name = "Frank", birth = bday4)
 
         fam1 = Fam(fid="fam1")
         fam2 = Fam(fid="fam2", children={i1.pid})
