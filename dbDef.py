@@ -22,7 +22,7 @@ class Indi(Document):
     alive = BooleanField(default=True) # are they currently alive
     death = DateTimeField() # when did they die? not required
     children = ListField(StringField()) # list of children ids (seems to be wrong and had fids)
-    marriages = DictField() # pid of spouse: date of marriage
+    marriages = DictField() # fid: date of marriage
     divorces = DictField() # pid of ex : date of divorce
     families = ListField(StringField()) # list of family ids
 

@@ -60,6 +60,12 @@ def findBadIndis():
         if(not marriageAfter14(i)):
             if debug: print("Error US10("+i.pid + "): marriage before 14.")
             valid = False
+        if(not noMarriagesToDescendants(i)):
+            if debug: print("Error US17("+i.pid + "): marriage to a descendant.")
+        # US11 is there bigamy
+        if(bigamyCheck(i)):
+            if debug: print("Error US11("+i.pid + "): cannot be married again while being married.")
+            valid = False
         if not valid:
             if i.pid not in badIds:
                 badIds.append(i.pid)

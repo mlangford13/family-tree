@@ -19,9 +19,9 @@ else:
 
 # printing the tables from the lists
 t1 = PrettyTable()
-t1.field_names = ["ID","Name","Gender","Birthday","Age","Alive","Death","Child","Spouse"]
+t1.field_names = ["ID","Name","Gender","Birthday","Age","Alive","Death","Child","Spouse", "Divorces"]
 for i in Indi.objects:
-    t1.add_row([i.pid,i.name,i.gender,i.birth,i.age,i.alive,i.death,i.children,i.marriages])
+    t1.add_row([i.pid,i.name,i.gender,i.birth,i.age,i.alive,i.death,i.children,i.marriages, i.divorces])
 print("Individuals")
 print(t1)
 
@@ -39,5 +39,32 @@ print(t2)
 # US29 List deceased
 print("Deceased: " + str(listDead()))
 
-# US29 List Married and Alive
+# US30 List Married and Alive
 print("Married and Alive: " + str(listMarriedAlive()))
+
+# US31 List Single and Alive
+print("Single and Alive: " + str(listLivingSingle()))
+
+
+# US35 List Recent Births
+print("Recent Births: " + str(listRecentBirths()))
+
+# US36 List Recent Deaths
+print("Recent Deaths: " + str(listRecentDeaths()))
+
+# US37 List recent survivors
+for i in Indi.objects():
+    spouses, descendants = listRecentSurvivors(i)
+    if spouses or descendants: print("Individual "+ i.pid +" survived by:")
+    if spouses: print("\tSpouses: " + str(spouses))
+    if descendants: print("\tDescendants: " + str(descendants))
+
+
+# US38 List Upcoming Birthdays
+print("Upcoming Birthdays: " + str(listUpcomingBirthdays()))
+
+# US39
+print("Upcoming Anniversaries: ")
+anniversaries = getFams(listUpcomingAnniversaries())
+for f in anniversaries:
+    print("\tHusband: " + f.hid + ", Wife: " + f.wid + ", Married: " + str(f.married))

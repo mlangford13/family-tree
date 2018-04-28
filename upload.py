@@ -180,11 +180,19 @@ for i in fams:
     husband = Indi.objects.get(pid=i.hid)
     if i.fid not in husband.families: husband.families.append(i.fid)
     husband.marriages[i.wid]=i.married
+
+    if i.divorced != None:
+        if i.wid not in husband.divorces:
+            husband.divorces[i.wid]=i.divorced
     husband.save()
 
     wife = Indi.objects.get(pid=i.wid)
     if i.fid not in wife.families: wife.families.append(i.fid)
     wife.marriages[i.hid]=i.married
+
+    if i.divorced != None:
+        if i.hid not in wife.divorces:
+            wife.divorces[i.hid]=i.divorced
     wife.save()
 
     for cid in i.children:

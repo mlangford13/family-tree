@@ -9,7 +9,7 @@ import subprocess
 connectToTest()
 
 class FixDataTests(unittest.TestCase):
-    
+
     def test_us01(self):
         today = datetime.datetime.today()
         past = datetime.datetime.min
@@ -327,7 +327,64 @@ class FixDataTests(unittest.TestCase):
         self.assertFalse(marriageAfter14(i3))
         self.assertTrue(marriageAfter14(i4))
         self.assertFalse(marriageAfter14(i5))
+    # US11 bigamy check
+    def test_us11(self):
+        d0 = datetime.datetime(2000,1,1)
+        d1 = datetime.datetime(2001,1,1)
+        d2 = datetime.datetime(2002,1,1)
 
+        # plain marriage
+        i0 = Indi(pid = "i0", marriages = {"i1" : d0})
+        i1 = Indi(pid = "i1", marriages = {"i0" : d0})
+
+        #plain bigamy
+        i2 = Indi(pid = "i2", marriages = {"i2" : d0, "i3":d1})
+        i3 = Indi(pid = "i3", marriages = {"i2" : d0})
+        i4 = Indi(pid = "i4", marriages = {"i3" : d1})
+
+        # working divorce
+        i5 = Indi(pid = "i5", marriages = {"i6" : d0, "i7":d2}, divorces = {"i6":d1})
+        i6 = Indi(pid = "i6", marriages = {"i5" : d0})
+        i7 = Indi(pid = "i7", marriages = {"i5" : d2})
+
+        # divorce not timed right
+        i8 = Indi(pid = "i8", marriages = {"i9" : d0, "i10":d1}, divorces = {"i2":d2})
+        i9 = Indi(pid = "i9", marriages = {"i8" : d0})
+        i10 = Indi(pid = "i10", marriages = {"i8" : d1})
+
+        clearDB()
+
+        i0.save()
+        i1.save()
+
+        self.assertTrue(not bigamyCheck(i0))
+        self.assertTrue(not bigamyCheck(i1))
+
+        i2.save()
+        i3.save()
+        i4.save()
+
+        self.assertTrue(bigamyCheck(i2))
+        self.assertTrue(not bigamyCheck(i3))
+        self.assertTrue(not bigamyCheck(i4))
+
+        i5.save()
+        i6.save()
+        i7.save()
+
+        self.assertTrue(not bigamyCheck(i5))
+        self.assertTrue(not bigamyCheck(i6))
+        self.assertTrue(not bigamyCheck(i7))
+
+        i8.save()
+        i9.save()
+        i10.save()
+
+        self.assertTrue(bigamyCheck(i8))
+        self.assertTrue(not bigamyCheck(i9))
+        self.assertTrue(not bigamyCheck(i10))
+
+        clearDB()
     # parents not too old
     def test_us12(self):
         y = 365
@@ -486,15 +543,31 @@ class FixDataTests(unittest.TestCase):
         self.assertTrue(sameMaleLastNames(fam4))
         self.assertTrue(sameMaleLastNames(fam5))
 
+    def test_us17(self):
+        i1 = Indi(pid="dad", marriages={'f1':''}, gender='M')
+        i2 = Indi(pid="son", marriages={'f2':''}, gender='M')
+        i3 = Indi(pid="g-son")
+
+        f1 = Fam(fid="f1", hid='dad', wid='mom', children=["son"])
+        f2 = Fam(fid='f2', hid="son", wid="g-son", children=["g-son"])
+
+        clearDB()
+        for obj in [i1, i2, i3, f1, f2]:
+            obj.save()
+
+        self.assertTrue(noMarriagesToDescendants(i1))
+        self.assertFalse(noMarriagesToDescendants(i2))
+        self.assertTrue(noMarriagesToDescendants(i3))
+
     def test_us18(self):
-        i0 = Indi(pid='i0', marriages={'i1':''})  # fam
-        i1 = Indi(pid='i1', marriages={'i0':''})  # fam
+        i0 = Indi(pid='i0', marriages={'f2':''}, gender='M')  # fam
+        i1 = Indi(pid='i1', marriages={'f2':''}, gender='F')  # fam
         i2 = Indi(pid='i2', marriages ={'i3':''}) # fam
         i3 = Indi(pid='i3', marriages={'i2':''})  # not fam
 
         f0 = Fam(fid='f0',children=[])            # good
         f1 = Fam(fid='f1',children=['i0'])        # good
-        f2 = Fam(fid='f2',children=['i0','i1'])   # bad
+        f2 = Fam(fid='f2', hid='i0', wid='i1', children=['i0','i1'])   # bad
         f3 = Fam(fid='f3',children=['i2'])        # good
 
         saveList = [i0,i1,i2,i3,f0,f1,f2,f3]
@@ -609,16 +682,16 @@ class FixDataTests(unittest.TestCase):
         result2 = ["01"]
         result3 = ["01", "04"]
         result4 = ["01", "02", "03"]
-        result5 = ["01", "02", "04"]
+        result5 = ["01", "04", "02"]
 
         for obj in [i1, i2, i3, i4, fam1, fam2, fam3, fam4, fam5]:
             obj.save()
 
-        self.assertEqual(order_siblings_by_age(fam1), result1)
-        self.assertEqual(order_siblings_by_age(fam2), result2)
-        self.assertEqual(order_siblings_by_age(fam3), result3)
-        self.assertEqual(order_siblings_by_age(fam4), result4)
-        self.assertEqual(order_siblings_by_age(fam5), result5)
+        self.assertEqual(orderSibilingsByAge(fam1), result1)
+        self.assertEqual(orderSibilingsByAge(fam2), result2)
+        self.assertEqual(orderSibilingsByAge(fam3), result3)
+        self.assertEqual(orderSibilingsByAge(fam4), result4)
+        self.assertEqual(orderSibilingsByAge(fam5), result5)
 
     def test_us29(self):
         i0 = Indi(pid="i0",alive=True)
@@ -692,6 +765,267 @@ class FixDataTests(unittest.TestCase):
         self.assertTrue(len(x) == 4)
 
         clearDB()
+    def test_us31(self):
+        i0 = Indi(pid="i0", marriages={"f0":0}) # married to each other
+        i1 = Indi(pid="i1", marriages={"f0":0})
+
+        i2 = Indi(pid="i2", marriages={"f1":0}, divorces={"f1":0}) # married to each other then divorced
+        i3 = Indi(pid="i3", marriages={"f1":0}, divorces={"f1":0})
+
+        i4 = Indi(pid="i4") # no marriages
+        i5 = Indi(pid="i5")
+
+        i6 = Indi(pid="i6", marriages={"f1":0}, divorces={"f1":0}) # marriage divorce, then remarried
+        i7 = Indi(pid="i7", marriages={"f1":0,"f2":0}, divorces={"f1":0})
+        i8 = Indi(pid="i8", marriages={"f2":0})
+
+        i9 = Indi(pid="i9", marriages={"f1":0}, divorces={"f1":0}) # marriage divorce, then remarried
+        i10 = Indi(pid="i10", marriages={"f1":0,"f2":0}, divorces={"f1":0,"f2":0}) # then divorced again
+        i11 = Indi(pid="i11", marriages={"f2":0}, divorces={"f2":0})
+
+        i12 = Indi(pid="i12") # just a single person
+
+        clearDB()
+        self.assertTrue(listLivingSingle() == [])
+        i0.save()
+        i1.save()
+        x = listLivingSingle()
+        self.assertTrue(x == [])
+        i2.save()
+        i3.save()
+        x = listLivingSingle()
+        self.assertTrue("i2" in x)
+        self.assertTrue("i3" in x)
+        self.assertTrue(len(x)==2)
+        i4.save()
+        i5.save()
+        x = listLivingSingle()
+        self.assertTrue("i2" in x)
+        self.assertTrue("i3" in x)
+        self.assertTrue("i4" in x)
+        self.assertTrue("i5" in x)
+        self.assertTrue(len(x)==4)
+        i6.save()
+        i7.save()
+        i8.save()
+        x = listLivingSingle()
+        self.assertTrue("i2" in x)
+        self.assertTrue("i3" in x)
+        self.assertTrue("i4" in x)
+        self.assertTrue("i5" in x)
+        self.assertTrue("i6" in x)
+        self.assertTrue(len(x)==5)
+        i9.save()
+        i10.save()
+        i11.save()
+        x = listLivingSingle()
+        self.assertTrue("i2" in x)
+        self.assertTrue("i3" in x)
+        self.assertTrue("i4" in x)
+        self.assertTrue("i5" in x)
+        self.assertTrue("i6" in x)
+        self.assertTrue("i9" in x)
+        self.assertTrue("i10" in x)
+        self.assertTrue("i11" in x)
+        self.assertTrue(len(x)==8)
+        i12.save()
+        x = listLivingSingle()
+        self.assertTrue("i2" in x)
+        self.assertTrue("i3" in x)
+        self.assertTrue("i4" in x)
+        self.assertTrue("i5" in x)
+        self.assertTrue("i6" in x)
+        self.assertTrue("i9" in x)
+        self.assertTrue("i10" in x)
+        self.assertTrue("i11" in x)
+        self.assertTrue("i12" in x)
+        self.assertTrue(len(x)==9)
+        clearDB()
+
+    def test_us35(self):
+        today = datetime.datetime.today()
+        margin0 = datetime.timedelta(days = 15)
+        margin1 = datetime.timedelta(days = 30)
+        margin2 = datetime.timedelta(days = 31)
+        margin3 = datetime.timedelta(days = 90)
+
+        date0 = today
+        date1 = today + margin0 # +15 bad
+        date2 = today - margin0 # -15 good
+        date3 = today + margin1 # +30 bad
+        date4 = today - margin1 # -30 good
+        date5 = today + margin2 # +31 bad
+        date6 = today - margin2 # -31 bad
+        date7 = today + margin3 # +90 bad
+        date8 = today - margin3 # -90 bad
+
+        i0 = Indi(pid='i0', birth=date0)
+        i1 = Indi(pid='i1', birth=date1)
+        i2 = Indi(pid='i2', birth=date2)
+        i3 = Indi(pid='i3', birth=date3)
+        i4 = Indi(pid='i4', birth=date4)
+        i5 = Indi(pid='i5', birth=date5)
+        i6 = Indi(pid='i6', birth=date6)
+        i7 = Indi(pid='i7', birth=date7)
+        i8 = Indi(pid='i8', birth=date8)
+
+        iList = [i0,i1,i2,i3,i4,i5,i6,i7,i8]
+
+        clearDB()
+        for i in iList:
+            i.save()
+        x = listRecentBirths()
+        self.assertTrue('i0' in x)
+        self.assertTrue('i2' in x)
+        self.assertTrue('i4' in x)
+        self.assertTrue(len(x)==3)
+    def test_us36(self):
+        today = datetime.datetime.today()
+        margin0 = datetime.timedelta(days = 15)
+        margin1 = datetime.timedelta(days = 30)
+        margin2 = datetime.timedelta(days = 31)
+        margin3 = datetime.timedelta(days = 90)
+
+        date0 = today
+        date1 = today + margin0 # +15 bad
+        date2 = today - margin0 # -15 good
+        date3 = today + margin1 # +30 bad
+        date4 = today - margin1 # -30 good
+        date5 = today + margin2 # +31 bad
+        date6 = today - margin2 # -31 bad
+        date7 = today + margin3 # +90 bad
+        date8 = today - margin3 # -90 bad
+
+        i0 = Indi(pid='i0', death=date0)
+        i1 = Indi(pid='i1', death=date1)
+        i2 = Indi(pid='i2', death=date2)
+        i3 = Indi(pid='i3', death=date3)
+        i4 = Indi(pid='i4', death=date4)
+        i5 = Indi(pid='i5', death=date5)
+        i6 = Indi(pid='i6', death=date6)
+        i7 = Indi(pid='i7', death=date7)
+        i8 = Indi(pid='i8', death=date8)
+
+        iList = [i0,i1,i2,i3,i4,i5,i6,i7,i8]
+
+        clearDB()
+        for i in iList:
+            i.save()
+        x = listRecentDeaths()
+        self.assertTrue('i0' in x)
+        self.assertTrue('i2' in x)
+        self.assertTrue('i4' in x)
+        self.assertTrue(len(x)==3)
+    def test_us37(self):
+        today = datetime.datetime.today()
+        margin0 = datetime.timedelta(days = 15)
+        margin1 = datetime.timedelta(days = 30)
+        margin2 = datetime.timedelta(days = 60)
+        margin3 = datetime.timedelta(days = 90)
+
+        marriage0 = {"f0":today-margin1}
+        marriageBoth = {"f0":(today-margin1), "f1":(today-margin2)}
+        marriage1 = {"f1":today-margin2}
+        marriage2 = {"f2":today-margin3}
+
+        i0 = Indi(pid="i0", gender="M", death=today-margin0, alive=False, marriages=marriageBoth)
+        i1 = Indi(pid="i1", gender="F", marriages=marriage0)
+        i2 = Indi(pid="i2", gender="F", alive=False, marriages=marriage1)
+
+        i3 = Indi(pid="i3", alive=True)
+        i4 = Indi(pid="i4", alive=True)
+        i5 = Indi(pid="i5", alive=False, marriages=marriage2)
+
+        i6 = Indi(pid="i6", alive=True)
+
+        f0 = Fam(fid="f0", hid=i0.pid, wid=i1.pid, children=[i3.pid, i4.pid, i5.pid])
+        f1 = Fam(fid="f1", hid=i0.pid, wid=i2.pid)
+        f2 = Fam(fid="f2", children=[i6.pid])
+
+        saveList = [i0,i1,i2,i3,i4,i5,i6,f0,f1,f2]
+
+        clearDB()
+        for obj in saveList:
+            obj.save()
+
+
+        spouses, descendants = listRecentSurvivors(i0)
+        self.assertTrue("i1" in spouses)
+        self.assertTrue(len(spouses) == 1)
+
+        self.assertTrue("i3" in descendants)
+        self.assertTrue("i4" in descendants)
+        self.assertTrue("i6" in descendants)
+        self.assertTrue(len(descendants) == 3)
+        clearDB()
+
+
+
+    def test_us38(self):
+        today = datetime.datetime.today()
+        margin0 = datetime.timedelta(days = 15)
+        margin1 = datetime.timedelta(days = 30)
+        margin2 = datetime.timedelta(days = 31)
+        margin3 = datetime.timedelta(days = 90)
+
+        date0 = today
+        date1 = today + margin0 # +15 good
+        date2 = today - margin0 # -15 bad
+        date3 = today + margin1 # +30 good
+        date4 = today - margin1 # -30 bad
+        date5 = today + margin2 # +31 bad
+        date6 = today - margin2 # -31 bad
+        date7 = today + margin3 # +90 bad
+        date8 = today - margin3 # -90 bad
+
+        i0 = Indi(pid='i0', birth=date0)
+        i1 = Indi(pid='i1', birth=date1)
+        i2 = Indi(pid='i2', birth=date2)
+        i3 = Indi(pid='i3', birth=date3)
+        i4 = Indi(pid='i4', birth=date4)
+        i5 = Indi(pid='i5', birth=date5)
+        i6 = Indi(pid='i6', birth=date6)
+        i7 = Indi(pid='i7', birth=date7)
+        i8 = Indi(pid='i8', birth=date8)
+
+        iList = [i0,i1,i2,i3,i4,i5,i6,i7,i8]
+
+        clearDB()
+        for i in iList:
+            i.save()
+        x = listUpcomingBirthdays()
+        self.assertTrue('i0' in x)
+        self.assertTrue('i1' in x)
+        self.assertTrue('i3' in x)
+        self.assertTrue(len(x)==3)
+
+    def test_us39(self):
+        today = datetime.date.today()
+        margin0 = datetime.timedelta(days = 15)
+        margin1 = datetime.timedelta(days = 30)
+        margin2 = datetime.timedelta(days = 60)
+
+        f0 = Fam(fid="f0", hid="m0_good", wid="w0_good", married=today)
+        f1 = Fam(fid="f1", hid="m1_good", wid="w1_good", married=today+margin0)
+        f2 = Fam(fid="f2", hid="m2_good", wid="w2_good", married=today+margin1)
+        f3 = Fam(fid="f3", hid="m3_bad", wid="w3_bad", married=today+margin2)
+        f4 = Fam(fid="f4", hid="m4_bad", wid="w3_bad", married=today-margin0)
+
+        clearDB()
+
+        for obj in [f0, f1, f2, f3, f4]:
+            obj.save()
+
+        fams = listUpcomingAnniversaries()
+
+        self.assertTrue("f0" in fams)
+        self.assertTrue("f1" in fams)
+        self.assertTrue("f2" in fams)
+        self.assertTrue(len(fams) == 3)
+
+        clearDB()
+
+
 
     '''
     def testing_us42(self):
